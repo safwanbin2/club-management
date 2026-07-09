@@ -1,32 +1,104 @@
+
 # University Club Management System
 
-This repository is scaffolded as a production-oriented MERN application for the product brief in `docs/university-club-management-system.md`.
+A modern, production-oriented MERN application for managing university clubs, members, events, announcements, attendance, polls, resources, and role-based dashboards.
 
-## Structure
+The project is designed for Students, Club Executives, and University Administration. It uses a modular full-stack structure, shared UI theming, and AI-ready project documentation so juniors and coding agents can build features as clean vertical slices.
+
+## Tech Stack
+
+| Area     | Tools                                                                |
+| -------- | -------------------------------------------------------------------- |
+| Frontend | React, Vite, TypeScript, React Router, TanStack Query, Zustand       |
+| UI       | Ant Design, Tailwind CSS, lucide-react, shared design/theme tokens   |
+| Backend  | Node.js, Express, TypeScript, MongoDB, Mongoose, Zod                 |
+| Tooling  | pnpm workspace, ESLint, Prettier, Vitest, Docker Compose for MongoDB |
+
+## Project Structure
 
 ```text
 .
-├── frontend/   # Vite, React, React Router, TanStack Query, Zustand
-├── backend/    # Express, MongoDB, Mongoose
-├── docs/       # Product and project documentation
-└── AGENTS.md   # Project instructions for Codex-style agents
+├── frontend/        # Vite React app
+├── backend/         # Express API server
+├── docs/            # Product, API, UI, design, and AI workflow docs
+├── docker-compose.yml
+├── pnpm-workspace.yaml
+└── AGENTS.md        # Shared instructions for Codex-style agents
 ```
 
-## Local Development
+## Prerequisites
 
-Install dependencies from the root, then start both apps:
+- Node.js 22 or newer
+- pnpm
+- Docker, or a local MongoDB instance
+
+## Getting Started
+
+Clone the repository and install dependencies from the project root:
 
 ```bash
 pnpm install
+```
+
+Create local environment files:
+
+```bash
+cp frontend/.env.example frontend/.env.local
+cp backend/.env.example backend/.env
+```
+
+Start MongoDB with Docker:
+
+```bash
 pnpm db:up
+```
+
+Start the frontend and backend together:
+
+```bash
 pnpm dev
 ```
 
-The frontend is configured for `http://localhost:5173` and the backend for `http://localhost:5000`.
+Default local URLs:
 
-## Project Context
+- Frontend: `http://localhost:5173`
+- Backend: `http://localhost:5000`
+- API base URL: `http://localhost:5000/api`
+- MongoDB: `mongodb://127.0.0.1:27017/university-club-management`
 
-Read these docs before large feature work:
+## Available Scripts
+
+```bash
+pnpm dev           # Start frontend and backend
+pnpm dev:frontend  # Start only the frontend
+pnpm dev:backend   # Start only the backend
+pnpm db:up         # Start MongoDB through Docker Compose
+pnpm db:down       # Stop Docker services
+pnpm db:logs       # Follow MongoDB logs
+pnpm ts-check      # Run TypeScript checks
+pnpm lint          # Run ESLint
+pnpm format:check  # Check formatting
+pnpm test          # Run frontend and backend tests
+pnpm check         # Run the full quality gate
+pnpm build         # Build frontend and backend
+```
+
+## Product Scope
+
+The application includes role-aware workflows for:
+
+- authentication and protected routes
+- student, executive, and admin dashboards
+- club browsing, club details, memberships, and executive management
+- news feed, announcements, posts, likes, comments, and moderation
+- events, registration, waitlists, QR attendance, and reports
+- polls, notifications, group chat, badges, resources, analytics, and search
+
+The full product brief lives in `docs/university-club-management-system.md`.
+
+## Design And AI Workflow
+
+This repository is set up for AI-assisted development. Before large feature work, read:
 
 - `docs/agent-instructions.md`
 - `docs/ai-workflow.md`
@@ -38,9 +110,8 @@ Read these docs before large feature work:
 - `docs/design/page-map.md`
 - `docs/design/implementation-notes.md`
 - `docs/feature-slices.md`
-- `docs/demo-data.md`
 
-See `docs/development.md` for local setup and quality commands.
+The Stitch design export is stored in `docs/design/stitch-export/`. New frontend pages should follow the closest available Stitch screenshot and use Ant Design plus Tailwind with the shared project theme.
 
 ## AI Agent Integrations
 
@@ -52,5 +123,4 @@ This repo includes native instruction files for common coding assistants:
 - Claude: `CLAUDE.md`
 - OpenCode extra context: `opencode.json`
 
-All of them point back to the same shared project rules in `docs/agent-instructions.md`.
-The `architecture` skill is duplicated under `.codex/skills`, `.claude/skills`, and `.cursor/skills`; keep those copies synchronized whenever the skill changes.
+All agents point back to the same shared project rules in `docs/agent-instructions.md`. The `architecture` skill is duplicated under `.codex/skills`, `.claude/skills`, and `.cursor/skills`; keep those copies synchronized whenever the skill changes.
