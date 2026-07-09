@@ -4,7 +4,7 @@
 
 - Node.js 22 or newer
 - pnpm
-- Docker, or a local MongoDB instance
+- A MongoDB connection URI
 
 ## Environment Files
 
@@ -25,7 +25,7 @@ Default local URLs:
 - Frontend: `http://localhost:5173`
 - Backend: `http://localhost:5000`
 - API: `http://localhost:5000/api`
-- MongoDB: `mongodb://127.0.0.1:27017/university-club-management`
+- MongoDB: configured by `backend/.env` as `MONGODB_URI`
 
 ## Commands
 
@@ -35,16 +35,21 @@ Install dependencies:
 pnpm install
 ```
 
-Start MongoDB with Docker:
+Set `MONGODB_URI` in `backend/.env` to the MongoDB URI for your environment.
 
-```bash
-pnpm db:up
-```
+The backend does not start or manage MongoDB. It only connects to the URI you provide.
 
 Start both apps:
 
 ```bash
 pnpm dev
+```
+
+Prepare database collections and demo data:
+
+```bash
+pnpm migrate
+pnpm seed:demo
 ```
 
 Quality checks:

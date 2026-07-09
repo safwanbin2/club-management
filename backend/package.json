@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "tsc -p tsconfig.json",
+    "migrate": "tsx src/db/migrations/run-migrations.ts",
+    "seed:demo": "tsx src/db/seeders/seed-demo.ts",
     "start": "node dist/server.js",
     "test": "vitest",
     "test:run": "vitest run",

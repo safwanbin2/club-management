@@ -15,8 +15,20 @@ export const demoUsers: DemoUser[] = [
     role: USER_ROLES.student
   },
   {
+    email: 'omar.student@example.edu',
+    name: 'Omar Hasan',
+    password: 'DemoStudent123!',
+    role: USER_ROLES.student
+  },
+  {
     email: 'nabila.executive@example.edu',
     name: 'Nabila Chowdhury',
+    password: 'DemoExecutive123!',
+    role: USER_ROLES.clubExecutive
+  },
+  {
+    email: 'rafi.executive@example.edu',
+    name: 'Rafi Ahmed',
     password: 'DemoExecutive123!',
     role: USER_ROLES.clubExecutive
   },

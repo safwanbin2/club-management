@@ -31,11 +31,17 @@ Demo data should make the product feel alive and should exercise the tricky work
 
 ## Seed Strategy
 
-When models are implemented, add a backend seed command that:
+The backend seed command is:
 
-1. Clears only demo-owned records in development.
-2. Creates users with known demo credentials.
-3. Creates clubs, memberships, events, posts, polls, resource requests, notifications, badges, and attendance.
-4. Prints demo login credentials and local URLs.
+```bash
+pnpm seed:demo
+```
 
-Do not seed production data from this script.
+It:
+
+1. Runs pending database migrations first.
+2. Upserts users with known demo credentials.
+3. Upserts clubs, memberships, events, posts, polls, resource requests, notifications, badges, chat, and attendance.
+4. Prints demo login credentials.
+
+The script is idempotent and does not clear arbitrary data. Do not run demo seeding against production data.

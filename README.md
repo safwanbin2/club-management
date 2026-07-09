@@ -1,4 +1,3 @@
-
 # University Club Management System
 
 A modern, production-oriented MERN application for managing university clubs, members, events, announcements, attendance, polls, resources, and role-based dashboards.
@@ -7,12 +6,12 @@ The project is designed for Students, Club Executives, and University Administra
 
 ## Tech Stack
 
-| Area     | Tools                                                                |
-| -------- | -------------------------------------------------------------------- |
-| Frontend | React, Vite, TypeScript, React Router, TanStack Query, Zustand       |
-| UI       | Ant Design, Tailwind CSS, lucide-react, shared design/theme tokens   |
-| Backend  | Node.js, Express, TypeScript, MongoDB, Mongoose, Zod                 |
-| Tooling  | pnpm workspace, ESLint, Prettier, Vitest, Docker Compose for MongoDB |
+| Area     | Tools                                                              |
+| -------- | ------------------------------------------------------------------ |
+| Frontend | React, Vite, TypeScript, React Router, TanStack Query, Zustand     |
+| UI       | Ant Design, Tailwind CSS, lucide-react, shared design/theme tokens |
+| Backend  | Node.js, Express, TypeScript, MongoDB, Mongoose, Zod               |
+| Tooling  | pnpm workspace, ESLint, Prettier, Vitest                           |
 
 ## Project Structure
 
@@ -21,7 +20,6 @@ The project is designed for Students, Club Executives, and University Administra
 ├── frontend/        # Vite React app
 ├── backend/         # Express API server
 ├── docs/            # Product, API, UI, design, and AI workflow docs
-├── docker-compose.yml
 ├── pnpm-workspace.yaml
 └── AGENTS.md        # Shared instructions for Codex-style agents
 ```
@@ -30,7 +28,7 @@ The project is designed for Students, Club Executives, and University Administra
 
 - Node.js 22 or newer
 - pnpm
-- Docker, or a local MongoDB instance
+- A MongoDB connection URI
 
 ## Getting Started
 
@@ -47,11 +45,7 @@ cp frontend/.env.example frontend/.env.local
 cp backend/.env.example backend/.env
 ```
 
-Start MongoDB with Docker:
-
-```bash
-pnpm db:up
-```
+Set `MONGODB_URI` in `backend/.env` to the MongoDB URI for your environment.
 
 Start the frontend and backend together:
 
@@ -64,7 +58,7 @@ Default local URLs:
 - Frontend: `http://localhost:5173`
 - Backend: `http://localhost:5000`
 - API base URL: `http://localhost:5000/api`
-- MongoDB: `mongodb://127.0.0.1:27017/university-club-management`
+- MongoDB: configured by `backend/.env` as `MONGODB_URI`
 
 ## Available Scripts
 
@@ -72,9 +66,8 @@ Default local URLs:
 pnpm dev           # Start frontend and backend
 pnpm dev:frontend  # Start only the frontend
 pnpm dev:backend   # Start only the backend
-pnpm db:up         # Start MongoDB through Docker Compose
-pnpm db:down       # Stop Docker services
-pnpm db:logs       # Follow MongoDB logs
+pnpm migrate       # Create MongoDB collections and indexes
+pnpm seed:demo     # Upsert demo users, clubs, events, activity, and requests
 pnpm ts-check      # Run TypeScript checks
 pnpm lint          # Run ESLint
 pnpm format:check  # Check formatting
