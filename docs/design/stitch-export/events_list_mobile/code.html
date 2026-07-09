@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-highest": "#f2dee1",
+                    "error": "#ba1a1a",
+                    "on-tertiary-container": "#71a87d",
+                    "surface-variant": "#f2dee1",
+                    "on-surface": "#23191b",
+                    "on-tertiary-fixed": "#00210c",
+                    "surface-tint": "#a4355d",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary-container": "#003c1b",
+                    "tertiary-fixed-dim": "#9bd4a5",
+                    "secondary-fixed-dim": "#b9c7e0",
+                    "error-container": "#ffdad6",
+                    "secondary-container": "#d5e3fd",
+                    "on-surface-variant": "#554246",
+                    "on-secondary-fixed-variant": "#3a485c",
+                    "inverse-primary": "#ffb1c5",
+                    "on-secondary": "#ffffff",
+                    "background": "#fff8f8",
+                    "tertiary-fixed": "#b6f0c0",
+                    "tertiary": "#00240e",
+                    "on-primary-container": "#f1719a",
+                    "on-secondary-fixed": "#0d1c2f",
+                    "secondary": "#515f74",
+                    "primary-container": "#6a0032",
+                    "on-primary-fixed-variant": "#851b46",
+                    "surface": "#fff8f8",
+                    "outline-variant": "#dbc0c5",
+                    "on-error": "#ffffff",
+                    "on-tertiary-fixed-variant": "#1b512d",
+                    "surface-dim": "#e9d5d8",
+                    "inverse-on-surface": "#ffecef",
+                    "on-background": "#23191b",
+                    "surface-container-low": "#fff0f2",
+                    "on-secondary-container": "#57657b",
+                    "on-primary": "#ffffff",
+                    "on-primary-fixed": "#3f001b",
+                    "surface-container": "#fde9ec",
+                    "surface-container-high": "#f7e3e7",
+                    "on-tertiary": "#ffffff",
+                    "surface-bright": "#fff8f8",
+                    "primary": "#43001d",
+                    "outline": "#887176",
+                    "on-error-container": "#93000a",
+                    "inverse-surface": "#392d30",
+                    "primary-fixed": "#ffd9e1",
+                    "secondary-fixed": "#d5e3fd",
+                    "primary-fixed-dim": "#ffb1c5"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "sidebar-width": "260px",
+                    "topbar-height": "64px",
+                    "container-padding": "24px",
+                    "unit": "4px",
+                    "gutter": "16px"
+            },
+            "fontFamily": {
+                    "label-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "headline-sm": ["Inter"],
+                    "body-md": ["Inter"],
+                    "body-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "label-sm-mobile": ["10px", {"lineHeight": "12px", "fontWeight": "500"}],
+                    "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "label-sm": ["11px", {"lineHeight": "14px", "fontWeight": "500"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .active-filter { position: relative; }
+        .active-filter::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background-color: #6a0032;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen pb-24">
+<!-- TopNavBar -->
+<header class="bg-surface sticky top-0 z-50 flex justify-between items-center w-full h-[64px] px-container-padding border-b border-outline-variant shadow-sm">
+<div class="flex items-center gap-3">
+<span class="font-headline-sm text-headline-sm font-bold text-primary">CampusHub</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface-variant cursor-pointer active:opacity-80">notifications</button>
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a university student with a friendly expression, set against a blurred academic background. The lighting is soft and natural, emphasizing a clean and corporate-minimalist aesthetic. The colors are muted, focusing on subtle tones of slate and maroon." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXB7JfAX41LeqKsZxZSRVPRZYW3n0YQWfL47Be3na0Hme7gLWnThjnr7I6MbumVzGOQrclC08ZpFVnXLYGE1RI3h4onqotw1HxEFQ8wDZ_DH3OXjR1GAtIdoSBJBunqr7fQtozYjBTOvbotoQfT8n0d08RE-hrYC_5DsvC0dqjXu4jZLP02_496fO7aTjcIvqmUo6bgxJwuTZbl044Z07H0Kp9JMHklkziFofO-9fuJJgGFMjC4CyhSA"/>
+</div>
+</div>
+</header>
+<main class="px-4 py-6">
+<!-- Filter Bar -->
+<section class="mb-8">
+<div class="flex items-baseline justify-between mb-4">
+<h1 class="font-headline-md text-headline-md text-on-surface">Events</h1>
+<span class="font-label-md text-label-md text-on-surface-variant">October 2023</span>
+</div>
+<div class="flex gap-6 border-b border-outline-variant pb-2 overflow-x-auto no-scrollbar">
+<button class="font-label-md text-label-md text-primary font-bold active-filter whitespace-nowrap">All Events</button>
+<button class="font-label-md text-label-md text-on-surface-variant whitespace-nowrap">My Clubs</button>
+<button class="font-label-md text-label-md text-on-surface-variant whitespace-nowrap">Academic</button>
+<button class="font-label-md text-label-md text-on-surface-variant whitespace-nowrap">Social</button>
+</div>
+</section>
+<!-- Vertical Events List -->
+<section class="space-y-6">
+<!-- Event Item 1 -->
+<div class="flex gap-4 group active:bg-surface-container transition-colors p-2 -mx-2 rounded-xl">
+<!-- Date Icon -->
+<div class="flex-shrink-0 w-16 h-20 flex flex-col items-center justify-center bg-primary-container text-on-primary rounded-xl shadow-sm">
+<span class="font-label-sm text-label-sm uppercase tracking-widest opacity-80">OCT</span>
+<span class="font-display-lg text-display-lg leading-none">12</span>
+</div>
+<!-- Content Area -->
+<div class="flex-grow min-w-0 flex flex-col justify-center">
+<div class="flex items-center gap-2 mb-1">
+<span class="px-2 py-0.5 bg-tertiary-fixed text-on-tertiary-fixed-variant font-label-sm text-label-sm rounded">Workshop</span>
+<span class="font-label-sm text-label-sm text-outline">10:00 AM</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface truncate">Advanced UI/UX Principles</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-2">Designers Guild • Hall C</p>
+<div class="flex -space-x-2">
+<div class="w-6 h-6 rounded-full border-2 border-surface bg-slate-200 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A close-up of a student smiling, part of a diverse group. The aesthetic is clean, academic, and minimalist with high-key lighting and professional color grading." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBv1UmHHDFfhCaGivzgQSDNZzNs7mSqumaNDLXUGbWRlI9iOnKNEExhcm6DHZDh5_FVoBrHoXMnyXGhFm2MRLVaTJ5YEU2fE-g840gsubkf1iBdb_zmZm7oIgBYu7XIFhJM46eEmcoXu-t8p0AbAK-6EykqCIsv9wwJ7BwxY64BUySJ-EjKwGP2PbfsNrl_orNRFtWh5oUqyWF1mwo07ou3xXMZLMN35C3t4gETvWfX7pLCvU-0ekDDKA"/>
+</div>
+<div class="w-6 h-6 rounded-full border-2 border-surface bg-slate-300 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A portrait of a male student wearing glasses, looking thoughtful in a modern university library setting. Sharp focus and soft bokeh effect." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwZtp2yzY9rKyJ7OfAymL0iZM_cQNs0Ujierftmn-tCPYAjIqXySf_hF-w0iloiLRxJCmsqbJh4SUHG4E3QhXLwaLA_8kyg92B-sQ7CLQGueNl1j0-6UtMcPotrMJ0gBzN-BaVQSQN2zDoCG1nwa6M5d64kRL_89gPx7CHp4yqEXXc_f7RJ8y7oj9KinAw-Adnhl_ZDBS7p0Q_aYgPNIIesqnVlNsXQk9m6mcP5ePQzB2OQ0AVDodBXg"/>
+</div>
+<div class="w-6 h-6 rounded-full border-2 border-surface bg-primary-container flex items-center justify-center text-[8px] font-bold text-on-primary">
+                            +24
+                        </div>
+</div>
+</div>
+<div class="flex flex-col justify-center">
+<span class="material-symbols-outlined text-outline">chevron_right</span>
+</div>
+</div>
+<!-- Event Item 2 -->
+<div class="flex gap-4 group active:bg-surface-container transition-colors p-2 -mx-2 rounded-xl">
+<div class="flex-shrink-0 w-16 h-20 flex flex-col items-center justify-center bg-surface-container-high text-primary border border-outline-variant rounded-xl">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant">OCT</span>
+<span class="font-display-lg text-display-lg leading-none">14</span>
+</div>
+<div class="flex-grow min-w-0 flex flex-col justify-center">
+<div class="flex items-center gap-2 mb-1">
+<span class="px-2 py-0.5 bg-secondary-container text-on-secondary-container font-label-sm text-label-sm rounded">Social</span>
+<span class="font-label-sm text-label-sm text-outline">6:30 PM</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface truncate">Autumn Mixer Gala</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-2">Student Union • Grand Ballroom</p>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-error">local_fire_department</span>
+<span class="font-label-sm text-label-sm text-error">Almost Full</span>
+</div>
+</div>
+<div class="flex flex-col justify-center">
+<span class="material-symbols-outlined text-outline">chevron_right</span>
+</div>
+</div>
+<!-- Event Item 3 (Image Featured) -->
+<div class="flex flex-col gap-3 group active:bg-surface-container transition-colors p-2 -mx-2 rounded-xl">
+<div class="flex gap-4">
+<div class="flex-shrink-0 w-16 h-20 flex flex-col items-center justify-center bg-surface-container-high text-primary border border-outline-variant rounded-xl">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant">OCT</span>
+<span class="font-display-lg text-display-lg leading-none">15</span>
+</div>
+<div class="flex-grow min-w-0 flex flex-col justify-center">
+<div class="flex items-center gap-2 mb-1">
+<span class="px-2 py-0.5 bg-tertiary-fixed text-on-tertiary-fixed-variant font-label-sm text-label-sm rounded">Sports</span>
+<span class="font-label-sm text-label-sm text-outline">2:00 PM</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface truncate">Inter-Campus Derby</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Athletic Dept • Main Stadium</p>
+</div>
+<div class="flex flex-col justify-center">
+<span class="material-symbols-outlined text-outline">chevron_right</span>
+</div>
+</div>
+<div class="relative h-32 w-full rounded-lg overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A wide shot of a high-energy university stadium event with students in maroon jerseys. The lighting is crisp afternoon sun, creating long shadows and high contrast. The atmosphere is vibrant and organized, following a modern corporate-minimalist photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQ5uNnNNpxDNxSAaPd8V7OMLFzd8W9BGfxBaSTyDxcdAN4IhqEoqSEju82I3mmobIZ2JLQgLnHbLwuPmqEoGP_YANSrB-wZIWLZF0vazYY_dzjUgBc7Rca__X8m7L_xtxbQSrb25Ces6hYRFC6LW3AY4ixiaa_k1ysJl5C6eH17T91a4FU2L9p8vRTLRf8xHTJjKUGHufPBV5NRdH_Y9s30fJyCT5RZTYoZgrSOAH4viyFReC216h6gw"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+<div class="absolute bottom-2 left-3 text-white font-label-md text-label-md">Join over 500 attendees</div>
+</div>
+</div>
+<!-- Event Item 4 -->
+<div class="flex gap-4 group active:bg-surface-container transition-colors p-2 -mx-2 rounded-xl">
+<div class="flex-shrink-0 w-16 h-20 flex flex-col items-center justify-center bg-surface-container-high text-primary border border-outline-variant rounded-xl">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant">OCT</span>
+<span class="font-display-lg text-display-lg leading-none">18</span>
+</div>
+<div class="flex-grow min-w-0 flex flex-col justify-center">
+<div class="flex items-center gap-2 mb-1">
+<span class="px-2 py-0.5 bg-surface-container-highest text-on-surface-variant font-label-sm text-label-sm rounded">Career</span>
+<span class="font-label-sm text-label-sm text-outline">11:00 AM</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface truncate">Tech Recruitment Fair</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-2">Career Center • Plaza</p>
+</div>
+<div class="flex flex-col justify-center">
+<span class="material-symbols-outlined text-outline">chevron_right</span>
+</div>
+</div>
+</section>
+<!-- Contextual FAB -->
+<button class="fixed bottom-24 right-6 w-14 h-14 bg-primary-container text-on-primary rounded-full shadow-lg flex items-center justify-center active:scale-95 transition-transform">
+<span class="material-symbols-outlined">add</span>
+</button>
+</main>
+<!-- BottomNavBar -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe bg-surface border-t border-outline-variant shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-sm text-label-sm-mobile">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">explore</span>
+<span class="font-label-sm text-label-sm-mobile">Directory</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary rounded-full px-6 py-1 active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">event</span>
+<span class="font-label-sm text-label-sm-mobile">Events</span>
+</a>
+</nav>
+<script>
+        // Simple ripple effect or interaction feedback
+        document.querySelectorAll('button, a').forEach(elem => {
+            elem.addEventListener('click', function(e) {
+                // Potential interaction logic
+            });
+        });
+
+        // Filter toggle logic
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        filterButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterButtons.forEach(b => b.classList.remove('active-filter', 'text-primary', 'font-bold'));
+                btn.classList.add('active-filter', 'text-primary', 'font-bold');
+            });
+        });
+    </script>
+</body></html>

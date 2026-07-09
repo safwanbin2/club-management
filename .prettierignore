@@ -1,0 +1,9 @@
+node_modules
+.codex
+.claude/skills
+.cursor/skills
+dist
+build
+coverage
+pnpm-lock.yaml
+docs/design/stitch-export

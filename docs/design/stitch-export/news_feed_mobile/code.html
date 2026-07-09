@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CampusHub | News Feed</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-highest": "#f2dee1",
+                    "error": "#ba1a1a",
+                    "on-tertiary-container": "#71a87d",
+                    "surface-variant": "#f2dee1",
+                    "on-surface": "#23191b",
+                    "on-tertiary-fixed": "#00210c",
+                    "surface-tint": "#a4355d",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary-container": "#003c1b",
+                    "tertiary-fixed-dim": "#9bd4a5",
+                    "secondary-fixed-dim": "#b9c7e0",
+                    "error-container": "#ffdad6",
+                    "secondary-container": "#d5e3fd",
+                    "on-surface-variant": "#554246",
+                    "on-secondary-fixed-variant": "#3a485c",
+                    "inverse-primary": "#ffb1c5",
+                    "on-secondary": "#ffffff",
+                    "background": "#fff8f8",
+                    "tertiary-fixed": "#b6f0c0",
+                    "tertiary": "#00240e",
+                    "on-primary-container": "#f1719a",
+                    "on-secondary-fixed": "#0d1c2f",
+                    "secondary": "#515f74",
+                    "primary-container": "#6a0032",
+                    "on-primary-fixed-variant": "#851b46",
+                    "surface": "#fff8f8",
+                    "outline-variant": "#dbc0c5",
+                    "on-error": "#ffffff",
+                    "on-tertiary-fixed-variant": "#1b512d",
+                    "surface-dim": "#e9d5d8",
+                    "inverse-on-surface": "#ffecef",
+                    "on-background": "#23191b",
+                    "surface-container-low": "#fff0f2",
+                    "on-secondary-container": "#57657b",
+                    "on-primary": "#ffffff",
+                    "on-primary-fixed": "#3f001b",
+                    "surface-container": "#fde9ec",
+                    "surface-container-high": "#f7e3e7",
+                    "on-tertiary": "#ffffff",
+                    "surface-bright": "#fff8f8",
+                    "primary": "#43001d",
+                    "outline": "#887176",
+                    "on-error-container": "#93000a",
+                    "inverse-surface": "#392d30",
+                    "primary-fixed": "#ffd9e1",
+                    "secondary-fixed": "#d5e3fd",
+                    "primary-fixed-dim": "#ffb1c5"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "sidebar-width": "260px",
+                    "topbar-height": "64px",
+                    "container-padding": "24px",
+                    "unit": "4px",
+                    "gutter": "16px"
+            },
+            "fontFamily": {
+                    "label-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "headline-sm": ["Inter"],
+                    "body-md": ["Inter"],
+                    "body-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "label-sm-mobile": ["10px", {"lineHeight": "12px", "fontWeight": "500"}],
+                    "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "label-sm": ["11px", {"lineHeight": "14px", "fontWeight": "500"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .active-tab-indicator { position: absolute; bottom: -2px; left: 0; right: 0; height: 3px; background-color: #6a0032; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface min-h-screen pb-20">
+<!-- Top Navigation Bar -->
+<header class="flex justify-between items-center w-full h-[64px] px-container-padding sticky top-0 z-50 bg-surface dark:bg-surface-container border-b border-outline-variant dark:border-outline shadow-sm">
+<div class="flex items-center gap-4">
+<span class="font-headline-sm text-headline-sm font-bold text-primary dark:text-primary-fixed">CampusHub</span>
+</div>
+<div class="flex items-center gap-3">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-secondary-container dark:hover:bg-secondary transition-colors cursor-pointer active:opacity-80">
+<span class="material-symbols-outlined text-primary">search</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-secondary-container dark:hover:bg-secondary transition-colors cursor-pointer active:opacity-80">
+<span class="material-symbols-outlined text-primary">notifications</span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a university student for a profile avatar, captured in natural soft lighting on a campus courtyard. The aesthetic is clean and modern, featuring a shallow depth of field. The color palette includes soft maroon and neutral slate tones, maintaining a professional corporate minimalist style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCC3_JAkq6Hl2cWMtPN0WZcWdjWefNt-my5U5eAaN0r7Nr97Zbd_yAjld7tTaZdgU7gneVPZGOUMDs_xnnvpofosHQGPzp5WKbSFe048_b7ehZoBRpCfnwoE9oJyEcv6qgx5ajUKoaNJHhqIrM0Hh0-fBxnZu7MjZFmz4L7-ha3IeHVIlXh5y3t4uu3YePZqmHIvbW3AxItbX89uY_8fMWfacRztFSwSCP6DQdYCiy_Z1O_rGE4ULjzzA"/>
+</div>
+</div>
+</header>
+<!-- Content Area -->
+<main class="max-w-md mx-auto">
+<!-- Trending Carousel Section -->
+<section class="py-4 border-b border-outline-variant">
+<div class="px-4 flex justify-between items-center mb-3">
+<h2 class="font-headline-sm text-headline-sm text-primary">Trending Now</h2>
+<button class="font-label-md text-label-md text-on-primary-container">See all</button>
+</div>
+<div class="flex overflow-x-auto gap-4 px-4 no-scrollbar">
+<!-- Trending Card 1 -->
+<div class="flex-none w-64 rounded-xl overflow-hidden bg-surface-container shadow-sm border border-outline-variant relative">
+<div class="h-32 w-full overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A vibrant campus festival scene with students gathered around a modern outdoor stage at dusk. Colorful string lights crisscross the sky, casting a warm glow. The atmosphere is energetic and celebratory, with high-end digital photography style, emphasizing university community and modern collegiate life." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXY5MpF4TEZsaAcZZE9gNg51ap3eYQI7IsY3M6bWDzxov6N62xY95av7NGwgzY3NpaVbBqt72RQGl1LYs25iatWS0ALzZ-eMupk8nUfBe9qAOhZv2sYzVuOlmJGr2Wg3xTffeF1EZmovcdCVT3fGSvgaEuzfC13ziuitABte3X9SZbUXQ7_D_ZmkzOklmhdywRf-bQzTV5DB5pmg40ymZ_O3Qtmg9V0GsFdMpNa7lO4ANswR8D0oBAYA"/>
+</div>
+<div class="p-3">
+<span class="font-label-sm text-label-sm text-on-tertiary-fixed-variant bg-tertiary-fixed px-2 py-0.5 rounded-full">#SpringFest</span>
+<h3 class="font-label-md text-label-md mt-2 line-clamp-1">Annual Spring Festival Lineup Revealed</h3>
+</div>
+</div>
+<!-- Trending Card 2 -->
+<div class="flex-none w-64 rounded-xl overflow-hidden bg-surface-container shadow-sm border border-outline-variant relative">
+<div class="h-32 w-full overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A sleek, high-tech computer science lab where students are collaborating on robots. The room is filled with monitors displaying complex code and mechanical components. Bright, clean lighting highlights the professional and innovative atmosphere of a modern university research facility." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBgcGVnCpKTwYZgduY4DIpCO88P3CwSeFr9FC533ao4-5lRP1z53hKa38qFLxGiwKpa_9v33SxdxALPi22LlWBeGXs1ia73DWd4AWEhpJGzwnCVBT64YHvq2X_ZA5F0dGGmYWY6apNr9dUnHQ48g5YRgoPmVYwynwKUfExEo5HEzQibxkjJZZ_Y3-gdtBckCyy6BXR50s3KIB7Ya4bRUZYE9idN40hVNWY7Es8IcLJV2KAllbhG0Tb6zg"/>
+</div>
+<div class="p-3">
+<span class="font-label-sm text-label-sm text-on-primary-fixed-variant bg-primary-fixed px-2 py-0.5 rounded-full">#Robotics</span>
+<h3 class="font-label-md text-label-md mt-2 line-clamp-1">Campus Robotics Wins National Award</h3>
+</div>
+</div>
+</div>
+</section>
+<!-- Feed Filter Tabs -->
+<nav class="sticky top-[64px] z-40 bg-surface flex border-b border-outline-variant">
+<button class="flex-1 py-3 font-label-md text-label-md text-primary relative">
+                All Posts
+                <div class="active-tab-indicator"></div>
+</button>
+<button class="flex-1 py-3 font-label-md text-label-md text-on-surface-variant">Following</button>
+<button class="flex-1 py-3 font-label-md text-label-md text-on-surface-variant">Clubs</button>
+<button class="flex-1 py-3 font-label-md text-label-md text-on-surface-variant">Official</button>
+</nav>
+<!-- News Feed List -->
+<div class="divide-y divide-outline-variant">
+<!-- Feed Item 1: Image Post -->
+<article class="p-4 bg-surface hover:bg-surface-container-low transition-colors">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center overflow-hidden">
+<span class="material-symbols-outlined text-white">groups</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Debate Society</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">2 hours ago</p>
+</div>
+</div>
+<button class="text-on-surface-variant">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<h4 class="font-body-lg text-body-lg font-semibold mb-2">Grand Finals: This Friday at the Auditorium</h4>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">The semi-finals are over and the stage is set! Join us for an evening of rigorous debate and intellectual fireworks.</p>
+<div class="rounded-xl overflow-hidden aspect-video border border-outline-variant mb-4">
+<img class="w-full h-full object-cover" data-alt="A grand university auditorium with dark wood paneling and elegant architecture. A lone podium stands on stage under a focused spotlight, creating a dramatic and prestigious atmosphere for a debate. The image captures the professional and serious tone of collegiate academic competition." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAU22RvATYEoXHjvsxkwaa1LKk3-91UJ4d5r-rSHaT4AHaZe43LRzhukI7SKozdMKw7JgRhmlbEARbXUlfwt00GKBdjxgQYT1UUUbOY0FapRTqlBUbeUcOnzHuPjdhpIw_feeDuprHmSxZvNcEra0QnutOTLaaitzP_yOO15mAVg8Pp1UTm8Upp71xHxFF1_ZrGloee7j0httL4XIPzqzmENZfTBcwDhFqNj9HhcL9v3sr55kWYUTtpCA"/>
+</div>
+<div class="flex items-center gap-6 text-on-surface-variant">
+<button class="flex items-center gap-1 active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[20px]">favorite</span>
+<span class="font-label-sm text-label-sm">124</span>
+</button>
+<button class="flex items-center gap-1 active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[20px]">chat_bubble</span>
+<span class="font-label-sm text-label-sm">18</span>
+</button>
+<button class="flex items-center gap-1 active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[20px]">share</span>
+<span class="font-label-sm text-label-sm">Share</span>
+</button>
+</div>
+</article>
+<!-- Feed Item 2: Text Only Post -->
+<article class="p-4 bg-surface hover:bg-surface-container-low transition-colors">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center overflow-hidden">
+<span class="material-symbols-outlined text-secondary">campaign</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Campus Administration</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">5 hours ago</p>
+</div>
+</div>
+<span class="font-label-sm text-label-sm bg-error-container text-on-error-container px-2 py-0.5 rounded">URGENT</span>
+</div>
+<h4 class="font-body-lg text-body-lg font-semibold mb-2">Library Hours Update</h4>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">Starting next Monday, the main library will remain open 24/7 to support students during the upcoming mid-term examination period. Please remember your student ID for entry after 11:00 PM.</p>
+<div class="flex items-center gap-6 text-on-surface-variant">
+<button class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[20px]">favorite</span>
+<span class="font-label-sm text-label-sm">450</span>
+</button>
+<button class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[20px]">chat_bubble</span>
+<span class="font-label-sm text-label-sm">32</span>
+</button>
+</div>
+</article>
+<!-- Feed Item 3: Event Card Style -->
+<article class="p-4 bg-surface hover:bg-surface-container-low transition-colors">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-tertiary-container flex items-center justify-center overflow-hidden">
+<span class="material-symbols-outlined text-tertiary-fixed">palette</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Arts &amp; Crafts Collective</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Yesterday</p>
+</div>
+</div>
+</div>
+<div class="p-4 border border-outline-variant rounded-xl bg-surface-container-low flex gap-4">
+<div class="w-20 h-20 rounded-lg overflow-hidden flex-none">
+<img class="w-full h-full object-cover" data-alt="A macro shot of vibrant oil paints being mixed on a wooden palette. The texture of the paint is thick and glossy, with rich colors like deep maroon, forest green, and gold blending together. The lighting is focused and warm, emphasizing the artistic process and creative energy." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAIVoNr5vD8KE9eRzWx6oawDi8wLp1Vn0E4ML7pqnGWCCiBYNSA9k0gyT9sacewfRM4SXUuCEjX2ZkfPmMsfHKFK7cEdPT556_skjQuwYTQaDjMxdcpKRQhvh2Uha1KRG-0uznURPF-sVV0QzUsB4cIDizoazj-JRvZsd2UL2J419LOuuRLQKcEYWrHl3N4HPSX3QOHcgiSSDeCu2hQ8st4AcW7voakMbQFegYx27sjzsFmbLxd0rysKg"/>
+</div>
+<div class="flex flex-col justify-between">
+<div>
+<h5 class="font-label-md text-label-md text-primary">Oil Painting Workshop</h5>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Saturday, 2:00 PM • Creative Hub</p>
+</div>
+<button class="self-start px-4 py-1.5 bg-primary-container text-on-primary font-label-sm text-label-sm rounded-full active:scale-95 transition-transform">Register</button>
+</div>
+</div>
+<div class="mt-4 flex items-center gap-6 text-on-surface-variant">
+<button class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[20px]">favorite</span>
+<span class="font-label-sm text-label-sm">89</span>
+</button>
+<button class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[20px]">chat_bubble</span>
+<span class="font-label-sm text-label-sm">11</span>
+</button>
+</div>
+</article>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe bg-surface dark:bg-surface-container-high border-t border-outline-variant dark:border-outline shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-sm text-label-sm-mobile">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">newspaper</span>
+<span class="font-label-sm text-label-sm-mobile">Feed</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">explore</span>
+<span class="font-label-sm text-label-sm-mobile">Directory</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">event</span>
+<span class="font-label-sm text-label-sm-mobile">Events</span>
+</a>
+</nav>
+<!-- Post Creation FAB -->
+<button class="fixed bottom-24 right-6 w-14 h-14 bg-primary-container text-white rounded-full shadow-lg flex items-center justify-center active:scale-90 transition-transform z-40">
+<span class="material-symbols-outlined text-[28px]">add</span>
+</button>
+<script>
+        // Simple Micro-interaction: Active tab switching
+        const tabs = document.querySelectorAll('nav.sticky button');
+        const indicator = document.querySelector('.active-tab-indicator');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => {
+                    t.classList.remove('text-primary');
+                    t.classList.add('text-on-surface-variant');
+                });
+                tab.classList.remove('text-on-surface-variant');
+                tab.classList.add('text-primary');
+                
+                // Move indicator (simple implementation)
+                tab.appendChild(indicator);
+            });
+        });
+
+        // Like Button Pulse Effect
+        const likeButtons = document.querySelectorAll('button .material-symbols-outlined:first-child');
+        likeButtons.forEach(btn => {
+            btn.parentElement.addEventListener('click', () => {
+                if (btn.style.fontVariationSettings.includes("'FILL' 1")) {
+                    btn.style.fontVariationSettings = "'FILL' 0";
+                    btn.classList.remove('text-primary-container');
+                } else {
+                    btn.style.fontVariationSettings = "'FILL' 1";
+                    btn.classList.add('text-primary-container');
+                }
+            });
+        });
+    </script>
+</body></html>

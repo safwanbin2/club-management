@@ -16,26 +16,26 @@ There are three main roles:
 
 Students can:
 
-* Register/Login
-* View and edit their profile
-* Browse clubs
-* Join or leave clubs
-* View club information
-* Pay membership fee (mock payment is acceptable)
-* View club executives
-* View club announcements
-* View news feed
-* Like posts
-* Comment on posts
-* Register for events
-* Cancel event registration
-* Join waitlists
-* Receive notifications
-* Vote in club polls
-* Participate in club group chats (only for clubs they belong to)
-* View attendance history
-* View badges and achievements
-* View certificates (optional)
+- Register/Login
+- View and edit their profile
+- Browse clubs
+- Join or leave clubs
+- View club information
+- Pay membership fee (mock payment is acceptable)
+- View club executives
+- View club announcements
+- View news feed
+- Like posts
+- Comment on posts
+- Register for events
+- Cancel event registration
+- Join waitlists
+- Receive notifications
+- Vote in club polls
+- Participate in club group chats (only for clubs they belong to)
+- View attendance history
+- View badges and achievements
+- View certificates (optional)
 
 ---
 
@@ -43,28 +43,28 @@ Students can:
 
 Executives inherit all Student permissions and additionally can:
 
-* Manage their club
-* Edit club information
-* Manage membership requests
-* Accept or reject members
-* Assign executive positions
-* Create announcements
-* Create posts
-* Pin important posts
-* Delete inappropriate posts/comments
-* Create events
-* Edit/Delete events
-* Set event capacity
-* Manage registrations
-* Generate QR code for attendance
-* View attendance reports
-* Create polls
-* Close polls
-* View poll results
-* Moderate club group chat
-* View club analytics
-* Submit funding requests
-* Submit room booking requests
+- Manage their club
+- Edit club information
+- Manage membership requests
+- Accept or reject members
+- Assign executive positions
+- Create announcements
+- Create posts
+- Pin important posts
+- Delete inappropriate posts/comments
+- Create events
+- Edit/Delete events
+- Set event capacity
+- Manage registrations
+- Generate QR code for attendance
+- View attendance reports
+- Create polls
+- Close polls
+- View poll results
+- Moderate club group chat
+- View club analytics
+- Submit funding requests
+- Submit room booking requests
 
 ---
 
@@ -72,15 +72,15 @@ Executives inherit all Student permissions and additionally can:
 
 University administrators can:
 
-* Manage all clubs
-* Create clubs
-* Disable clubs
-* Manage all users
-* View university-wide analytics
-* Approve funding requests
-* Approve room booking requests
-* Moderate platform content
-* View reports
+- Manage all clubs
+- Create clubs
+- Disable clubs
+- Manage all users
+- View university-wide analytics
+- Approve funding requests
+- Approve room booking requests
+- Moderate platform content
+- View reports
 
 ---
 
@@ -88,15 +88,15 @@ University administrators can:
 
 Implement:
 
-* Login
-* Registration
-* Logout
-* Forgot password
-* Reset password
-* Role-based authorization
-* Protected routes
-* Secure authentication
-* Session persistence
+- Login
+- Registration
+- Logout
+- Forgot password
+- Reset password
+- Role-based authorization
+- Protected routes
+- Secure authentication
+- Session persistence
 
 ---
 
@@ -106,31 +106,31 @@ Each role has its own dashboard.
 
 Student Dashboard
 
-* Joined clubs
-* Upcoming events
-* Notifications
-* Attendance summary
-* Recent activity
-* Badges
+- Joined clubs
+- Upcoming events
+- Notifications
+- Attendance summary
+- Recent activity
+- Badges
 
 Club Executive Dashboard
 
-* Total members
-* Pending requests
-* Upcoming events
-* Poll statistics
-* Attendance charts
-* Engagement metrics
+- Total members
+- Pending requests
+- Upcoming events
+- Poll statistics
+- Attendance charts
+- Engagement metrics
 
 University Dashboard
 
-* Total clubs
-* Total students
-* Total events
-* Most active clubs
-* Monthly participation
-* Funding requests
-* Room bookings
+- Total clubs
+- Total students
+- Total events
+- Most active clubs
+- Monthly participation
+- Funding requests
+- Room bookings
 
 ---
 
@@ -138,24 +138,24 @@ University Dashboard
 
 Each club contains:
 
-* Name
-* Logo
-* Cover image
-* Description
-* Category
-* Faculty advisor
-* Contact information
-* Social links
-* Executive committee
-* Members
-* Gallery
+- Name
+- Logo
+- Cover image
+- Description
+- Category
+- Faculty advisor
+- Contact information
+- Social links
+- Executive committee
+- Members
+- Gallery
 
 Members can:
 
-* Join
-* Leave
-* View members
-* View executives
+- Join
+- Leave
+- View members
+- View executives
 
 Executives can manage every aspect of their own club.
 
@@ -169,21 +169,21 @@ The feed should aggregate posts from all clubs.
 
 Feed supports multiple content types:
 
-* Regular post
-* Announcement
-* Event
-* Poll
-* Achievement
+- Regular post
+- Announcement
+- Event
+- Poll
+- Achievement
 
 Every post should support:
 
-* Author
-* Club
-* Timestamp
-* Rich text
-* Images (optional)
-* Likes
-* Comments
+- Author
+- Club
+- Timestamp
+- Rich text
+- Images (optional)
+- Likes
+- Comments
 
 Executives can pin important posts.
 
@@ -195,27 +195,27 @@ Announcements should appear highlighted.
 
 Executives can:
 
-* Create events
-* Edit events
-* Delete events
+- Create events
+- Edit events
+- Delete events
 
 Event contains:
 
-* Title
-* Description
-* Banner
-* Date
-* Time
-* Venue
-* Capacity
-* Registration deadline
-* Organizer
-* Status
+- Title
+- Description
+- Banner
+- Date
+- Time
+- Venue
+- Capacity
+- Registration deadline
+- Organizer
+- Status
 
 Students can:
 
-* Register
-* Cancel registration
+- Register
+- Cancel registration
 
 When capacity is reached:
 
@@ -251,16 +251,16 @@ Club executives can create polls.
 
 Poll types:
 
-* Single choice
-* Multiple choice
+- Single choice
+- Multiple choice
 
 Poll features:
 
-* Closing date
-* Live results
-* Anonymous or public voting
-* Total votes
-* Automatic closing
+- Closing date
+- Live results
+- Anonymous or public voting
+- Total votes
+- Automatic closing
 
 Only club members may vote.
 
@@ -276,19 +276,19 @@ Only members of that club can access it.
 
 Support:
 
-* Real-time messaging
-* Emojis
-* Image upload
-* Message timestamps
-* Typing indicator
-* Seen status (optional)
-* Reply to message (optional)
+- Real-time messaging
+- Emojis
+- Image upload
+- Message timestamps
+- Typing indicator
+- Seen status (optional)
+- Reply to message (optional)
 
 Executives can:
 
-* Delete messages
-* Pin messages
-* Moderate chat
+- Delete messages
+- Pin messages
+- Moderate chat
 
 ---
 
@@ -298,16 +298,16 @@ Provide an in-app notification system.
 
 Notify users when:
 
-* Membership approved
-* New event
-* Event reminder
-* Registration confirmed
-* Waitlist promoted
-* Poll created
-* Poll ending
-* Announcement published
-* Badge earned
-* Funding approved
+- Membership approved
+- New event
+- Event reminder
+- Registration confirmed
+- Waitlist promoted
+- Poll created
+- Poll ending
+- Announcement published
+- Badge earned
+- Funding approved
 
 ---
 
@@ -315,15 +315,15 @@ Notify users when:
 
 Each profile displays:
 
-* Avatar
-* Student information
-* Joined clubs
-* Executive positions
-* Events attended
-* Attendance percentage
-* Badges
-* Achievements
-* Activity timeline
+- Avatar
+- Student information
+- Joined clubs
+- Executive positions
+- Events attended
+- Attendance percentage
+- Badges
+- Achievements
+- Activity timeline
 
 Profiles should be shareable via a public URL.
 
@@ -335,12 +335,12 @@ Students earn badges based on activities.
 
 Examples:
 
-* First Club Joined
-* Event Explorer
-* Volunteer
-* Executive Member
-* 100% Attendance
-* Community Leader
+- First Club Joined
+- Event Explorer
+- Volunteer
+- Executive Member
+- 100% Attendance
+- Community Leader
 
 Badges should appear on the public profile.
 
@@ -350,20 +350,20 @@ Badges should appear on the public profile.
 
 Club Analytics
 
-* Membership growth
-* Event popularity
-* Attendance
-* Poll participation
-* Feed engagement
+- Membership growth
+- Event popularity
+- Attendance
+- Poll participation
+- Feed engagement
 
 University Analytics
 
-* Active clubs
-* Active students
-* Monthly registrations
-* Club rankings
-* Event participation
-* Attendance trends
+- Active clubs
+- Active students
+- Monthly registrations
+- Club rankings
+- Event participation
+- Attendance trends
 
 Use attractive dashboard charts.
 
@@ -393,10 +393,10 @@ Track request status.
 
 Provide global search for:
 
-* Clubs
-* Events
-* Students
-* Posts
+- Clubs
+- Events
+- Students
+- Posts
 
 Support filtering and sorting where appropriate.
 
@@ -406,17 +406,17 @@ Support filtering and sorting where appropriate.
 
 Implement:
 
-* Responsive design
-* Pagination
-* Search
-* Filters
-* Loading states
-* Empty states
-* Toast notifications
-* Form validation
-* Error handling
-* Confirmation dialogs
-* Soft delete where appropriate
+- Responsive design
+- Pagination
+- Search
+- Filters
+- Loading states
+- Empty states
+- Toast notifications
+- Form validation
+- Error handling
+- Confirmation dialogs
+- Soft delete where appropriate
 
 ---
 
@@ -426,18 +426,18 @@ The UI should feel modern and professional.
 
 Use:
 
-* Dashboard layout
-* Sidebar navigation
-* Top navigation
-* Cards
-* Tables
-* Charts
-* Beautiful forms
-* Responsive grids
-* Consistent spacing
-* Light and dark mode support
-* Smooth animations
-* Accessible color contrast
+- Dashboard layout
+- Sidebar navigation
+- Top navigation
+- Cards
+- Tables
+- Charts
+- Beautiful forms
+- Responsive grids
+- Consistent spacing
+- Light and dark mode support
+- Smooth animations
+- Accessible color contrast
 
 The application should resemble a polished SaaS product rather than a basic university assignment.
 

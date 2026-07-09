@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CampusHub | Club Directory</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-highest": "#f2dee1",
+                    "error": "#ba1a1a",
+                    "on-tertiary-container": "#71a87d",
+                    "surface-variant": "#f2dee1",
+                    "on-surface": "#23191b",
+                    "on-tertiary-fixed": "#00210c",
+                    "surface-tint": "#a4355d",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary-container": "#003c1b",
+                    "tertiary-fixed-dim": "#9bd4a5",
+                    "secondary-fixed-dim": "#b9c7e0",
+                    "error-container": "#ffdad6",
+                    "secondary-container": "#d5e3fd",
+                    "on-surface-variant": "#554246",
+                    "on-secondary-fixed-variant": "#3a485c",
+                    "inverse-primary": "#ffb1c5",
+                    "on-secondary": "#ffffff",
+                    "background": "#fff8f8",
+                    "tertiary-fixed": "#b6f0c0",
+                    "tertiary": "#00240e",
+                    "on-primary-container": "#f1719a",
+                    "on-secondary-fixed": "#0d1c2f",
+                    "secondary": "#515f74",
+                    "primary-container": "#6a0032",
+                    "on-primary-fixed-variant": "#851b46",
+                    "surface": "#fff8f8",
+                    "outline-variant": "#dbc0c5",
+                    "on-error": "#ffffff",
+                    "on-tertiary-fixed-variant": "#1b512d",
+                    "surface-dim": "#e9d5d8",
+                    "inverse-on-surface": "#ffecef",
+                    "on-background": "#23191b",
+                    "surface-container-low": "#fff0f2",
+                    "on-secondary-container": "#57657b",
+                    "on-primary": "#ffffff",
+                    "on-primary-fixed": "#3f001b",
+                    "surface-container": "#fde9ec",
+                    "surface-container-high": "#f7e3e7",
+                    "on-tertiary": "#ffffff",
+                    "surface-bright": "#fff8f8",
+                    "primary": "#43001d",
+                    "outline": "#887176",
+                    "on-error-container": "#93000a",
+                    "inverse-surface": "#392d30",
+                    "primary-fixed": "#ffd9e1",
+                    "secondary-fixed": "#d5e3fd",
+                    "primary-fixed-dim": "#ffb1c5"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "sidebar-width": "260px",
+                    "topbar-height": "64px",
+                    "container-padding": "24px",
+                    "unit": "4px",
+                    "gutter": "16px"
+            },
+            "fontFamily": {
+                    "label-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "headline-sm": ["Inter"],
+                    "body-md": ["Inter"],
+                    "body-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "label-sm": ["11px", {"lineHeight": "14px", "fontWeight": "500"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #dbc0c5; border-radius: 10px; }
+        .club-card:hover { transform: translateY(-4px); transition: all 0.2s ease-out; }
+    </style>
+</head>
+<body class="bg-background text-on-background selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- TopNavBar -->
+<nav class="flex justify-between items-center w-full h-[64px] px-container-padding sticky top-0 z-50 bg-surface dark:bg-surface-container border-b border-outline-variant dark:border-outline shadow-sm">
+<div class="flex items-center gap-8">
+<span class="font-headline-sm text-headline-sm font-bold text-primary dark:text-primary-fixed">CampusHub</span>
+<div class="hidden md:flex items-center bg-surface-container px-4 py-2 rounded-full border border-outline-variant w-[320px]">
+<span class="material-symbols-outlined text-on-surface-variant mr-2" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-md w-full" placeholder="Search clubs, interests..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden lg:flex items-center gap-6 mr-6">
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Directory</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Events</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Resources</a>
+</div>
+<button class="material-symbols-outlined text-on-surface-variant p-2 hover:bg-secondary-container rounded-full transition-colors" data-icon="notifications">notifications</button>
+<button class="material-symbols-outlined text-on-surface-variant p-2 hover:bg-secondary-container rounded-full transition-colors" data-icon="apps">apps</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A clean, professional headshot of a university student for a user profile avatar. The background is a soft, blurred campus library. The lighting is warm and natural, suggesting a friendly and approachable administrative environment consistent with a high-utility corporate aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnBIGczzgeSB7OsVCHwDbjZHOrCqhWWWuCL895SEScWL3QXbqKmUDyJKlkY5V7xYjrGI5gvZ42eWv2zUMB5qOQzGTkWIzNYFPTdOe-NTZ49j72DiEAB2sX74OKh2DI4E4pqx2qQ6Cfw6p6l5gC6QpZ8UBg_TpdpGaYMMYLIbgoo8Qcb3rcD7QtZ-F2y5JQ7ZFdaFcejP1416fNJZikdYuJCakPDvF52D9JiIgzkt3axs_IGAASaLICbA"/>
+</div>
+</div>
+</nav>
+<div class="flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col h-screen fixed left-0 top-0 py-6 overflow-y-auto bg-surface-container-low dark:bg-surface-dim border-r border-outline-variant dark:border-outline w-sidebar-width pt-[80px]">
+<div class="px-6 mb-8">
+<div class="flex items-center gap-3 mb-2">
+<div class="w-10 h-10 bg-primary-container rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary-container" data-icon="school">school</span>
+</div>
+<div>
+<div class="font-label-md text-label-md text-primary font-bold">Admin Portal</div>
+<div class="font-body-sm text-[10px] text-secondary opacity-70">Management Console</div>
+</div>
+</div>
+</div>
+<nav class="flex-1 px-4 space-y-1">
+<a class="flex items-center gap-3 text-secondary dark:text-secondary-fixed-dim px-4 py-2 hover:bg-secondary-container transition-all rounded-lg group" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 bg-primary-container text-on-primary-container font-bold rounded-lg px-4 py-2 border-l-4 border-primary group" href="#">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+<span class="font-label-md text-label-md">Club Directory</span>
+</a>
+<a class="flex items-center gap-3 text-secondary dark:text-secondary-fixed-dim px-4 py-2 hover:bg-secondary-container transition-all rounded-lg group" href="#">
+<span class="material-symbols-outlined" data-icon="newspaper">newspaper</span>
+<span class="font-label-md text-label-md">News Feed</span>
+</a>
+<a class="flex items-center gap-3 text-secondary dark:text-secondary-fixed-dim px-4 py-2 hover:bg-secondary-container transition-all rounded-lg group" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span>
+<span class="font-label-md text-label-md">Events</span>
+</a>
+<a class="flex items-center gap-3 text-secondary dark:text-secondary-fixed-dim px-4 py-2 hover:bg-secondary-container transition-all rounded-lg group" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</nav>
+<div class="px-4 mt-8">
+<button class="w-full bg-primary-container text-on-primary-container font-label-md text-label-md py-3 rounded-xl flex items-center justify-center gap-2 shadow-sm hover:opacity-90 transition-opacity active:scale-95">
+<span class="material-symbols-outlined text-[18px]" data-icon="add">add</span>
+                    Create New Club
+                </button>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 md:ml-sidebar-width p-container-padding pb-24">
+<!-- Page Header -->
+<div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-8">
+<div>
+<h1 class="font-display-lg text-display-lg text-primary mb-2">Club Directory</h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl">Discover and join over 150+ student-led organizations on campus. From competitive coding to contemporary dance, find your community here.</p>
+</div>
+<div class="flex items-center gap-3">
+<button class="flex items-center gap-2 bg-surface-container border border-outline-variant px-4 py-2 rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="sort">sort</span>
+                        Sort: Popular
+                    </button>
+<button class="flex items-center gap-2 bg-primary text-on-primary px-4 py-2 rounded-lg font-label-md text-label-md shadow-md hover:opacity-90 transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="filter_alt">filter_alt</span>
+                        Filter
+                    </button>
+</div>
+</div>
+<!-- Categories Scroller -->
+<div class="flex gap-3 overflow-x-auto pb-4 mb-8 no-scrollbar">
+<button class="whitespace-nowrap px-6 py-2 rounded-full bg-primary-container text-on-primary-container font-label-md text-label-md border border-primary">All Groups</button>
+<button class="whitespace-nowrap px-6 py-2 rounded-full bg-surface-container text-on-surface-variant font-label-md text-label-md border border-outline-variant hover:border-primary transition-all">Technology</button>
+<button class="whitespace-nowrap px-6 py-2 rounded-full bg-surface-container text-on-surface-variant font-label-md text-label-md border border-outline-variant hover:border-primary transition-all">Arts &amp; Culture</button>
+<button class="whitespace-nowrap px-6 py-2 rounded-full bg-surface-container text-on-surface-variant font-label-md text-label-md border border-outline-variant hover:border-primary transition-all">Sports &amp; Fitness</button>
+<button class="whitespace-nowrap px-6 py-2 rounded-full bg-surface-container text-on-surface-variant font-label-md text-label-md border border-outline-variant hover:border-primary transition-all">Professional</button>
+<button class="whitespace-nowrap px-6 py-2 rounded-full bg-surface-container text-on-surface-variant font-label-md text-label-md border border-outline-variant hover:border-primary transition-all">Sustainability</button>
+<button class="whitespace-nowrap px-6 py-2 rounded-full bg-surface-container text-on-surface-variant font-label-md text-label-md border border-outline-variant hover:border-primary transition-all">Gaming</button>
+</div>
+<!-- Club Bento Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+<!-- Club Card 1 -->
+<div class="club-card group bg-surface-container-lowest border border-outline-variant rounded-xl p-6 flex flex-col h-full shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div class="w-16 h-16 rounded-xl bg-primary-container flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A minimalist logo for a tech club featuring abstract geometric patterns of circuitry and binary code. The palette uses deep maroon and crisp whites. High-contrast, modern graphic design style set against a clean studio background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_RDssOx3rKqrwfN34l7NArOIAmctZNXQCgKMujARsLoaeQkz-lgISHxkdh2f--kCNyyFK8PPS13AfgdRY0M7T5jw7Pn4uHD0TAxRHVt5HOv5z7ZuoHk8ZBq66LQUkwsFlOJ2orANVn_O1-rIrSYlbPt5SdVNz0B9RXfzRfWKw8MJn2Z-RR1YxFZF-LYTptz39OT8BLdiYzyiGCta8K94arp_2UmwY6_ikCQL8pJxU3-8tLyNAFS_CtQ"/>
+</div>
+<span class="px-3 py-1 rounded-full bg-tertiary-container text-tertiary-fixed font-label-sm text-label-sm uppercase tracking-wider">Tech</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-2">Silicon Valley Syndicate</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6 line-clamp-2">The university's premier hub for developers, designers, and entrepreneurs building the future.</p>
+<div class="mt-auto flex items-center justify-between">
+<div class="flex items-center gap-2 text-secondary">
+<span class="material-symbols-outlined text-[18px]" data-icon="person">person</span>
+<span class="font-label-md text-label-md">1,240 Members</span>
+</div>
+<button class="bg-primary-container text-on-primary-container px-5 py-2 rounded-lg font-label-md text-label-md hover:bg-primary transition-all active:scale-95">Join</button>
+</div>
+</div>
+<!-- Club Card 2 -->
+<div class="club-card group bg-surface-container-lowest border border-outline-variant rounded-xl p-6 flex flex-col h-full shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div class="w-16 h-16 rounded-xl bg-secondary-container flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A stylized logo for an arts club depicting a paintbrush stroke and a musical note combined elegantly. The style is fluid and artistic, using sophisticated shades of slate blue and maroon. Modern corporate minimalism with professional lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDyMJct-SgU84EpNF9kMSZRZwwGDMykIZbdoqRjdqmWGEIXCdOMpkhNJD7DmUIGleyqTC2BD2XW9TQlM61g85CrXrlMtNcj3gBuqUoJHQC6NoLRQBGrf1tSUNuztfAbj6waruJgbMg_pX_Qi0KAKccT-c2vlY5HUz_5eRhhzyKQOIOz9HhCnmpKVVfGJsf1LyMeEQy8XSrRe2SMlqmozhYHV0TdqW6TNaf1qxBHEWPIXyjb8L_KUpMkOQ"/>
+</div>
+<span class="px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm uppercase tracking-wider">Arts</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-2">Metropolis Collective</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6 line-clamp-2">An interdisciplinary community exploring contemporary arts, music production, and digital media.</p>
+<div class="mt-auto flex items-center justify-between">
+<div class="flex items-center gap-2 text-secondary">
+<span class="material-symbols-outlined text-[18px]" data-icon="person">person</span>
+<span class="font-label-md text-label-md">860 Members</span>
+</div>
+<button class="bg-primary-container text-on-primary-container px-5 py-2 rounded-lg font-label-md text-label-md hover:bg-primary transition-all active:scale-95">Join</button>
+</div>
+</div>
+<!-- Club Card 3 -->
+<div class="club-card group bg-surface-container-lowest border border-outline-variant rounded-xl p-6 flex flex-col h-full shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div class="w-16 h-16 rounded-xl bg-error-container flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A dynamic sports club emblem featuring a stylized shield and a roaring mascot. The design is bold and energetic, utilizing the university's signature maroon and gold. High-quality vector illustration style with clean lines and professional finish." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKf4LSKe10_CwoqdzglnKDt72IoBtrAy3RZYHMSoRds0CLiWKuJQpIKdrTdRoa2XNb39zt_ynp30q6Eifb9jpvJlDQLaNgpCWXzkNh_MX_OHF9DMALD6wT0sp6GGezonjzOdgk13--yK2jNVJPWx35g6goCh39IhRPkWI3igA2VupjSsT4aVqyTTXDq8VomkSuxMRfeb2-lL0TeXTG8AsI7w4-6V-62sds9ZV8M8f0po8bP8xup6RRvA"/>
+</div>
+<span class="px-3 py-1 rounded-full bg-error-container text-on-error-container font-label-sm text-label-sm uppercase tracking-wider">Sports</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-2">Campus Athletic Union</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6 line-clamp-2">Coordinating intramural leagues and fitness workshops for students of all skill levels.</p>
+<div class="mt-auto flex items-center justify-between">
+<div class="flex items-center gap-2 text-secondary">
+<span class="material-symbols-outlined text-[18px]" data-icon="person">person</span>
+<span class="font-label-md text-label-md">2.1k Members</span>
+</div>
+<button class="bg-primary-container text-on-primary-container px-5 py-2 rounded-lg font-label-md text-label-md hover:bg-primary transition-all active:scale-95">Join</button>
+</div>
+</div>
+<!-- Club Card 4 -->
+<div class="club-card group bg-surface-container-lowest border border-outline-variant rounded-xl p-6 flex flex-col h-full shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div class="w-16 h-16 rounded-xl bg-tertiary-fixed-dim flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional logo for a business and finance club showing a minimalist bar chart that forms the shape of a skyscraper. The aesthetic is clean, corporate, and reliable. Professional photography lighting in a bright office environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBq1UrCnTKlXtIV9aTh39hp3qfanLQu7tH0sKINsm4PPpSYo8bhpO7MUrhCoD89Ku4gQbHjGXG2ByoLn0Si128zNJh17V-18ooyTt-hfbNJTCG3Rb6TFVOo28INY1jo6n3EwC2zcV1EKgOZgHQlBnkyMptXUKm_B4OsQAHuc9h9HmEheZLEV-TArcJV8TVyWmfDmJUM02OVaNhoBUblB3yG7qWREZ6guZ6R-FybcCGjOJ6SZXiD0ad-cw"/>
+</div>
+<span class="px-3 py-1 rounded-full bg-on-tertiary-container text-on-tertiary font-label-sm text-label-sm uppercase tracking-wider">Business</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-2">Global Markets Forum</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6 line-clamp-2">Bridging the gap between academic theory and real-world financial market experience.</p>
+<div class="mt-auto flex items-center justify-between">
+<div class="flex items-center gap-2 text-secondary">
+<span class="material-symbols-outlined text-[18px]" data-icon="person">person</span>
+<span class="font-label-md text-label-md">540 Members</span>
+</div>
+<button class="bg-primary-container text-on-primary-container px-5 py-2 rounded-lg font-label-md text-label-md hover:bg-primary transition-all active:scale-95">Join</button>
+</div>
+</div>
+<!-- Club Card 5 -->
+<div class="club-card group bg-surface-container-lowest border border-outline-variant rounded-xl p-6 flex flex-col h-full shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div class="w-16 h-16 rounded-xl bg-surface-container-highest flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A logo for a culinary and culture club showing a stylized globe and kitchen utensils. Warm, inviting colors like maroon and cream. The visual style is friendly yet professional, suitable for a university organization directory." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwbnPCuaKsZYdbjI-M7-gJCGRCcsNcRgzBrrh8Q-CLgMEZsna6ZHVMr9nTnMW3tUXKnxo7FIK_6l1nQu9y6pbQNSnMmxU3anjCdifMeuKuRvWB8k47MnjTzyzaaVbPwN9ajK2sCtbBtAZYdKoc698Morybsf442PNFwRZDg5BZb7oFDl0kvQNRTSweGAIzf0fIIIemmHZ0NMRdJPgAy_vaw6zVx5-NMge9vHqQi8HmxHsTlSBSME-d3Q"/>
+</div>
+<span class="px-3 py-1 rounded-full bg-outline-variant text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider">Culture</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-2">International Gastronomy</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6 line-clamp-2">Exploring global cultures through the lens of traditional cuisine and cooking techniques.</p>
+<div class="mt-auto flex items-center justify-between">
+<div class="flex items-center gap-2 text-secondary">
+<span class="material-symbols-outlined text-[18px]" data-icon="person">person</span>
+<span class="font-label-md text-label-md">320 Members</span>
+</div>
+<button class="bg-primary-container text-on-primary-container px-5 py-2 rounded-lg font-label-md text-label-md hover:bg-primary transition-all active:scale-95">Join</button>
+</div>
+</div>
+<!-- Club Card 6 -->
+<div class="club-card group bg-surface-container-lowest border border-outline-variant rounded-xl p-6 flex flex-col h-full shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div class="w-16 h-16 rounded-xl bg-inverse-primary flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A sleek logo for a robotics club featuring a mechanical hand reaching for a gear. The style is futuristic and high-tech, using metallic tones with maroon accents. Sharp focus, clean studio photography aesthetic for a professional UI directory." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDWNgN3MqKSajNDyka8ao84g3PhsAXRFhX-AxU_foLe_RvKTTkcgBp1DSrwcFFk4weAtfJQH4KdrHHlp_5MD2bmEf20-INdgrDMZEcM5XJ_CHAo5W4QOSCRlq0hd496cTAml1G2BhYgoe0zAZ3kijUNwbkCxAFnNJTKmk7h1Rne54bg-Q9p2Q2nr2M5_muU32qmEyO_-AVUT-qP4itiwghs4H7BO6tLqyYkCnYTB-uyinFJzHZA9RT6xw"/>
+</div>
+<span class="px-3 py-1 rounded-full bg-tertiary-container text-tertiary-fixed font-label-sm text-label-sm uppercase tracking-wider">Tech</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-2">Robotics &amp; AI Guild</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6 line-clamp-2">Hands-on engineering projects ranging from autonomous drones to machine learning models.</p>
+<div class="mt-auto flex items-center justify-between">
+<div class="flex items-center gap-2 text-secondary">
+<span class="material-symbols-outlined text-[18px]" data-icon="person">person</span>
+<span class="font-label-md text-label-md">415 Members</span>
+</div>
+<button class="bg-primary-container text-on-primary-container px-5 py-2 rounded-lg font-label-md text-label-md hover:bg-primary transition-all active:scale-95">Join</button>
+</div>
+</div>
+</div>
+<!-- Pagination/Load More -->
+<div class="mt-12 flex justify-center">
+<button class="flex items-center gap-2 border-2 border-primary text-primary px-8 py-3 rounded-full font-label-md text-label-md hover:bg-primary-container transition-all">
+                    Load More Clubs
+                    <span class="material-symbols-outlined text-[20px]" data-icon="expand_more">expand_more</span>
+</button>
+</div>
+</main>
+</div>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe bg-surface dark:bg-surface-container-high border-t border-outline-variant dark:border-outline shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant group" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-sm text-label-sm-mobile">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1" href="#">
+<span class="material-symbols-outlined" data-icon="explore">explore</span>
+<span class="font-label-sm text-label-sm-mobile">Directory</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant group" href="#">
+<span class="material-symbols-outlined" data-icon="event">event</span>
+<span class="font-label-sm text-label-sm-mobile">Events</span>
+</a>
+</nav>
+<script>
+        // Micro-interaction for join buttons
+        document.querySelectorAll('button').forEach(button => {
+            if (button.textContent.trim() === 'Join') {
+                button.addEventListener('click', function() {
+                    const isJoined = this.getAttribute('data-joined') === 'true';
+                    if (!isJoined) {
+                        this.textContent = 'Joined';
+                        this.classList.remove('bg-primary-container', 'text-on-primary-container');
+                        this.classList.add('bg-tertiary-container', 'text-tertiary-fixed');
+                        this.setAttribute('data-joined', 'true');
+                    } else {
+                        this.textContent = 'Join';
+                        this.classList.add('bg-primary-container', 'text-on-primary-container');
+                        this.classList.remove('bg-tertiary-container', 'text-tertiary-fixed');
+                        this.setAttribute('data-joined', 'false');
+                    }
+                });
+            }
+        });
+
+        // Search bar interaction
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput.addEventListener('focus', () => {
+            searchInput.parentElement.classList.add('border-primary', 'shadow-md');
+        });
+        searchInput.addEventListener('blur', () => {
+            searchInput.parentElement.classList.remove('border-primary', 'shadow-md');
+        });
+    </script>
+</body></html>

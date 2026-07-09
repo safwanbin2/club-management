@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CampusHub | Club Details</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Custom scrollbar suppression for the swipeable gallery */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-highest": "#f2dee1",
+                      "error": "#ba1a1a",
+                      "on-tertiary-container": "#71a87d",
+                      "surface-variant": "#f2dee1",
+                      "on-surface": "#23191b",
+                      "on-tertiary-fixed": "#00210c",
+                      "surface-tint": "#a4355d",
+                      "surface-container-lowest": "#ffffff",
+                      "tertiary-container": "#003c1b",
+                      "tertiary-fixed-dim": "#9bd4a5",
+                      "secondary-fixed-dim": "#b9c7e0",
+                      "error-container": "#ffdad6",
+                      "secondary-container": "#d5e3fd",
+                      "on-surface-variant": "#554246",
+                      "on-secondary-fixed-variant": "#3a485c",
+                      "inverse-primary": "#ffb1c5",
+                      "on-secondary": "#ffffff",
+                      "background": "#fff8f8",
+                      "tertiary-fixed": "#b6f0c0",
+                      "tertiary": "#00240e",
+                      "on-primary-container": "#f1719a",
+                      "on-secondary-fixed": "#0d1c2f",
+                      "secondary": "#515f74",
+                      "primary-container": "#6a0032",
+                      "on-primary-fixed-variant": "#851b46",
+                      "surface": "#fff8f8",
+                      "outline-variant": "#dbc0c5",
+                      "on-error": "#ffffff",
+                      "on-tertiary-fixed-variant": "#1b512d",
+                      "surface-dim": "#e9d5d8",
+                      "inverse-on-surface": "#ffecef",
+                      "on-background": "#23191b",
+                      "surface-container-low": "#fff0f2",
+                      "on-secondary-container": "#57657b",
+                      "on-primary": "#ffffff",
+                      "on-primary-fixed": "#3f001b",
+                      "surface-container": "#fde9ec",
+                      "surface-container-high": "#f7e3e7",
+                      "on-tertiary": "#ffffff",
+                      "surface-bright": "#fff8f8",
+                      "primary": "#43001d",
+                      "outline": "#887176",
+                      "on-error-container": "#93000a",
+                      "inverse-surface": "#392d30",
+                      "primary-fixed": "#ffd9e1",
+                      "secondary-fixed": "#d5e3fd",
+                      "primary-fixed-dim": "#ffb1c5"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "sidebar-width": "260px",
+                      "topbar-height": "64px",
+                      "container-padding": "24px",
+                      "unit": "4px",
+                      "gutter": "16px"
+              },
+              "fontFamily": {
+                      "label-md": ["Inter"],
+                      "display-lg": ["Inter"],
+                      "body-sm": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "label-sm": ["Inter"],
+                      "headline-sm": ["Inter"],
+                      "body-md": ["Inter"],
+                      "body-lg": ["Inter"]
+              },
+              "fontSize": {
+                      "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "label-sm": ["11px", {"lineHeight": "14px", "fontWeight": "500"}],
+                      "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "label-sm-mobile": ["10px", {"lineHeight": "12px", "fontWeight": "500"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface min-h-screen pb-32">
+<!-- Top Navigation (Mobile Shell) -->
+<header class="flex justify-between items-center w-full h-[64px] px-4 fixed top-0 z-50 glass-effect">
+<button class="w-10 h-10 flex items-center justify-center rounded-full active:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-primary">arrow_back</span>
+</button>
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary">CampusHub</h1>
+<div class="flex gap-2">
+<button class="w-10 h-10 flex items-center justify-center rounded-full active:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-primary">share</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-full active:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-primary">more_vert</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="w-full">
+<!-- Hero Section -->
+<section class="relative w-full h-[397px] overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20 z-10"></div>
+<img class="w-full h-full object-cover" data-alt="A cinematic, high-quality photograph of a vibrant university campus robotic club in action. Students are gathered around a sleek, modern workstation with intricate metallic components and glowing blue lights. The lighting is dramatic, highlighting the Maroon and Slate color palette of the university. The atmosphere is one of intense collaboration and high-tech innovation in a clean, professional lab environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDe4lVlgfsoDfupEIBV3iN-yrYBle-q3CTpLS_QTSo66TD-eJb2Sr_CNpVfyR-Zg3gINQqRISAx3puLf-CH5fLlRXbJhzFnZ-p3gKLONZGca8BCEDi3CbHw3aTXQQmSLsHMX5w6PBFfSpgbIkAl5P_d8YnQ7fTOGHvl_vHVYCpSjtKZmyX06UMxlnawgW3uKBOawEMfGDabQSY4O_aTmAvqdgQ_PEhJMfLjstpq-mD5xTVC9_-nJ5Gvw"/>
+<div class="absolute bottom-0 left-0 w-full p-6 z-20">
+<div class="inline-flex items-center px-3 py-1 bg-primary-container text-on-primary-fixed text-label-sm font-label-sm rounded-full mb-3">
+<span class="material-symbols-outlined text-[14px] mr-1" style="font-variation-settings: 'FILL' 1;">stars</span>
+                    PREMIUM CLUB
+                </div>
+<h2 class="text-white font-display-lg text-display-lg leading-tight mb-1">Robotics &amp; AI Innovation</h2>
+<div class="flex items-center text-white/90 gap-4">
+<span class="flex items-center gap-1 font-label-md text-label-md">
+<span class="material-symbols-outlined text-[18px]">group</span> 124 Members
+                    </span>
+<span class="flex items-center gap-1 font-label-md text-label-md">
+<span class="material-symbols-outlined text-[18px]">location_on</span> Engineering Block B
+                    </span>
+</div>
+</div>
+</section>
+<!-- Details Stack -->
+<div class="px-container-padding -mt-4 relative z-30 space-y-6">
+<!-- Quick Info Cards -->
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface-container-low p-4 rounded-xl border border-outline-variant flex flex-col gap-2">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">calendar_today</span>
+<p class="font-label-md text-label-md text-on-surface-variant">NEXT MEETING</p>
+<p class="font-headline-sm text-headline-sm text-primary">Fri, Oct 24</p>
+<p class="font-body-sm text-body-sm text-on-secondary-fixed-variant">18:00 - 20:00</p>
+</div>
+<div class="bg-surface-container-low p-4 rounded-xl border border-outline-variant flex flex-col gap-2">
+<span class="material-symbols-outlined text-tertiary-container" style="font-variation-settings: 'FILL' 1;">payments</span>
+<p class="font-label-md text-label-md text-on-surface-variant">MEMBERSHIP FEE</p>
+<p class="font-headline-sm text-headline-sm text-on-tertiary-container">$15.00</p>
+<p class="font-body-sm text-body-sm text-on-secondary-fixed-variant">Per semester</p>
+</div>
+</div>
+<!-- About Section -->
+<section class="space-y-3">
+<h3 class="font-headline-sm text-headline-sm text-primary">About the Club</h3>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                    The Robotics &amp; AI Innovation club is dedicated to exploring the boundaries of autonomous systems and machine learning. We provide members with access to high-end prototyping equipment, industry mentorship, and competitive opportunities.
+                </p>
+<div class="flex flex-wrap gap-2 pt-2">
+<span class="px-3 py-1 bg-secondary-container text-on-secondary-container rounded-lg font-label-md text-label-md">Engineering</span>
+<span class="px-3 py-1 bg-secondary-container text-on-secondary-container rounded-lg font-label-md text-label-md">Technology</span>
+<span class="px-3 py-1 bg-secondary-container text-on-secondary-container rounded-lg font-label-md text-label-md">Competitions</span>
+</div>
+</section>
+<!-- Swipeable Gallery -->
+<section class="space-y-4">
+<div class="flex justify-between items-center">
+<h3 class="font-headline-sm text-headline-sm text-primary">Gallery</h3>
+<button class="text-primary font-label-md text-label-md">SEE ALL</button>
+</div>
+<div class="flex overflow-x-auto no-scrollbar gap-4 -mx-container-padding px-container-padding snap-x">
+<div class="flex-none w-64 h-40 rounded-xl overflow-hidden snap-start border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A group of university students in a brightly lit engineering lab, intensely focused on a complex robotic arm. They are dressed in casual modern attire with university branding visible. The background is filled with circuit boards, monitors displaying complex code, and mechanical parts. The lighting is soft and professional, reflecting the modern corporate minimalist style of the CampusHub platform." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAop32D5rOrcnTzcgGrmtxSnQ1jLblexzMx0HNSlumvf4hC_WcqDAiMtsA1mVAj3jYYUf8RGxeDDLz70Gzb_ceBzDovZmzzuRPYFjtdiXR7Nth_PBCPBxNF340bhFCmf-9A9RGbX4XnZ6-q5i5N8M95aqprmzSQV7btwwm572pcx7UiEGbdsKZgt91H9wb1qV0XhCZ0iuZkpY7wLpxDENQt8Nc1wOQSPorjsPhO9qN9w7Lg2gUVs8Y3-Q"/>
+</div>
+<div class="flex-none w-64 h-40 rounded-xl overflow-hidden snap-start border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A close-up shot of a humanoid robot's head being assembled. Fine metallic wires and microchips are visible against a clean, white laboratory background. The color palette is dominated by Slate and Maroon accents. High-utility data management aesthetic with a focus on technical detail and operational order." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBw7bdia0U-rTwq318XkSFkw-Q8kPxkPX4fog-x4tCvXCEc6NyyYJpzHcU-Th8ZJ7iZ_ZCFlRByJlFu2MMLquhrO6IfffKg1EfLsS15cLE8gxLff6G9J5TFJ-V218Kx-OCJnWkZoYqVAorOq_vmNj7VY1r3Nrn1tVwN9Qwjd5SjAQL_Ftmw0IT0zaicuJP8b0Cai5bQE_w7Tq76sP_daLLpM1XhsUPjCeRzZaFoYO274PET2HiEf7JY7g"/>
+</div>
+<div class="flex-none w-64 h-40 rounded-xl overflow-hidden snap-start border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="University students presenting their robotic project at a prestigious competition. They are standing in front of a branded backdrop in a large, modern exhibition hall. The scene is bright and professional, capturing a moment of triumph and systematic order. Maroon and white dominate the visual palette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDyHpengdzaZScbEf98M69NUylaItx8LNqpLMqi8rz7yw6TCn1DyWxV5sByqQLtQIMDrWWIrPjcS3udtWwJDvQFNAMDMB-gCgq4-_BbL2aQ1ze6OEhH7heoOPx2td7p0jVe9Htk0BRIQUITPEIlfwG-6Ss_UMDYEclOmBtyx5jWb6l9uAwa54byLgaIj8usnAhrsn6BR-gpgwUmqm1bQOc7cyfcyr7dDJgxg-Jbqp1nFlGhDTKxAEa3jA"/>
+</div>
+</div>
+</section>
+<!-- Leadership Section -->
+<section class="bg-surface-container p-5 rounded-2xl space-y-4">
+<h3 class="font-headline-sm text-headline-sm text-primary">Club Leadership</h3>
+<div class="space-y-4">
+<div class="flex items-center gap-4">
+<img class="w-12 h-12 rounded-full object-cover" data-alt="Professional headshot of a young male student leader with a friendly and confident expression. He is wearing a clean, branded university polo shirt. The background is a soft-focus campus setting. Lighting is natural and warm, following the high-end UI aesthetic of professional corporate minimalism." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAC0bHwesPcY-TFqAxucVb9n3oNoC2yOSJdgD07pbd9jkwwFx0hb9Eenwih_Lzerna7XcQYCnVjG5GQlu8jSc8Bk7CKKJlvlWZEPl5vDk7PVZ8RHzAMLndXW9oO95h0kfygknbzq-r83gZQZWDNwbKPVJGBD4M0KC7bGPUpcAO2CcARFlHBp3L6NhDIhpX7kHonDRwUWd_q6zitdSAKCKOw7YoNN9zCEaNFY0bLtVX1coNHjgn7SYN4zg"/>
+<div>
+<p class="font-body-md text-body-md font-bold text-on-surface">Alex Rivera</p>
+<p class="font-label-md text-label-md text-on-surface-variant">President | Computer Science '25</p>
+</div>
+<button class="ml-auto w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-highest text-primary">
+<span class="material-symbols-outlined">mail</span>
+</button>
+</div>
+<div class="flex items-center gap-4">
+<img class="w-12 h-12 rounded-full object-cover" data-alt="Professional headshot of a young female student leader with a focused and intelligent look. She has glasses and is wearing a professional blazer. The lighting is crisp and modern. The overall image quality is high, suitable for a premium administrative portal interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDWhoEogyGSI5ysd6YZks4E75jz5qwd0uFrt5uEsyuCfykslZIEM2Y_bVscUJGcFRVOsnwlHjyQLno5gbdpPpRtSxAtTYSF5kbP8MFIcvd4IFPhdt3taGXtoHuqteMU7za9zFDrxqYLi5wMFKycNqf6Obl3fzHqXRlIdp87xmmK2ZJHA2jD_mP881GQyoMcr8AbIjWyqia6gKaEpsjX7RqJILqnzoph1UNQLEUlUdyuXDu7EfKOz9ZLzA"/>
+<div>
+<p class="font-body-md text-body-md font-bold text-on-surface">Sarah Jenkins</p>
+<p class="font-label-md text-label-md text-on-surface-variant">Secretary | Mechanical Eng '24</p>
+</div>
+<button class="ml-auto w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-highest text-primary">
+<span class="material-symbols-outlined">mail</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Location Mini Map -->
+<section class="space-y-3 pb-8">
+<h3 class="font-headline-sm text-headline-sm text-primary">Find Us</h3>
+<div class="w-full h-48 rounded-2xl overflow-hidden border border-outline-variant relative">
+<img class="w-full h-full object-cover" data-alt="A clean, minimalist 3D map rendering of a university campus section, specifically highlighting the engineering block. The map uses a sophisticated color palette of whites, greys, and maroon highlights for key buildings. It looks like a high-end architectural visualization with soft shadows and clear pathways." data-location="University of Technology Engineering Square" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAIsdiNDmehlmfXEpZWwQTCF-GRcVRoqzuSu7cX0mdL1BqB95QwIe1j3HqmDuL4mKSJ5-y1aIJzPVwYuSd9RS5CKK0r7AQZrBZqCon3KBge6lGRr0ubvRi09ncSKioiJeWRzu87TCfW1WvBA1_sofqj5RzWfJIHgsTv1XNA94yR9UKMbRnd7IlcZ5zt2BpDmyYLh_f0harWzB1F1SIWfHF_kAGWFGIJL4Flwol8vZ7arg8MUPIoTl8FNw"/>
+<div class="absolute bottom-4 left-4 right-4 bg-white/90 backdrop-blur-md p-3 rounded-lg border border-outline-variant flex items-center gap-3">
+<div class="bg-primary p-2 rounded-lg text-white">
+<span class="material-symbols-outlined">directions</span>
+</div>
+<div>
+<p class="font-label-md text-label-md font-bold">Engineering Block B, Room 402</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">North Campus Campus</p>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Floating Action Button -->
+<div class="fixed bottom-24 right-6 z-50">
+<button class="flex items-center gap-2 bg-primary-container text-white px-6 py-4 rounded-full shadow-lg active:scale-95 transition-transform">
+<span class="material-symbols-outlined">person_add</span>
+<span class="font-label-md text-label-md uppercase tracking-wider">Join Club</span>
+</button>
+</div>
+<!-- Bottom Navigation Shell -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe bg-surface border-t border-outline-variant shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-sm text-label-sm-mobile">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">explore</span>
+<span class="font-label-sm text-label-sm-mobile">Directory</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">event</span>
+<span class="font-label-sm text-label-sm-mobile">Events</span>
+</a>
+</nav>
+<script>
+        // Micro-interaction for the FAB
+        const fab = document.querySelector('button.bg-primary-container');
+        fab.addEventListener('mousedown', () => {
+            fab.classList.add('opacity-90');
+        });
+        fab.addEventListener('mouseup', () => {
+            fab.classList.remove('opacity-90');
+        });
+
+        // Simple scroll effect for the header
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.classList.add('shadow-sm');
+                header.style.backgroundColor = 'rgba(255, 248, 248, 0.95)';
+            } else {
+                header.classList.remove('shadow-sm');
+                header.style.backgroundColor = 'transparent';
+            }
+        });
+    </script>
+</body></html>

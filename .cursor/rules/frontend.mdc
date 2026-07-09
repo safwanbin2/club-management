@@ -1,0 +1,21 @@
+---
+description: Frontend structure and design rules.
+globs:
+  - "frontend/**/*"
+alwaysApply: false
+---
+
+# Frontend Rules
+
+Read @.cursor/skills/architecture/references/frontend-structure.md, @docs/ui-system.md, @docs/design/stitch-source.md, @docs/design/page-map.md, and @docs/design/implementation-notes.md.
+
+- Use Ant Design for complex controls and Tailwind for layout/composition.
+- Inspect the closest Stitch desktop and mobile screenshots under @docs/design/stitch-export/ before designing or implementing a page.
+- Derive pages without exact Stitch coverage from the closest reference in @docs/design/page-map.md.
+- Keep route pages in `frontend/src/pages/<page-slice>/`.
+- Use `data/use-*.ts` for API interactions.
+- Use `state/` for page UI state.
+- Use `ui/` for presentational page components.
+- Use `internal/` for page-private workflows.
+- Use theme tokens from `frontend/src/config/theme.ts`, `frontend/src/resource/styles/tokens.css`, and `frontend/tailwind.config.cjs`.
+- Use `bg-primary`, `bg-muted`, `bg-surface`, `text-text`, `text-text-soft`, `border-border`, and Ant Design tokens instead of raw colors.

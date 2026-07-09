@@ -1,0 +1,19 @@
+---
+description: Backend module structure and API rules.
+globs:
+  - "backend/**/*"
+alwaysApply: false
+---
+
+# Backend Rules
+
+Read @.cursor/skills/architecture/references/backend-structure.md and @docs/api-contract.md.
+
+- Use module-first Express/Mongoose folders.
+- Keep route wiring in `*.routes.ts`.
+- Keep HTTP translation in `*.controller.ts`.
+- Keep business rules in `*.service.ts`.
+- Keep persistence in `*.model.ts`.
+- Validate input at the route boundary with Zod.
+- Register modules through `backend/src/http/routes.ts`.
+- Use shared response helpers and the documented API response shape.

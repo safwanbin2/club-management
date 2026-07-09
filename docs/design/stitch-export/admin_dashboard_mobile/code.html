@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-highest": "#f2dee1",
+                    "error": "#ba1a1a",
+                    "on-tertiary-container": "#71a87d",
+                    "surface-variant": "#f2dee1",
+                    "on-surface": "#23191b",
+                    "on-tertiary-fixed": "#00210c",
+                    "surface-tint": "#a4355d",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary-container": "#003c1b",
+                    "tertiary-fixed-dim": "#9bd4a5",
+                    "secondary-fixed-dim": "#b9c7e0",
+                    "error-container": "#ffdad6",
+                    "secondary-container": "#d5e3fd",
+                    "on-surface-variant": "#554246",
+                    "on-secondary-fixed-variant": "#3a485c",
+                    "inverse-primary": "#ffb1c5",
+                    "on-secondary": "#ffffff",
+                    "background": "#fff8f8",
+                    "tertiary-fixed": "#b6f0c0",
+                    "tertiary": "#00240e",
+                    "on-primary-container": "#f1719a",
+                    "on-secondary-fixed": "#0d1c2f",
+                    "secondary": "#515f74",
+                    "primary-container": "#6a0032",
+                    "on-primary-fixed-variant": "#851b46",
+                    "surface": "#fff8f8",
+                    "outline-variant": "#dbc0c5",
+                    "on-error": "#ffffff",
+                    "on-tertiary-fixed-variant": "#1b512d",
+                    "surface-dim": "#e9d5d8",
+                    "inverse-on-surface": "#ffecef",
+                    "on-background": "#23191b",
+                    "surface-container-low": "#fff0f2",
+                    "on-secondary-container": "#57657b",
+                    "on-primary": "#ffffff",
+                    "on-primary-fixed": "#3f001b",
+                    "surface-container": "#fde9ec",
+                    "surface-container-high": "#f7e3e7",
+                    "on-tertiary": "#ffffff",
+                    "surface-bright": "#fff8f8",
+                    "primary": "#43001d",
+                    "outline": "#887176",
+                    "on-error-container": "#93000a",
+                    "inverse-surface": "#392d30",
+                    "primary-fixed": "#ffd9e1",
+                    "secondary-fixed": "#d5e3fd",
+                    "primary-fixed-dim": "#ffb1c5"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "sidebar-width": "260px",
+                    "topbar-height": "64px",
+                    "container-padding": "24px",
+                    "unit": "4px",
+                    "gutter": "16px"
+            },
+            "fontFamily": {
+                    "label-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "headline-sm": ["Inter"],
+                    "body-md": ["Inter"],
+                    "body-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "label-sm": ["11px", {"lineHeight": "14px", "fontWeight": "500"}],
+                    "label-sm-mobile": ["10px", {"lineHeight": "12px", "fontWeight": "500"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface min-h-screen pb-24">
+<!-- Top Navigation Bar -->
+<header class="bg-surface dark:bg-surface-container flex justify-between items-center w-full h-[64px] px-container-padding sticky top-0 z-50 border-b border-outline-variant dark:border-outline shadow-sm">
+<div class="flex items-center gap-3">
+<span class="font-headline-sm text-headline-sm font-bold text-primary dark:text-primary-fixed">CampusHub</span>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative cursor-pointer active:opacity-80">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed">notifications</span>
+<span class="absolute -top-1 -right-1 bg-error text-on-error text-[9px] font-bold px-1.5 py-0.5 rounded-full">12</span>
+</div>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="Close-up professional headshot of a university administrator with a friendly expression. The lighting is soft and corporate, matching a clean academic environment. The background is a slightly blurred university library hallway with warm wood tones and professional lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAyGhm6V7Sj7foRoQxl0EXlvZm6YAtz97Ciil_2gVDLgh9fpShwjvLRi3ipXgi6SjJhBWv7ZhkTRbi2Kcjk6mbIzRni7DR_HS8Mf3lIDlb7RCOciDNLi52Ot7JPG2218eFf43BsaGLHzWU8wu9smiDiHckUeYxFbZ75cjTcsnKUgRZlxPxseC2bG-8ldGDLvvf7qGex3722gJAyrCX0-kOPHygY-2aR7TVtOs7H77SY2WBlIpFrtfy8Tw"/>
+</div>
+</div>
+</header>
+<main class="px-4 py-6 space-y-6">
+<!-- Welcome Header -->
+<section>
+<h1 class="font-headline-md text-headline-md text-on-surface">Dashboard</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Welcome back, Admin</p>
+</section>
+<!-- Bento Stats Grid -->
+<section class="grid grid-cols-2 gap-3">
+<div class="bg-surface-container-low p-4 rounded-xl border border-outline-variant shadow-sm flex flex-col justify-between aspect-square">
+<div class="bg-primary-container/10 w-10 h-10 rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">groups</span>
+</div>
+<div>
+<span class="font-display-lg text-display-lg text-primary block">142</span>
+<span class="font-label-md text-label-md text-on-surface-variant uppercase">Total Clubs</span>
+</div>
+</div>
+<div class="bg-surface-container-low p-4 rounded-xl border border-outline-variant shadow-sm flex flex-col justify-between aspect-square">
+<div class="bg-on-tertiary-container/10 w-10 h-10 rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-on-tertiary-container">pending_actions</span>
+</div>
+<div>
+<span class="font-display-lg text-display-lg text-on-tertiary-container block">12</span>
+<span class="font-label-md text-label-md text-on-surface-variant uppercase">Pending Approvals</span>
+</div>
+</div>
+<div class="col-span-2 bg-primary-container p-5 rounded-xl text-on-primary flex justify-between items-center overflow-hidden relative">
+<div class="z-10">
+<span class="font-label-md text-label-md text-primary-fixed opacity-80 block mb-1">Total Active Students</span>
+<span class="font-display-lg text-display-lg text-white block">3,842</span>
+<div class="mt-2 flex items-center gap-1 text-tertiary-fixed text-sm">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+<span class="font-label-sm text-label-sm">8% increase this month</span>
+</div>
+</div>
+<div class="absolute right-[-20px] bottom-[-20px] opacity-10">
+<span class="material-symbols-outlined text-[120px]" style="font-variation-settings: 'FILL' 1;">analytics</span>
+</div>
+</div>
+</section>
+<!-- Approval Queue Preview -->
+<section class="space-y-3">
+<div class="flex justify-between items-end">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Approval Queue</h2>
+<a class="font-label-md text-label-md text-on-primary-container" href="#">View All</a>
+</div>
+<div class="flex gap-4 overflow-x-auto no-scrollbar pb-2">
+<div class="min-w-[280px] bg-white p-4 rounded-xl border border-outline-variant shadow-sm flex gap-4 items-center">
+<div class="w-14 h-14 rounded-lg bg-surface-container flex-shrink-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-3xl">rocket_launch</span>
+</div>
+<div class="flex-1">
+<p class="font-label-md text-label-md text-on-surface-variant">New Club Application</p>
+<h3 class="font-body-md text-body-md font-bold text-on-surface truncate">Aerospace Engineering Soc</h3>
+<div class="mt-2 flex gap-2">
+<button class="bg-primary-container text-white px-3 py-1 rounded-full font-label-sm text-label-sm">Review</button>
+<button class="bg-surface-container-highest text-on-surface-variant px-3 py-1 rounded-full font-label-sm text-label-sm">Later</button>
+</div>
+</div>
+</div>
+<div class="min-w-[280px] bg-white p-4 rounded-xl border border-outline-variant shadow-sm flex gap-4 items-center">
+<div class="w-14 h-14 rounded-lg bg-surface-container flex-shrink-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-3xl">palette</span>
+</div>
+<div class="flex-1">
+<p class="font-label-md text-label-md text-on-surface-variant">Funding Request</p>
+<h3 class="font-body-md text-body-md font-bold text-on-surface truncate">Fine Arts Collective</h3>
+<div class="mt-2 flex gap-2">
+<button class="bg-primary-container text-white px-3 py-1 rounded-full font-label-sm text-label-sm">Review</button>
+<button class="bg-surface-container-highest text-on-surface-variant px-3 py-1 rounded-full font-label-sm text-label-sm">Later</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Club Status Table View -->
+<section class="space-y-3">
+<div class="flex justify-between items-end">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Club Status</h2>
+<div class="flex items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined text-lg">filter_list</span>
+<span class="font-label-md text-label-md">Filter</span>
+</div>
+</div>
+<div class="bg-white rounded-xl border border-outline-variant overflow-hidden shadow-sm">
+<table class="w-full text-left">
+<thead class="bg-surface-container text-on-surface-variant border-b border-outline-variant">
+<tr>
+<th class="px-4 py-3 font-label-md text-label-md uppercase tracking-wider">Club</th>
+<th class="px-4 py-3 font-label-md text-label-md uppercase tracking-wider text-right">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-4 py-3">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-primary font-bold text-xs">CS</div>
+<div class="flex flex-col">
+<span class="font-body-md text-body-md font-bold text-on-surface">Comp Sci Society</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Academic</span>
+</div>
+</div>
+</td>
+<td class="px-4 py-3 text-right">
+<span class="px-2 py-1 bg-tertiary-fixed text-on-tertiary-fixed-variant rounded font-label-sm text-label-sm">Active</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-4 py-3">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-primary font-bold text-xs">DF</div>
+<div class="flex flex-col">
+<span class="font-body-md text-body-md font-bold text-on-surface">Drama &amp; Film</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Arts</span>
+</div>
+</div>
+</td>
+<td class="px-4 py-3 text-right">
+<span class="px-2 py-1 bg-tertiary-fixed text-on-tertiary-fixed-variant rounded font-label-sm text-label-sm">Active</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-4 py-3">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-primary font-bold text-xs">BT</div>
+<div class="flex flex-col">
+<span class="font-body-md text-body-md font-bold text-on-surface">Boxing Team</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Sports</span>
+</div>
+</div>
+</td>
+<td class="px-4 py-3 text-right">
+<span class="px-2 py-1 bg-error-container text-on-error-container rounded font-label-sm text-label-sm">Suspended</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-4 py-3">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-primary font-bold text-xs">EN</div>
+<div class="flex flex-col">
+<span class="font-body-md text-body-md font-bold text-on-surface">Entrepreneurship</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Business</span>
+</div>
+</div>
+</td>
+<td class="px-4 py-3 text-right">
+<span class="px-2 py-1 bg-surface-container-highest text-on-surface-variant rounded font-label-sm text-label-sm">Pending</span>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="p-4 bg-surface-container-low flex justify-center">
+<button class="font-label-md text-label-md text-primary flex items-center gap-1">
+                        View Complete Directory <span class="material-symbols-outlined text-sm">arrow_forward_ios</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Quick Actions Grid -->
+<section class="pb-12">
+<h2 class="font-headline-sm text-headline-sm text-on-surface mb-3">Quick Actions</h2>
+<div class="grid grid-cols-3 gap-3">
+<div class="flex flex-col items-center gap-2 p-3 bg-surface-container rounded-xl cursor-pointer active:scale-95 transition-transform">
+<div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-primary">add_circle</span>
+</div>
+<span class="font-label-sm text-label-sm text-center">New Club</span>
+</div>
+<div class="flex flex-col items-center gap-2 p-3 bg-surface-container rounded-xl cursor-pointer active:scale-95 transition-transform">
+<div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-primary">mail</span>
+</div>
+<span class="font-label-sm text-label-sm text-center">Broadcast</span>
+</div>
+<div class="flex flex-col items-center gap-2 p-3 bg-surface-container rounded-xl cursor-pointer active:scale-95 transition-transform">
+<div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-primary">payments</span>
+</div>
+<span class="font-label-sm text-label-sm text-center">Grants</span>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe bg-surface dark:bg-surface-container-high border-t border-outline-variant dark:border-outline shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] rounded-t-xl">
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="font-label-sm text-label-sm-mobile">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">groups</span>
+<span class="font-label-sm text-label-sm-mobile">Directory</span>
+</a>
+<a class="relative flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">newspaper</span>
+<span class="font-label-sm text-label-sm-mobile">Feed</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-error rounded-full"></span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">calendar_month</span>
+<span class="font-label-sm text-label-sm-mobile">Events</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-sm text-label-sm-mobile">Settings</span>
+</a>
+</nav>
+<script>
+        // Micro-interactions for the dashboard
+        document.querySelectorAll('button, [class*="cursor-pointer"]').forEach(el => {
+            el.addEventListener('touchstart', () => {
+                el.classList.add('opacity-70');
+            });
+            el.addEventListener('touchend', () => {
+                el.classList.remove('opacity-70');
+            });
+        });
+    </script>
+</body></html>

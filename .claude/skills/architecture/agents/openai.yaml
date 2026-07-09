@@ -1,0 +1,4 @@
+interface:
+  display_name: "Architecture"
+  short_description: "Build MERN apps using the project architecture"
+  default_prompt: "Use $architecture to scaffold a React, Express, and MongoDB feature that follows the project architecture."

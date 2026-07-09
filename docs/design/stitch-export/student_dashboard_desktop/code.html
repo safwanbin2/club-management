@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CampusHub | Student Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#f2dee1",
+                        "error": "#ba1a1a",
+                        "on-tertiary-container": "#71a87d",
+                        "surface-variant": "#f2dee1",
+                        "on-surface": "#23191b",
+                        "on-tertiary-fixed": "#00210c",
+                        "surface-tint": "#a4355d",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-container": "#003c1b",
+                        "tertiary-fixed-dim": "#9bd4a5",
+                        "secondary-fixed-dim": "#b9c7e0",
+                        "error-container": "#ffdad6",
+                        "secondary-container": "#d5e3fd",
+                        "on-surface-variant": "#554246",
+                        "on-secondary-fixed-variant": "#3a485c",
+                        "inverse-primary": "#ffb1c5",
+                        "on-secondary": "#ffffff",
+                        "background": "#fff8f8",
+                        "tertiary-fixed": "#b6f0c0",
+                        "tertiary": "#00240e",
+                        "on-primary-container": "#f1719a",
+                        "on-secondary-fixed": "#0d1c2f",
+                        "secondary": "#515f74",
+                        "primary-container": "#6a0032",
+                        "on-primary-fixed-variant": "#851b46",
+                        "surface": "#fff8f8",
+                        "outline-variant": "#dbc0c5",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed-variant": "#1b512d",
+                        "surface-dim": "#e9d5d8",
+                        "inverse-on-surface": "#ffecef",
+                        "on-background": "#23191b",
+                        "surface-container-low": "#fff0f2",
+                        "on-secondary-container": "#57657b",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed": "#3f001b",
+                        "surface-container": "#fde9ec",
+                        "surface-container-high": "#f7e3e7",
+                        "on-tertiary": "#ffffff",
+                        "surface-bright": "#fff8f8",
+                        "primary": "#43001d",
+                        "outline": "#887176",
+                        "on-error-container": "#93000a",
+                        "inverse-surface": "#392d30",
+                        "primary-fixed": "#ffd9e1",
+                        "secondary-fixed": "#d5e3fd",
+                        "primary-fixed-dim": "#ffb1c5"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "sidebar-width": "260px",
+                        "topbar-height": "64px",
+                        "container-padding": "24px",
+                        "unit": "4px",
+                        "gutter": "16px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "label-sm": ["11px", {"lineHeight": "14px", "fontWeight": "500"}],
+                        "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .sidebar-active-pill {
+            position: absolute;
+            left: 0;
+            width: 4px;
+            height: 32px;
+            background-color: #6a0032;
+            border-radius: 0 4px 4px 0;
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #dbc0c5; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-background text-on-surface">
+<!-- TopNavBar -->
+<header class="flex justify-between items-center w-full h-[64px] px-container-padding sticky top-0 z-50 bg-surface dark:bg-surface-container border-b border-outline-variant dark:border-outline shadow-sm">
+<div class="flex items-center gap-8">
+<span class="font-headline-sm text-headline-sm font-bold text-primary dark:text-primary-fixed">CampusHub</span>
+<div class="hidden md:flex items-center bg-surface-container-low px-3 py-1.5 rounded-lg border border-outline-variant">
+<span class="material-symbols-outlined text-outline text-[20px]">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-md font-body-md w-64 ml-2 placeholder:text-on-surface-variant" placeholder="Search clubs or events..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 px-3 py-1 bg-secondary-container text-on-secondary-container rounded-full">
+<span class="font-label-md text-label-md">Student</span>
+<span class="material-symbols-outlined text-[16px]">swap_horiz</span>
+</div>
+<div class="flex items-center gap-3">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-secondary-container transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-secondary-container transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">apps</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a diverse university student with a friendly expression. The lighting is bright and natural, reflecting a clean and modern academic atmosphere. The background is a soft-focus university library with warm wooden textures and light-colored book spines, maintaining a high-key light-mode aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAr8vJmtpAPlaI_odNkl4OolGCEDQazGN2bFNZerDtM39JVoOZLS5U-ztWW-xknsoQYvGldrY83vLYUC1xkGqGI10M-DdrZ557rIlumc5TzYorwjEzdZxuyAAXLUI0HFKnA_u0aD_qZjOZgsAbysrCbzM4S3jy-JDolyds5cQINAzVeTThd7nbfO2rmsRd_q0YVSIBihFwRLSqhmstcLfv8tlVom8ttIXCv0cvb5xdlsj1o6SmQtUUNUw"/>
+</div>
+</div>
+</div>
+</header>
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col h-screen fixed left-0 top-0 py-6 overflow-y-auto bg-surface-container-low dark:bg-surface-dim border-r border-outline-variant dark:border-outline w-sidebar-width z-40">
+<div class="px-6 mb-8 mt-16">
+<div class="flex items-center gap-3 mb-6">
+<div class="w-10 h-10 rounded-lg bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary">school</span>
+</div>
+<div>
+<h2 class="font-label-md text-label-md text-primary font-bold uppercase tracking-widest">Admin Portal</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Student View</p>
+</div>
+</div>
+<button class="w-full py-2.5 px-4 bg-primary-container text-on-primary rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                Create New Club
+            </button>
+</div>
+<nav class="flex flex-col gap-1">
+<!-- Dashboard Active -->
+<a class="flex items-center gap-3 bg-primary-container text-on-primary-container font-bold rounded-lg px-4 py-3 border-l-4 border-primary mx-4" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 text-secondary dark:text-secondary-fixed-dim px-4 py-3 mx-4 hover:bg-secondary-container transition-all rounded-lg group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary" data-icon="groups">groups</span>
+<span class="font-label-md text-label-md">Club Directory</span>
+</a>
+<a class="flex items-center gap-3 text-secondary dark:text-secondary-fixed-dim px-4 py-3 mx-4 hover:bg-secondary-container transition-all rounded-lg group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary" data-icon="newspaper">newspaper</span>
+<span class="font-label-md text-label-md">News Feed</span>
+</a>
+<a class="flex items-center gap-3 text-secondary dark:text-secondary-fixed-dim px-4 py-3 mx-4 hover:bg-secondary-container transition-all rounded-lg group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary" data-icon="calendar_month">calendar_month</span>
+<span class="font-label-md text-label-md">Events</span>
+</a>
+<a class="flex items-center gap-3 text-secondary dark:text-secondary-fixed-dim px-4 py-3 mx-4 hover:bg-secondary-container transition-all rounded-lg group mt-auto" href="#">
+<span class="material-symbols-outlined group-hover:text-primary" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</nav>
+</aside>
+<!-- Main Content Canvas -->
+<main class="md:ml-sidebar-width min-h-[calc(100vh-64px)] p-container-padding pb-24 md:pb-container-padding">
+<div class="max-w-7xl mx-auto space-y-gutter">
+<!-- Greeting & Bento Layout Start -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Greeting Card -->
+<div class="lg:col-span-8 bg-surface-container rounded-xl p-8 relative overflow-hidden flex flex-col justify-center min-h-[240px] border border-outline-variant shadow-sm">
+<div class="relative z-10 max-w-lg">
+<h1 class="font-display-lg text-display-lg text-primary mb-2">Welcome back, Alex</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant">You have 3 club meetings today and 2 new announcements in the Robotics Club. Ready to lead the next session?</p>
+<div class="mt-6 flex gap-4">
+<button class="bg-primary-container text-on-primary px-6 py-2 rounded-lg font-label-md text-label-md shadow-md active:scale-95 transition-transform">View Schedule</button>
+<button class="border border-outline-variant bg-surface px-6 py-2 rounded-lg font-label-md text-label-md hover:bg-surface-container-high transition-colors">Quick Note</button>
+</div>
+</div>
+<!-- Decorative Element -->
+<div class="absolute -right-16 -bottom-16 w-64 h-64 bg-primary-fixed opacity-20 rounded-full blur-3xl"></div>
+<div class="absolute right-12 top-1/2 -translate-y-1/2 hidden md:block">
+<span class="material-symbols-outlined text-[120px] text-primary opacity-10">waving_hand</span>
+</div>
+</div>
+<!-- Stats/News Feed Preview Card -->
+<div class="lg:col-span-4 bg-surface-container-lowest rounded-xl p-6 border border-outline-variant shadow-sm flex flex-col">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Feed Preview</h3>
+<span class="material-symbols-outlined text-outline">more_vert</span>
+</div>
+<div class="space-y-4 flex-1 overflow-y-auto custom-scrollbar pr-2">
+<div class="p-3 bg-surface-container-low rounded-lg border-l-4 border-tertiary-container group cursor-pointer hover:bg-surface-container transition-colors">
+<p class="font-label-sm text-label-sm text-on-tertiary-fixed-variant mb-1 uppercase">University News</p>
+<h4 class="font-body-md text-body-md font-bold text-on-surface line-clamp-1">New Campus Dining Hall opening this Friday</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Check out the new menus and hours...</p>
+</div>
+<div class="p-3 bg-surface-container-low rounded-lg border-l-4 border-secondary-container group cursor-pointer hover:bg-surface-container transition-colors">
+<p class="font-label-sm text-label-sm text-on-secondary-fixed-variant mb-1 uppercase">Club Alert</p>
+<h4 class="font-body-md text-body-md font-bold text-on-surface line-clamp-1">Chess Club: Strategy Workshop Canceled</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">The workshop will be rescheduled for next Tuesday.</p>
+</div>
+</div>
+<button class="mt-4 w-full py-2 text-center text-primary font-label-md text-label-md hover:underline">View All Notifications</button>
+</div>
+<!-- My Clubs Grid (High Density Layout) -->
+<div class="lg:col-span-8 space-y-4">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">My Clubs</h3>
+<a class="text-primary font-label-md text-label-md flex items-center gap-1" href="#">Manage All <span class="material-symbols-outlined text-[16px]">arrow_forward</span></a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Club Card 1 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-4 flex gap-4 hover:shadow-md transition-shadow group">
+<div class="w-16 h-16 rounded-lg bg-tertiary-container flex-shrink-0 flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A stylized logo for a robotics club, featuring a futuristic mechanical arm assembly. The aesthetic is clean and modern, using deep blues and vibrant maroon accents. The lighting is sharp, industrial, and optimistic, set against a pristine light-mode background suitable for a professional university portal." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDP15CIH6tOFSOawR4KIxcEImjZqwDjsZKDXatsCg5oTB-j_T_hFypTQMhXhmse0UsOfZXhUoPkkhO6qkO8WiRl0J67jNwFe_796t1c3AxQyHTg8VEylhWHVVCJ3K4U-AzKUNEXmY6x5fMtF642u0a8u2vxt-BEFaiB8UpK4g9dHJ_024IBba815Xp2whJqkTnrapD_MRX7EMJnLy2nDYcTKu0zwiIAAlfldt8ftP8FejpaE5x9vl-pjg"/>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<h4 class="font-body-lg text-body-lg font-bold group-hover:text-primary transition-colors">Robotics Society</h4>
+<span class="px-2 py-0.5 rounded-full bg-on-tertiary-container/10 text-on-tertiary-container font-label-sm text-label-sm">Active</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-1 mt-1">Lead Developer • Next: Tomorrow, 4 PM</p>
+<div class="flex -space-x-2 mt-3">
+<div class="w-6 h-6 rounded-full border-2 border-surface bg-slate-200"></div>
+<div class="w-6 h-6 rounded-full border-2 border-surface bg-slate-300"></div>
+<div class="w-6 h-6 rounded-full border-2 border-surface bg-slate-400"></div>
+<div class="w-6 h-6 rounded-full border-2 border-surface bg-primary-fixed text-[10px] flex items-center justify-center font-bold text-primary">+12</div>
+</div>
+</div>
+</div>
+<!-- Club Card 2 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-4 flex gap-4 hover:shadow-md transition-shadow group">
+<div class="w-16 h-16 rounded-lg bg-secondary-container flex-shrink-0 flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="An artistic logo for a photography club, showcasing a minimalist camera lens silhouette with elegant linework. The color palette incorporates soft grey, white, and a signature maroon highlight. The overall feel is professional and creative, perfectly integrated into a high-utility minimalist university dashboard." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAuenGJgo19Hlrm7wACSA9za_gig-mA7ThM2IHg8AOeZOE62sn9LZKyrl-yVjXC8NmlXI6TYV3mJveKME4asjdMJTEHjKOq9IoanhCGPJjKwcIVzB7CBCAMtMqiDimHaaVe_QsfSWaPCLeFDR0ouLNkL1MLkW_rE_wr2tzpCJRyvdkiVqytBUJEIIq_ql0HoDzqd6_afviaZGiDWDIeeBkojGd6EzS3AeHpMyqFNzLreENZVGu6QnBM4Q"/>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<h4 class="font-body-lg text-body-lg font-bold group-hover:text-primary transition-colors">Photography Club</h4>
+<span class="px-2 py-0.5 rounded-full bg-secondary-fixed-dim/20 text-on-secondary-fixed-variant font-label-sm text-label-sm">Pending</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-1 mt-1">Member • Reviewing portfolio</p>
+<div class="mt-3 flex items-center text-error font-label-sm text-label-sm gap-1">
+<span class="material-symbols-outlined text-[14px]">info</span> Action Required
+                                </div>
+</div>
+</div>
+<!-- Club Card 3 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-4 flex gap-4 hover:shadow-md transition-shadow group">
+<div class="w-16 h-16 rounded-lg bg-surface-container-highest flex-shrink-0 flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A refined logo for a debate union, featuring a classical podium icon paired with modern, bold typography. The visual style is authoritative and collegiate, using a sophisticated mix of maroon and slate. Set in a bright, airy light-mode environment with crisp edges and soft shadows." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhLIkfIu0_UOVcwcq6sX3xKQ6dEvivtVTE4N4Z5IAeWM8I6NDIEOANI8ckpfotDYQsvTpBmkwyc2ZE3LyuzBNpkLhdf82XaCwfkum1pLzsRxYmY8ogWj1ypUD2HyGtw7orhwljqy04N_g2gw1RBvZLSBkZCNhd9tlcOj3k-pxxvmjjJIY9rUSnCS52FHlD4rbhWVcLm06dHVlEQ_mx_gMfdHGBdCeAFyqf9dEB4ESi_hfDm_IzDYrixA"/>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<h4 class="font-body-lg text-body-lg font-bold group-hover:text-primary transition-colors">Debate Union</h4>
+<span class="px-2 py-0.5 rounded-full bg-on-tertiary-container/10 text-on-tertiary-container font-label-sm text-label-sm">Active</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-1 mt-1">Treasurer • Budget Meeting: Monday</p>
+<div class="flex items-center gap-1 mt-3">
+<div class="w-2 h-2 rounded-full bg-error animate-pulse"></div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Live Discussion Now</span>
+</div>
+</div>
+</div>
+<!-- Club Card 4 - Join CTA -->
+<div class="border-2 border-dashed border-outline-variant rounded-xl p-4 flex flex-col items-center justify-center gap-2 hover:bg-surface-container-low cursor-pointer group transition-colors">
+<div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-primary">explore</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant">Explore More Clubs</span>
+</div>
+</div>
+</div>
+<!-- Upcoming Events List -->
+<div class="lg:col-span-4 space-y-4">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Upcoming Events</h3>
+<button class="w-8 h-8 flex items-center justify-center rounded-full bg-surface-container hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">filter_list</span>
+</button>
+</div>
+<div class="space-y-3">
+<!-- Event Item -->
+<div class="flex gap-4 p-4 bg-surface-container-lowest border border-outline-variant rounded-xl relative group overflow-hidden">
+<div class="flex flex-col items-center justify-center w-12 h-14 bg-surface-container rounded-lg border border-outline-variant">
+<span class="font-label-sm text-label-sm text-primary uppercase">Oct</span>
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">12</span>
+</div>
+<div class="flex-1">
+<h4 class="font-body-md text-body-md font-bold text-on-surface">AI Ethics Panel</h4>
+<div class="flex items-center gap-2 text-body-sm text-body-sm text-on-surface-variant mt-1">
+<span class="material-symbols-outlined text-[14px]">schedule</span>
+                                    5:30 PM - 7:00 PM
+                                </div>
+<div class="flex items-center gap-2 text-body-sm text-body-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[14px]">location_on</span>
+                                    Science Hall, Room 302
+                                </div>
+</div>
+<div class="absolute right-0 top-0 h-full w-1 bg-primary transform translate-x-1 group-hover:translate-x-0 transition-transform"></div>
+</div>
+<!-- Event Item -->
+<div class="flex gap-4 p-4 bg-surface-container-lowest border border-outline-variant rounded-xl relative group overflow-hidden">
+<div class="flex flex-col items-center justify-center w-12 h-14 bg-surface-container rounded-lg border border-outline-variant">
+<span class="font-label-sm text-label-sm text-primary uppercase">Oct</span>
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">14</span>
+</div>
+<div class="flex-1">
+<h4 class="font-body-md text-body-md font-bold text-on-surface">Hiking Club Meetup</h4>
+<div class="flex items-center gap-2 text-body-sm text-body-sm text-on-surface-variant mt-1">
+<span class="material-symbols-outlined text-[14px]">schedule</span>
+                                    08:00 AM
+                                </div>
+<div class="flex items-center gap-2 text-body-sm text-body-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[14px]">location_on</span>
+                                    North Trailhead
+                                </div>
+</div>
+<div class="absolute right-0 top-0 h-full w-1 bg-primary transform translate-x-1 group-hover:translate-x-0 transition-transform"></div>
+</div>
+<!-- Event Item -->
+<div class="flex gap-4 p-4 bg-surface-container-lowest border border-outline-variant rounded-xl relative group overflow-hidden opacity-60">
+<div class="flex flex-col items-center justify-center w-12 h-14 bg-surface-container rounded-lg border border-outline-variant">
+<span class="font-label-sm text-label-sm text-primary uppercase">Oct</span>
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">15</span>
+</div>
+<div class="flex-1">
+<h4 class="font-body-md text-body-md font-bold text-on-surface">Budget Planning</h4>
+<div class="flex items-center gap-2 text-body-sm text-body-sm text-on-surface-variant mt-1">
+<span class="material-symbols-outlined text-[14px]">schedule</span>
+                                    2:00 PM
+                                </div>
+<div class="flex items-center gap-2 text-body-sm text-body-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[14px]">location_on</span>
+                                    Virtual Meeting
+                                </div>
+</div>
+</div>
+</div>
+<button class="w-full py-3 bg-surface border border-outline-variant text-on-surface rounded-xl font-label-md text-label-md hover:bg-surface-container-high transition-colors flex items-center justify-center gap-2">
+                        View Full Calendar
+                        <span class="material-symbols-outlined text-[18px]">calendar_today</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe bg-surface dark:bg-surface-container-high border-t border-outline-variant dark:border-outline shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] rounded-t-xl">
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1" href="#">
+<span class="material-symbols-outlined" data-icon="home" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-sm text-label-sm-mobile">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:bg-secondary-container rounded-full px-4 py-1 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="explore">explore</span>
+<span class="font-label-sm text-label-sm-mobile">Directory</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:bg-secondary-container rounded-full px-4 py-1 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="event">event</span>
+<span class="font-label-sm text-label-sm-mobile">Events</span>
+</a>
+</nav>
+<!-- Contextual FAB (Mobile Only) -->
+<button class="md:hidden fixed bottom-20 right-6 w-14 h-14 bg-primary-container text-on-primary rounded-full shadow-2xl flex items-center justify-center z-40 active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-[32px]">add</span>
+</button>
+<script>
+        // Micro-interactions and effects
+        document.querySelectorAll('a, button').forEach(el => {
+            el.addEventListener('mousedown', () => {
+                el.classList.add('opacity-80');
+            });
+            el.addEventListener('mouseup', () => {
+                el.classList.remove('opacity-80');
+            });
+        });
+
+        // Hover state for table-like rows (Events)
+        const eventItems = document.querySelectorAll('.group');
+        eventItems.forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                // Background subtle shift already handled by Tailwind
+            });
+        });
+    </script>
+</body></html>

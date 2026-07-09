@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CampusHub | Events Directory</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-highest": "#f2dee1",
+                    "error": "#ba1a1a",
+                    "on-tertiary-container": "#71a87d",
+                    "surface-variant": "#f2dee1",
+                    "on-surface": "#23191b",
+                    "on-tertiary-fixed": "#00210c",
+                    "surface-tint": "#a4355d",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary-container": "#003c1b",
+                    "tertiary-fixed-dim": "#9bd4a5",
+                    "secondary-fixed-dim": "#b9c7e0",
+                    "error-container": "#ffdad6",
+                    "secondary-container": "#d5e3fd",
+                    "on-surface-variant": "#554246",
+                    "on-secondary-fixed-variant": "#3a485c",
+                    "inverse-primary": "#ffb1c5",
+                    "on-secondary": "#ffffff",
+                    "background": "#fff8f8",
+                    "tertiary-fixed": "#b6f0c0",
+                    "tertiary": "#00240e",
+                    "on-primary-container": "#f1719a",
+                    "on-secondary-fixed": "#0d1c2f",
+                    "secondary": "#515f74",
+                    "primary-container": "#6a0032",
+                    "on-primary-fixed-variant": "#851b46",
+                    "surface": "#fff8f8",
+                    "outline-variant": "#dbc0c5",
+                    "on-error": "#ffffff",
+                    "on-tertiary-fixed-variant": "#1b512d",
+                    "surface-dim": "#e9d5d8",
+                    "inverse-on-surface": "#ffecef",
+                    "on-background": "#23191b",
+                    "surface-container-low": "#fff0f2",
+                    "on-secondary-container": "#57657b",
+                    "on-primary": "#ffffff",
+                    "on-primary-fixed": "#3f001b",
+                    "surface-container": "#fde9ec",
+                    "surface-container-high": "#f7e3e7",
+                    "on-tertiary": "#ffffff",
+                    "surface-bright": "#fff8f8",
+                    "primary": "#43001d",
+                    "outline": "#887176",
+                    "on-error-container": "#93000a",
+                    "inverse-surface": "#392d30",
+                    "primary-fixed": "#ffd9e1",
+                    "secondary-fixed": "#d5e3fd",
+                    "primary-fixed-dim": "#ffb1c5"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "sidebar-width": "260px",
+                    "topbar-height": "64px",
+                    "container-padding": "24px",
+                    "unit": "4px",
+                    "gutter": "16px"
+            },
+            "fontFamily": {
+                    "label-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "headline-sm": ["Inter"],
+                    "body-md": ["Inter"],
+                    "body-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "label-sm": ["11px", {"lineHeight": "14px", "fontWeight": "500"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #fff8f8; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .sidebar-active { border-left-width: 4px; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="text-on-surface">
+<!-- TopNavBar -->
+<header class="flex justify-between items-center w-full h-[64px] px-container-padding sticky top-0 z-50 bg-surface border-b border-outline-variant shadow-sm">
+<div class="flex items-center gap-8">
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary">CampusHub</h1>
+<div class="hidden md:flex items-center gap-6">
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Dashboard</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Directory</a>
+<a class="font-label-md text-label-md text-primary font-bold border-b-2 border-primary py-4" href="#">Events</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
+<input class="pl-10 pr-4 py-2 rounded-full bg-surface-container-low border border-outline-variant text-body-md focus:outline-none focus:ring-2 focus:ring-primary/20 w-64" placeholder="Search events..." type="text"/>
+</div>
+<button class="material-symbols-outlined p-2 text-on-surface-variant hover:bg-secondary-container rounded-full transition-colors">notifications</button>
+<button class="material-symbols-outlined p-2 text-on-surface-variant hover:bg-secondary-container rounded-full transition-colors">apps</button>
+<div class="h-8 w-8 rounded-full overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a university student for a profile avatar, set against a clean, soft-lit studio background. The lighting is bright and modern, consistent with a high-end educational platform's aesthetic. The individual wears a smart-casual maroon sweater, subtly mirroring the brand color palette of CampusHub." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0zDLZgS4eP6oWSdpD8TL0fwcSd9inkaa7Q5l8xPMB0dD1OoOATLk0gj4_afzJBREWKbC_y87xkt2-y00A5qxMqy5ILHUcjn5JImruJEYj1uAfDb3AjD7TMQjxh1gw5GGaarWRvrB6qbrQ0bOFIq_HgbkaowYFSWXA9cjbJMhT0M9CvVrjp5bxvzsiHE6kG79Fgs2uS2aujhyTtHuyfm570Rlirdc-LL3EANiIhitRJA9Sj4siAICyhg"/>
+</div>
+</div>
+</header>
+<div class="flex min-h-[calc(100vh-64px)]">
+<!-- SideNavBar (Desktop Only) -->
+<aside class="hidden md:flex flex-col h-[calc(100vh-64px)] sticky top-[64px] w-sidebar-width py-6 bg-surface-container-low border-r border-outline-variant overflow-y-auto">
+<div class="px-6 mb-8">
+<div class="flex items-center gap-3 mb-2">
+<div class="w-10 h-10 rounded-lg bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-white">school</span>
+</div>
+<div>
+<h2 class="font-headline-sm text-[16px] font-black text-primary">Admin Portal</h2>
+<p class="font-label-sm text-label-sm text-secondary">Management Console</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 px-4 space-y-1">
+<a class="flex items-center gap-3 text-secondary px-4 py-2 hover:bg-secondary-container rounded-lg transition-all group" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 text-secondary px-4 py-2 hover:bg-secondary-container rounded-lg transition-all group" href="#">
+<span class="material-symbols-outlined text-[20px]">groups</span>
+<span class="font-label-md text-label-md">Club Directory</span>
+</a>
+<a class="flex items-center gap-3 text-secondary px-4 py-2 hover:bg-secondary-container rounded-lg transition-all group" href="#">
+<span class="material-symbols-outlined text-[20px]">newspaper</span>
+<span class="font-label-md text-label-md">News Feed</span>
+</a>
+<a class="flex items-center gap-3 bg-primary-container text-on-primary-container font-bold rounded-lg px-4 py-2 border-l-4 border-primary shadow-sm" href="#">
+<span class="material-symbols-outlined text-[20px]">calendar_month</span>
+<span class="font-label-md text-label-md">Events</span>
+</a>
+<a class="flex items-center gap-3 text-secondary px-4 py-2 hover:bg-secondary-container rounded-lg transition-all group" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</nav>
+<div class="px-4 mt-auto">
+<button class="w-full py-3 bg-primary-container text-white rounded-xl font-bold flex items-center justify-center gap-2 hover:opacity-90 transition-opacity shadow-md active:scale-[0.98]">
+<span class="material-symbols-outlined text-[20px]">add</span>
+<span class="font-label-md text-label-md text-white">Create New Club</span>
+</button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 p-container-padding bg-background pb-24 md:pb-8">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+<div>
+<h2 class="font-display-lg text-display-lg text-primary mb-2">Upcoming Events</h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl">Discover and join workshops, socials, and seminars hosted by university recognized organizations.</p>
+</div>
+<div class="flex items-center p-1 bg-surface-container-high rounded-full border border-outline-variant">
+<button class="px-6 py-1.5 rounded-full font-label-md text-label-md bg-white text-primary shadow-sm transition-all">All Events</button>
+<button class="px-6 py-1.5 rounded-full font-label-md text-label-md text-on-surface-variant hover:text-primary transition-all">My Clubs</button>
+</div>
+</div>
+<!-- Calendar Strip / Quick Select -->
+<div class="flex items-center gap-4 mb-8 overflow-x-auto hide-scrollbar pb-2">
+<div class="flex flex-col items-center justify-center min-w-[64px] h-20 bg-primary-container text-white rounded-xl shadow-lg border border-primary">
+<span class="font-label-sm text-label-sm uppercase tracking-widest opacity-80">Oct</span>
+<span class="font-headline-md text-headline-md leading-tight">24</span>
+</div>
+<!-- Day Loops -->
+<div class="flex flex-col items-center justify-center min-w-[64px] h-20 bg-white border border-outline-variant rounded-xl hover:border-primary/40 cursor-pointer transition-colors">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant">Oct</span>
+<span class="font-headline-md text-headline-md text-on-surface leading-tight">25</span>
+</div>
+<div class="flex flex-col items-center justify-center min-w-[64px] h-20 bg-white border border-outline-variant rounded-xl hover:border-primary/40 cursor-pointer transition-colors">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant">Oct</span>
+<span class="font-headline-md text-headline-md text-on-surface leading-tight">26</span>
+</div>
+<div class="flex flex-col items-center justify-center min-w-[64px] h-20 bg-white border border-outline-variant rounded-xl hover:border-primary/40 cursor-pointer transition-colors">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant">Oct</span>
+<span class="font-headline-md text-headline-md text-on-surface leading-tight">27</span>
+</div>
+<div class="flex flex-col items-center justify-center min-w-[64px] h-20 bg-white border border-outline-variant rounded-xl hover:border-primary/40 cursor-pointer transition-colors">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant">Oct</span>
+<span class="font-headline-md text-headline-md text-on-surface leading-tight">28</span>
+</div>
+<div class="flex flex-col items-center justify-center min-w-[64px] h-20 bg-white border border-outline-variant rounded-xl hover:border-primary/40 cursor-pointer transition-colors">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant">Oct</span>
+<span class="font-headline-md text-headline-md text-on-surface leading-tight">29</span>
+</div>
+<button class="flex flex-col items-center justify-center min-w-[64px] h-20 bg-surface-container-high rounded-xl text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">calendar_month</span>
+<span class="font-label-sm text-label-sm">More</span>
+</button>
+</div>
+<!-- Bento Grid Events Layout -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Large Feature Event Card -->
+<div class="col-span-1 lg:col-span-2 row-span-1 md:row-span-2 group relative overflow-hidden rounded-xl border border-outline-variant bg-white shadow-sm hover:shadow-md transition-shadow">
+<div class="h-64 md:h-full relative overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="A dynamic wide-angle shot of a university hackathon event in a modern, glass-walled innovation center. Students are gathered around sleek workstations with glowing screens. The lighting is vibrant with subtle maroon and white accents, capturing an atmosphere of focused energy and creative collaboration in a professional corporate-minimalist style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzHlj294HJmfjv4CVFRuv-vPuERmaxpOHPQYGtQvOhFECz49rZA5dRawGSonysIRgPc4aASobQKd8Aryw1aSSiuiEUEzRYem2eaQNROFaQ82NkG4Jfw6QjHPGeeW_lsw5m7RmmvimPRvgYXwbUvQAmc9vwYtcJrkdziPuW_7OCoutVkH3H3g9M4IOlsjTpd4nLgVeprasZz08Vi4HU78rB-WFMbNvB77F3CtGAes6CpoIW_d4MEGYw3g"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/40 to-transparent"></div>
+<div class="absolute top-4 left-4">
+<span class="bg-primary-container text-white px-3 py-1 rounded-full font-label-md text-label-md uppercase tracking-wider">Featured Event</span>
+</div>
+<div class="absolute bottom-6 left-6 right-6">
+<div class="flex items-center gap-3 mb-2">
+<span class="bg-white/20 backdrop-blur-md text-white px-2 py-1 rounded text-label-sm font-bold border border-white/30 uppercase tracking-tighter">HACKATHON</span>
+<span class="text-white/80 font-label-md text-label-md">• Code &amp; Coffee Club</span>
+</div>
+<h3 class="font-display-lg text-[28px] text-white mb-4">Annual Fall 24h Build-athon</h3>
+<div class="flex flex-wrap items-center gap-6 text-white/90 mb-6">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px]">schedule</span>
+<span class="font-body-md text-body-md">Oct 24 • 09:00 AM</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px]">location_on</span>
+<span class="font-body-md text-body-md">Innovation Hub, Lab 3</span>
+</div>
+</div>
+<button class="bg-white text-primary px-8 py-3 rounded-xl font-bold font-label-md text-label-md hover:bg-surface-container-highest transition-colors active:scale-95 shadow-xl">RSVP Now</button>
+</div>
+</div>
+</div>
+<!-- Regular Event Card 1 -->
+<div class="bg-white rounded-xl border border-outline-variant shadow-sm flex flex-col hover:border-primary transition-colors group">
+<div class="h-40 overflow-hidden rounded-t-xl">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform" data-alt="Close-up of vibrant succulents and gardening tools on a rustic wooden table, with soft morning sunlight streaming through a greenhouse window. The image reflects a university gardening club's workshop, with a clean and natural aesthetic that uses soft greens and warm wood tones, accented by professional CampusHub branding colors." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAETq2xHTjNtWI10UWrgTsUQ0zOgkKRzP2QWg6ydIp1X3gvMoq1z_1yHiBdNsXbrPHt7pXSp4x6L4CkwXrNQf9pIGFpJdPwN-Orvil5IR1Nj8a5S3wk8vb1QHng3VckX2qwxClQt2mTE5C-3GLwNU7HeM9bbxyBaLK8aZsvGwmAECG694sVOKDYHOy1gzM6RRTSwl0Gnmi8iB5R-MV7QMpnFfNF29D5ziLyMLSN8wJgncWuaC7N8_Xxpw"/>
+</div>
+<div class="p-5 flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-3">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-secondary uppercase">GARDENING CLUB</span>
+<h4 class="font-headline-sm text-headline-sm text-primary">Urban Greenhouse Setup</h4>
+</div>
+<div class="h-10 w-10 flex flex-col items-center justify-center bg-surface-container-high rounded-lg text-primary border border-outline-variant">
+<span class="text-[10px] font-bold leading-none">OCT</span>
+<span class="text-[16px] font-black leading-none">25</span>
+</div>
+</div>
+<div class="space-y-2 mb-6">
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]">schedule</span>
+<span class="font-body-sm text-body-sm">4:30 PM - 6:00 PM</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+<span class="font-body-sm text-body-sm">South Campus Plaza</span>
+</div>
+</div>
+<div class="mt-auto pt-4 border-t border-outline-variant flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-secondary">14 Attending</span>
+<button class="text-primary font-bold font-label-md text-label-md hover:underline decoration-2 underline-offset-4">RSVP</button>
+</div>
+</div>
+</div>
+<!-- Regular Event Card 2 -->
+<div class="bg-white rounded-xl border border-outline-variant shadow-sm flex flex-col hover:border-primary transition-colors group">
+<div class="h-40 overflow-hidden rounded-t-xl">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform" data-alt="A focused high-angle view of a chessboard mid-game, with a polished marble surface and high-contrast lighting. The chess pieces are elegant and modern. The scene captures the intellectual rigor of a university chess tournament, set in a minimalist library environment with soft background bokeh and professional lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBY49shYE2qpnKnshAy1StTC12yftj83tBkh79yQbaV-5u1svJQZ4drzNP_aFC33bvJgftFss3H3tDrykbRq1ouJfyxyQu0B-OXO6QTdl-sECxiEHo-7rtvsOUSa62CXaBW1kguQTbg8cepZ10acQy-8niS1vbQk_2aZjIEXA9dbDJIv6xbq3vkkM0ZSoXrjXPQ4DO6HKLXd5ln_9DMpvTWcxuDBYslEuwkWgemb6QKHmCsJkufCrJzgg"/>
+</div>
+<div class="p-5 flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-3">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-secondary uppercase">CHESS SOCIETY</span>
+<h4 class="font-headline-sm text-headline-sm text-primary">Monthly Blitz Open</h4>
+</div>
+<div class="h-10 w-10 flex flex-col items-center justify-center bg-surface-container-high rounded-lg text-primary border border-outline-variant">
+<span class="text-[10px] font-bold leading-none">OCT</span>
+<span class="text-[16px] font-black leading-none">26</span>
+</div>
+</div>
+<div class="space-y-2 mb-6">
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]">schedule</span>
+<span class="font-body-sm text-body-sm">1:00 PM - 5:00 PM</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+<span class="font-body-sm text-body-sm">Student Union, Rm 202</span>
+</div>
+</div>
+<div class="mt-auto pt-4 border-t border-outline-variant flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-secondary">32 Attending</span>
+<button class="text-primary font-bold font-label-md text-label-md hover:underline decoration-2 underline-offset-4">RSVP</button>
+</div>
+</div>
+</div>
+<!-- Regular Event Card 3 -->
+<div class="bg-white rounded-xl border border-outline-variant shadow-sm flex flex-col hover:border-primary transition-colors group">
+<div class="h-40 overflow-hidden rounded-t-xl">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform" data-alt="An artistic shot of a paint palette with vibrant colors mixed together, next to a clean white canvas on an easel. The setting is a bright, sunlit art studio with minimalist white walls and industrial windows. The aesthetic is clean, inspiring, and professional, perfectly suited for an art therapy or painting workshop in a university setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIMocr303prcZgvG--bavtEM97OXpmgGx-Kmm0NNjPCrDs9W3-mu6-h5xJ3nEQkUPHkc_aXW3_ViERTwBVny0FCMwesZAlfPqhMG2HDA5XEvCUiPAUJgkHWLQ-NJqASLUovKw0ntfT2EfR8CRa3MwZL_IrD4p75vh3C9NQbWqEBb1AkrdQ_dfucV3cmFaXJN5j96J-NM0SXC8g9iqlNmy-NMnLb_pxo7Db3a3zlBo1nXGAzV5RaETQLw"/>
+</div>
+<div class="p-5 flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-3">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-secondary uppercase">CREATIVE ARTS</span>
+<h4 class="font-headline-sm text-headline-sm text-primary">Watercolor Therapy</h4>
+</div>
+<div class="h-10 w-10 flex flex-col items-center justify-center bg-surface-container-high rounded-lg text-primary border border-outline-variant">
+<span class="text-[10px] font-bold leading-none">OCT</span>
+<span class="text-[16px] font-black leading-none">27</span>
+</div>
+</div>
+<div class="space-y-2 mb-6">
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]">schedule</span>
+<span class="font-body-sm text-body-sm">6:00 PM - 7:30 PM</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+<span class="font-body-sm text-body-sm">Art Annex B</span>
+</div>
+</div>
+<div class="mt-auto pt-4 border-t border-outline-variant flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-secondary">8 Attending</span>
+<button class="text-primary font-bold font-label-md text-label-md hover:underline decoration-2 underline-offset-4">RSVP</button>
+</div>
+</div>
+</div>
+<!-- Newsletter / Stats Card -->
+<div class="bg-primary text-white rounded-xl p-8 flex flex-col justify-center relative overflow-hidden">
+<div class="relative z-10">
+<h4 class="font-headline-md text-headline-md mb-4">Host your own event?</h4>
+<p class="font-body-md text-body-md text-white/80 mb-6">Learn how to reserve campus spaces and apply for club funding in 3 easy steps.</p>
+<button class="flex items-center gap-2 font-label-md text-label-md bg-white text-primary px-6 py-2 rounded-lg font-bold shadow-lg hover:bg-surface-container-low transition-colors">
+                            Get the Guide
+                            <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+<!-- Decorative Background element -->
+<div class="absolute -right-4 -bottom-4 w-32 h-32 bg-primary-container rounded-full opacity-20 blur-2xl"></div>
+</div>
+</div>
+</main>
+</div>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe bg-surface border-t border-outline-variant shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-sm text-[10px]">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">explore</span>
+<span class="font-label-sm text-[10px]">Directory</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-white rounded-full px-5 py-1.5 shadow-md" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">event</span>
+<span class="font-label-sm text-[10px] font-bold">Events</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">notifications</span>
+<span class="font-label-sm text-[10px]">Alerts</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-[10px]">Profile</span>
+</a>
+</nav>
+<script>
+        // Micro-interactions for buttons
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.classList.add('scale-95');
+                setTimeout(() => this.classList.remove('scale-95'), 100);
+            });
+        });
+
+        // Filter toggle interaction
+        const filterBtns = document.querySelectorAll('.rounded-full.border.border-outline-variant button');
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                filterBtns.forEach(b => {
+                    b.classList.remove('bg-white', 'text-primary', 'shadow-sm');
+                    b.classList.add('text-on-surface-variant');
+                });
+                this.classList.add('bg-white', 'text-primary', 'shadow-sm');
+                this.classList.remove('text-on-surface-variant');
+            });
+        });
+    </script>
+</body></html>

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": [
+    "docs/agent-instructions.md",
+    "docs/ai-workflow.md",
+    "docs/university-club-management-system.md",
+    "docs/roadmap.md",
+    "docs/domain-model.md",
+    "docs/api-contract.md",
+    "docs/ui-system.md",
+    "docs/design/stitch-source.md",
+    "docs/design/page-map.md",
+    "docs/design/implementation-notes.md",
+    "docs/feature-slices.md",
+    ".codex/skills/architecture/SKILL.md",
+    ".codex/skills/architecture/references/project-setup.md",
+    ".codex/skills/architecture/references/frontend-structure.md",
+    ".codex/skills/architecture/references/backend-structure.md",
+    ".codex/skills/architecture/references/feature-blueprint.md"
+  ]
+}

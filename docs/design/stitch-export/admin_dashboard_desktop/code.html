@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CampusHub | Admin Portal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-highest": "#f2dee1",
+                    "error": "#ba1a1a",
+                    "on-tertiary-container": "#71a87d",
+                    "surface-variant": "#f2dee1",
+                    "on-surface": "#23191b",
+                    "on-tertiary-fixed": "#00210c",
+                    "surface-tint": "#a4355d",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary-container": "#003c1b",
+                    "tertiary-fixed-dim": "#9bd4a5",
+                    "secondary-fixed-dim": "#b9c7e0",
+                    "error-container": "#ffdad6",
+                    "secondary-container": "#d5e3fd",
+                    "on-surface-variant": "#554246",
+                    "on-secondary-fixed-variant": "#3a485c",
+                    "inverse-primary": "#ffb1c5",
+                    "on-secondary": "#ffffff",
+                    "background": "#fff8f8",
+                    "tertiary-fixed": "#b6f0c0",
+                    "tertiary": "#00240e",
+                    "on-primary-container": "#f1719a",
+                    "on-secondary-fixed": "#0d1c2f",
+                    "secondary": "#515f74",
+                    "primary-container": "#6a0032",
+                    "on-primary-fixed-variant": "#851b46",
+                    "surface": "#fff8f8",
+                    "outline-variant": "#dbc0c5",
+                    "on-error": "#ffffff",
+                    "on-tertiary-fixed-variant": "#1b512d",
+                    "surface-dim": "#e9d5d8",
+                    "inverse-on-surface": "#ffecef",
+                    "on-background": "#23191b",
+                    "surface-container-low": "#fff0f2",
+                    "on-secondary-container": "#57657b",
+                    "on-primary": "#ffffff",
+                    "on-primary-fixed": "#3f001b",
+                    "surface-container": "#fde9ec",
+                    "surface-container-high": "#f7e3e7",
+                    "on-tertiary": "#ffffff",
+                    "surface-bright": "#fff8f8",
+                    "primary": "#43001d",
+                    "outline": "#887176",
+                    "on-error-container": "#93000a",
+                    "inverse-surface": "#392d30",
+                    "primary-fixed": "#ffd9e1",
+                    "secondary-fixed": "#d5e3fd",
+                    "primary-fixed-dim": "#ffb1c5"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "sidebar-width": "260px",
+                    "topbar-height": "64px",
+                    "container-padding": "24px",
+                    "unit": "4px",
+                    "gutter": "16px"
+            },
+            "fontFamily": {
+                    "label-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "headline-sm": ["Inter"],
+                    "body-md": ["Inter"],
+                    "body-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "label-sm": ["11px", {"lineHeight": "14px", "fontWeight": "500"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #fff8f8; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .sidebar-active { border-left-width: 4px; }
+        .glass-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(8px); }
+        .chart-bar { transition: height 1s ease-in-out; }
+    </style>
+</head>
+<body class="text-on-surface">
+<!-- SideNavBar (Shared Component) -->
+<aside class="hidden md:flex flex-col h-screen fixed left-0 top-0 py-6 overflow-y-auto bg-surface-container-low dark:bg-surface-dim border-r border-outline-variant dark:border-outline w-sidebar-width z-50">
+<div class="px-6 mb-8 flex items-center gap-3">
+<div class="w-10 h-10 rounded bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-white" style="font-variation-settings: 'FILL' 1;">account_balance</span>
+</div>
+<div>
+<h1 class="font-headline-sm text-headline-sm font-black text-primary dark:text-primary-fixed">Admin Portal</h1>
+<p class="font-label-md text-label-md text-on-surface-variant opacity-70">Management Console</p>
+</div>
+</div>
+<nav class="flex-1 px-4 space-y-1">
+<a class="flex items-center gap-3 bg-primary-container text-on-primary-container font-bold rounded-lg px-4 py-2 border-l-4 border-primary transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 text-secondary dark:text-secondary-fixed-dim px-4 py-2 hover:bg-secondary-container dark:hover:bg-secondary-container-highest transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+<span class="font-label-md text-label-md">Club Directory</span>
+</a>
+<a class="flex items-center gap-3 text-secondary dark:text-secondary-fixed-dim px-4 py-2 hover:bg-secondary-container dark:hover:bg-secondary-container-highest transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="newspaper">newspaper</span>
+<span class="font-label-md text-label-md">News Feed</span>
+</a>
+<a class="flex items-center gap-3 text-secondary dark:text-secondary-fixed-dim px-4 py-2 hover:bg-secondary-container dark:hover:bg-secondary-container-highest transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span>
+<span class="font-label-md text-label-md">Events</span>
+</a>
+<a class="flex items-center gap-3 text-secondary dark:text-secondary-fixed-dim px-4 py-2 hover:bg-secondary-container dark:hover:bg-secondary-container-highest transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="how_to_reg">how_to_reg</span>
+<span class="font-label-md text-label-md">Approval Queue</span>
+</a>
+<a class="flex items-center gap-3 text-secondary dark:text-secondary-fixed-dim px-4 py-2 hover:bg-secondary-container dark:hover:bg-secondary-container-highest transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</nav>
+<div class="px-4 mt-6">
+<button class="w-full bg-primary-container text-on-primary text-white py-3 rounded-lg font-bold shadow-md hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">add_circle</span>
+<span>Create New Club</span>
+</button>
+</div>
+</aside>
+<!-- Main Content Wrapper -->
+<main class="md:ml-sidebar-width min-h-screen flex flex-col">
+<!-- TopNavBar (Shared Component) -->
+<header class="flex justify-between items-center w-full h-[64px] px-container-padding sticky top-0 z-40 bg-surface dark:bg-surface-container border-b border-outline-variant dark:border-outline shadow-sm">
+<div class="flex items-center gap-4">
+<span class="md:hidden material-symbols-outlined text-primary cursor-pointer">menu</span>
+<div class="relative">
+<span class="absolute inset-y-0 left-3 flex items-center text-outline">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</span>
+<input class="pl-10 pr-4 py-1.5 bg-surface-container-low border border-outline-variant rounded-full text-body-md focus:outline-none focus:border-primary w-64 md:w-80" placeholder="Search system records..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden lg:flex items-center bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full cursor-pointer hover:bg-opacity-80">
+<span class="font-label-md text-label-md">Role Switcher</span>
+<span class="material-symbols-outlined text-[18px] ml-1">swap_horiz</span>
+</div>
+<button class="p-2 text-on-surface-variant hover:bg-secondary-container rounded-full transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="p-2 text-on-surface-variant hover:bg-secondary-container rounded-full transition-colors">
+<span class="material-symbols-outlined">apps</span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="Close-up professional headshot of a university administrator in a brightly lit office setting. The person has a friendly but authoritative expression, representing high-level oversight. The background is slightly blurred showing academic certificates on a white wall, maintaining a professional corporate minimalist aesthetic with soft lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9iqJBv37IlfmTvkEB5jKl7QnwxyT4yn7xsDEHv8T8Hb0UdZrnEyyuqX964TL_qn6pOLMpIvBIf-Kc7YSRZG6woXcrnbN6Vg-DAPgcaeT6FUIVM_-3i1SYZ_Czn9sA8-egPkerjAyu0_ZNyctOkD8fp8RNjAmCR9mA4HhPZdLo6Q6XZUpeuGtRGrvPxRBS8veRoAoovvzcWOquCaJhzffRn8GEo5TXeGZhE0H2xICcZb3mMN1TzX-TrA"/>
+</div>
+</div>
+</header>
+<!-- Dashboard Content -->
+<div class="p-container-padding space-y-gutter">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h2 class="font-headline-md text-headline-md text-primary">System-Wide Oversight</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Real-time performance monitoring across 14 campus departments.</p>
+</div>
+<div class="flex items-center gap-2 bg-surface-container-high px-4 py-2 rounded-lg border border-outline-variant">
+<span class="material-symbols-outlined text-primary text-[20px]">calendar_today</span>
+<span class="font-label-md text-label-md">Fall Semester 2024</span>
+<span class="material-symbols-outlined text-outline text-[18px]">expand_more</span>
+</div>
+</div>
+<!-- Bento Grid Stats -->
+<div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+<!-- Stat Card: Total Clubs -->
+<div class="bg-white p-6 rounded-xl border border-outline-variant shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start">
+<div class="p-3 bg-primary-fixed text-primary rounded-lg">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">groups</span>
+</div>
+<span class="text-on-tertiary-container font-label-md text-label-md flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+                            +12%
+                        </span>
+</div>
+<div class="mt-4">
+<p class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Total Clubs</p>
+<h3 class="font-display-lg text-display-lg text-primary">248</h3>
+</div>
+</div>
+<!-- Stat Card: Active Members -->
+<div class="bg-white p-6 rounded-xl border border-outline-variant shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start">
+<div class="p-3 bg-secondary-container text-secondary rounded-lg">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">person</span>
+</div>
+<span class="text-on-tertiary-container font-label-md text-label-md flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+                            +4.2k
+                        </span>
+</div>
+<div class="mt-4">
+<p class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Active Members</p>
+<h3 class="font-display-lg text-display-lg text-primary">18,402</h3>
+</div>
+</div>
+<!-- Stat Card: Pending Approvals -->
+<div class="bg-white p-6 rounded-xl border border-outline-variant shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start">
+<div class="p-3 bg-surface-container-highest text-on-primary-container rounded-lg">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">pending_actions</span>
+</div>
+<span class="text-error font-label-md text-label-md">Urgent</span>
+</div>
+<div class="mt-4">
+<p class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Pending Approvals</p>
+<h3 class="font-display-lg text-display-lg text-primary">31</h3>
+</div>
+</div>
+<!-- Quick Action/Promo Card -->
+<div class="relative md:col-span-1 overflow-hidden bg-primary rounded-xl border border-primary-container shadow-lg flex flex-col justify-end p-6 group">
+<div class="absolute inset-0 z-0 opacity-20 transition-transform group-hover:scale-110 duration-700" data-alt="An abstract high-tech pattern of interlocking university seals and architectural blueprints of a campus. The style is minimalist with thin white lines on a dark maroon background, creating a sense of history and institutional stability. Dramatic soft focus edges and deep maroon tonal shifts." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC3g7PWBHaZ60VuwvoSBtsXHvuuGuc8cpWrl9DMNIdsrY8SuWS8wyiSGEz5a6mAoXEnMBbWIztKreITdu8aYqK_Cl1FI0O1KoJkylVeO7jbNvzy05G5pzv_LgzFvPTQTK_HNIsJ7HB_1AywZa5qcC7x4k7rbGzfwN4idGcSa5JabDTMLvL-O9xiXWu1-YGKFywgrFeaMHinOJfr55ST7oErXQwNY7tVeZ-Z6d5Y508SBLx7zNfKkHzjow')"></div>
+<div class="relative z-10">
+<h4 class="text-white font-headline-sm text-headline-sm mb-1">Annual Audit</h4>
+<p class="text-primary-fixed font-body-sm text-body-sm mb-4">Complete your system-wide club compliance audit by Friday.</p>
+<button class="bg-white text-primary px-4 py-2 rounded-full font-label-md text-label-md hover:bg-primary-fixed transition-colors">Start Audit</button>
+</div>
+</div>
+</div>
+<!-- Main Dashboard Area -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Chart Section: Engagement -->
+<div class="lg:col-span-2 bg-white rounded-xl border border-outline-variant shadow-sm overflow-hidden">
+<div class="px-6 py-4 border-b border-outline-variant flex justify-between items-center">
+<h3 class="font-headline-sm text-headline-sm text-primary">Engagement Trends</h3>
+<div class="flex gap-2">
+<button class="text-label-sm font-label-sm px-3 py-1 rounded bg-primary-container text-white">Daily</button>
+<button class="text-label-sm font-label-sm px-3 py-1 rounded bg-surface-container hover:bg-surface-container-high">Weekly</button>
+</div>
+</div>
+<div class="p-6">
+<div class="h-64 flex items-end justify-between gap-2 px-2">
+<!-- Simple Animated Bar Chart -->
+<div class="flex flex-col items-center w-full group">
+<div class="chart-bar w-full bg-primary-container opacity-40 group-hover:opacity-100 rounded-t-sm" style="height: 45%;"></div>
+<span class="font-label-sm text-label-sm text-outline mt-2">Sep</span>
+</div>
+<div class="flex flex-col items-center w-full group">
+<div class="chart-bar w-full bg-primary-container opacity-40 group-hover:opacity-100 rounded-t-sm" style="height: 65%;"></div>
+<span class="font-label-sm text-label-sm text-outline mt-2">Oct</span>
+</div>
+<div class="flex flex-col items-center w-full group">
+<div class="chart-bar w-full bg-primary-container opacity-40 group-hover:opacity-100 rounded-t-sm" style="height: 85%;"></div>
+<span class="font-label-sm text-label-sm text-outline mt-2">Nov</span>
+</div>
+<div class="flex flex-col items-center w-full group">
+<div class="chart-bar w-full bg-primary-container opacity-100 rounded-t-sm" style="height: 95%;"></div>
+<span class="font-label-sm text-label-sm text-outline mt-2">Dec</span>
+</div>
+<div class="flex flex-col items-center w-full group">
+<div class="chart-bar w-full bg-primary-container opacity-40 group-hover:opacity-100 rounded-t-sm" style="height: 35%;"></div>
+<span class="font-label-sm text-label-sm text-outline mt-2">Jan</span>
+</div>
+</div>
+<div class="mt-8 flex justify-around border-t border-outline-variant pt-6">
+<div class="text-center">
+<p class="text-outline font-label-sm text-label-sm uppercase">Peak Activity</p>
+<p class="text-primary font-headline-sm text-headline-sm">Nov 14</p>
+</div>
+<div class="text-center">
+<p class="text-outline font-label-sm text-label-sm uppercase">Avg Session</p>
+<p class="text-primary font-headline-sm text-headline-sm">18.5m</p>
+</div>
+<div class="text-center">
+<p class="text-outline font-label-sm text-label-sm uppercase">Growth</p>
+<p class="text-on-tertiary-container font-headline-sm text-headline-sm">+22%</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Side Widget: Recent Approvals -->
+<div class="bg-white rounded-xl border border-outline-variant shadow-sm flex flex-col">
+<div class="px-6 py-4 border-b border-outline-variant">
+<h3 class="font-headline-sm text-headline-sm text-primary">Recent Approvals</h3>
+</div>
+<div class="flex-1 overflow-y-auto p-4 space-y-4">
+<div class="flex items-center gap-3 p-3 rounded-lg hover:bg-surface-container transition-colors">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary">rocket_launch</span>
+</div>
+<div class="flex-1">
+<p class="font-label-md text-label-md text-primary">Aerospace Society</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Approved by Dr. Miller</p>
+</div>
+<span class="text-outline font-label-sm text-label-sm">2h ago</span>
+</div>
+<div class="flex items-center gap-3 p-3 rounded-lg hover:bg-surface-container transition-colors border-l-4 border-error">
+<div class="w-10 h-10 rounded-full bg-error-container flex items-center justify-center text-error">
+<span class="material-symbols-outlined">warning</span>
+</div>
+<div class="flex-1">
+<p class="font-label-md text-label-md text-primary">Chess Master’s Club</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Documentation Missing</p>
+</div>
+<span class="text-outline font-label-sm text-label-sm">5h ago</span>
+</div>
+<div class="flex items-center gap-3 p-3 rounded-lg hover:bg-surface-container transition-colors">
+<div class="w-10 h-10 rounded-full bg-tertiary-fixed flex items-center justify-center text-on-tertiary-fixed">
+<span class="material-symbols-outlined">menu_book</span>
+</div>
+<div class="flex-1">
+<p class="font-label-md text-label-md text-primary">Poetry Collective</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Approved by Admin</p>
+</div>
+<span class="text-outline font-label-sm text-label-sm">1d ago</span>
+</div>
+</div>
+<button class="m-4 py-2 border border-outline-variant rounded-lg text-label-md font-label-md text-primary hover:bg-surface-container transition-colors">View All Pending</button>
+</div>
+</div>
+<!-- All Clubs Table Section -->
+<div class="bg-white rounded-xl border border-outline-variant shadow-sm overflow-hidden">
+<div class="px-6 py-4 border-b border-outline-variant flex flex-col md:flex-row justify-between md:items-center gap-4">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-primary">Club Directory Status</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">A comprehensive list of registered organizations and their standing.</p>
+</div>
+<div class="flex gap-2">
+<button class="flex items-center gap-2 px-3 py-1.5 border border-outline-variant rounded-lg text-label-md font-label-md hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[18px]">filter_list</span>
+                            Filter
+                        </button>
+<button class="flex items-center gap-2 px-3 py-1.5 border border-outline-variant rounded-lg text-label-md font-label-md hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[18px]">download</span>
+                            Export CSV
+                        </button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low border-b border-outline-variant">
+<tr>
+<th class="px-6 py-3 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Club Name</th>
+<th class="px-6 py-3 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Category</th>
+<th class="px-6 py-3 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">President</th>
+<th class="px-6 py-3 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Status</th>
+<th class="px-6 py-3 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Audit Date</th>
+<th class="px-6 py-3"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr class="hover:bg-surface-container transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-primary-fixed flex items-center justify-center text-primary font-bold">DS</div>
+<span class="font-body-md text-body-md text-on-surface">Data Science League</span>
+</div>
+</td>
+<td class="px-6 py-4 text-body-md text-on-surface-variant">Academic</td>
+<td class="px-6 py-4 text-body-md text-on-surface-variant">Sarah Jenkins</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-label-sm font-label-sm bg-tertiary-fixed text-on-tertiary-fixed">
+<span class="w-1.5 h-1.5 rounded-full bg-on-tertiary-container"></span>
+                                        Active
+                                    </span>
+</td>
+<td class="px-6 py-4 text-body-sm text-outline">Oct 12, 2024</td>
+<td class="px-6 py-4 text-right">
+<button class="p-1 hover:bg-secondary-container rounded-full"><span class="material-symbols-outlined text-[20px]">more_vert</span></button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-secondary-container flex items-center justify-center text-secondary font-bold">EB</div>
+<span class="font-body-md text-body-md text-on-surface">Ethics Board</span>
+</div>
+</td>
+<td class="px-6 py-4 text-body-md text-on-surface-variant">Administrative</td>
+<td class="px-6 py-4 text-body-md text-on-surface-variant">Dr. Aaron Vance</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-label-sm font-label-sm bg-error-container text-on-error-container">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+                                        Warning
+                                    </span>
+</td>
+<td class="px-6 py-4 text-body-sm text-outline">Sept 28, 2024</td>
+<td class="px-6 py-4 text-right">
+<button class="p-1 hover:bg-secondary-container rounded-full"><span class="material-symbols-outlined text-[20px]">more_vert</span></button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-surface-container-highest flex items-center justify-center text-primary font-bold">UA</div>
+<span class="font-body-md text-body-md text-on-surface">Undergrad Arts</span>
+</div>
+</td>
+<td class="px-6 py-4 text-body-md text-on-surface-variant">Creative</td>
+<td class="px-6 py-4 text-body-md text-on-surface-variant">Lila Thorne</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-label-sm font-label-sm bg-tertiary-fixed text-on-tertiary-fixed">
+<span class="w-1.5 h-1.5 rounded-full bg-on-tertiary-container"></span>
+                                        Active
+                                    </span>
+</td>
+<td class="px-6 py-4 text-body-sm text-outline">Oct 05, 2024</td>
+<td class="px-6 py-4 text-right">
+<button class="p-1 hover:bg-secondary-container rounded-full"><span class="material-symbols-outlined text-[20px]">more_vert</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="px-6 py-4 bg-surface-container-low flex justify-between items-center">
+<span class="text-body-sm text-on-surface-variant">Showing 1-3 of 248 clubs</span>
+<div class="flex gap-2">
+<button class="px-3 py-1 border border-outline-variant rounded-lg disabled:opacity-50" disabled="">Previous</button>
+<button class="px-3 py-1 border border-outline-variant rounded-lg bg-white">Next</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<footer class="mt-auto px-container-padding py-6 border-t border-outline-variant text-center">
+<p class="font-label-sm text-label-sm text-on-surface-variant opacity-60">© 2024 CampusHub Management System. All system actions are logged for audit purposes.</p>
+</footer>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe bg-surface dark:bg-surface-container-high border-t border-outline-variant dark:border-outline shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] rounded-t-xl">
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-sm text-label-sm-mobile">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="explore">explore</span>
+<span class="font-label-sm text-label-sm-mobile">Directory</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="event">event</span>
+<span class="font-label-sm text-label-sm-mobile">Events</span>
+</a>
+</nav>
+</main>
+<script>
+        // Micro-interaction for charts: sequential bar animation
+        window.addEventListener('DOMContentLoaded', () => {
+            const bars = document.querySelectorAll('.chart-bar');
+            bars.forEach((bar, index) => {
+                const targetHeight = bar.style.height;
+                bar.style.height = '0%';
+                setTimeout(() => {
+                    bar.style.height = targetHeight;
+                }, 100 * index);
+            });
+        });
+    </script>
+</body></html>

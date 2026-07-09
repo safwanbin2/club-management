@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CampusHub | Login</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-highest": "#f2dee1",
+                    "error": "#ba1a1a",
+                    "on-tertiary-container": "#71a87d",
+                    "surface-variant": "#f2dee1",
+                    "on-surface": "#23191b",
+                    "on-tertiary-fixed": "#00210c",
+                    "surface-tint": "#a4355d",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary-container": "#003c1b",
+                    "tertiary-fixed-dim": "#9bd4a5",
+                    "secondary-fixed-dim": "#b9c7e0",
+                    "error-container": "#ffdad6",
+                    "secondary-container": "#d5e3fd",
+                    "on-surface-variant": "#554246",
+                    "on-secondary-fixed-variant": "#3a485c",
+                    "inverse-primary": "#ffb1c5",
+                    "on-secondary": "#ffffff",
+                    "background": "#fff8f8",
+                    "tertiary-fixed": "#b6f0c0",
+                    "tertiary": "#00240e",
+                    "on-primary-container": "#f1719a",
+                    "on-secondary-fixed": "#0d1c2f",
+                    "secondary": "#515f74",
+                    "primary-container": "#6a0032",
+                    "on-primary-fixed-variant": "#851b46",
+                    "surface": "#fff8f8",
+                    "outline-variant": "#dbc0c5",
+                    "on-error": "#ffffff",
+                    "on-tertiary-fixed-variant": "#1b512d",
+                    "surface-dim": "#e9d5d8",
+                    "inverse-on-surface": "#ffecef",
+                    "on-background": "#23191b",
+                    "surface-container-low": "#fff0f2",
+                    "on-secondary-container": "#57657b",
+                    "on-primary": "#ffffff",
+                    "on-primary-fixed": "#3f001b",
+                    "surface-container": "#fde9ec",
+                    "surface-container-high": "#f7e3e7",
+                    "on-tertiary": "#ffffff",
+                    "surface-bright": "#fff8f8",
+                    "primary": "#43001d",
+                    "outline": "#887176",
+                    "on-error-container": "#93000a",
+                    "inverse-surface": "#392d30",
+                    "primary-fixed": "#ffd9e1",
+                    "secondary-fixed": "#d5e3fd",
+                    "primary-fixed-dim": "#ffb1c5"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "sidebar-width": "260px",
+                    "topbar-height": "64px",
+                    "container-padding": "24px",
+                    "unit": "4px",
+                    "gutter": "16px"
+            },
+            "fontFamily": {
+                    "label-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "headline-sm": ["Inter"],
+                    "body-md": ["Inter"],
+                    "body-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "label-sm": ["11px", {"lineHeight": "14px", "fontWeight": "500"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fff8f8;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .login-card {
+            box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .input-focus-ring:focus {
+            outline: none;
+            border-color: #6a0032;
+            box-shadow: 0 0 0 2px rgba(106, 0, 50, 0.15);
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        /* Subtle atmospheric gradient */
+        .bg-mesh {
+            background-image: radial-gradient(at 0% 0%, rgba(253, 233, 236, 0.5) 0, transparent 50%), 
+                              radial-gradient(at 100% 100%, rgba(213, 227, 253, 0.2) 0, transparent 50%);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen flex items-center justify-center p-4 bg-mesh">
+<!-- Top Left Branding (Subtle) -->
+<div class="fixed top-8 left-8 flex items-center gap-3">
+<div class="w-10 h-10 bg-primary-container rounded-lg flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-white" style="font-variation-settings: 'FILL' 1">school</span>
+</div>
+<div>
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary">CampusHub</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant">University Administration</p>
+</div>
+</div>
+<!-- Main Login Canvas -->
+<main class="w-full max-w-[420px] z-10">
+<div class="login-card bg-surface-container-lowest border border-outline-variant p-8 rounded-xl">
+<!-- Header Section -->
+<div class="mb-8">
+<h2 class="font-headline-md text-headline-md text-on-surface mb-1">Welcome Back</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Manage your organization's presence.</p>
+</div>
+<!-- Login Form -->
+<form class="space-y-5" onsubmit="event.preventDefault();">
+<!-- Email Field -->
+<div class="space-y-1.5">
+<label class="font-label-md text-label-md text-on-surface-variant block" for="email">Email Address</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px]">mail</span>
+<input class="w-full pl-10 pr-4 py-2.5 bg-surface border border-outline-variant rounded-lg font-body-md text-body-md input-focus-ring transition-all" id="email" placeholder="name@university.edu" required="" type="email"/>
+</div>
+</div>
+<!-- Password Field -->
+<div class="space-y-1.5">
+<div class="flex justify-between items-center">
+<label class="font-label-md text-label-md text-on-surface-variant block" for="password">Password</label>
+<a class="font-label-md text-label-md text-primary-container hover:underline transition-all" href="#">Forgot password?</a>
+</div>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px]">lock</span>
+<input class="w-full pl-10 pr-10 py-2.5 bg-surface border border-outline-variant rounded-lg font-body-md text-body-md input-focus-ring transition-all" id="password" placeholder="••••••••" required="" type="password"/>
+<button class="absolute right-3 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</div>
+</div>
+<!-- Remember Me -->
+<div class="flex items-center gap-2">
+<input class="w-4 h-4 rounded border-outline-variant text-primary-container focus:ring-primary-container" id="remember" type="checkbox"/>
+<label class="font-label-md text-label-md text-on-surface-variant cursor-pointer select-none" for="remember">Remember this device</label>
+</div>
+<!-- Submit Action -->
+<button class="w-full bg-primary-container text-white py-3 rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 hover:opacity-90 active:scale-[0.98] transition-all shadow-sm" type="submit">
+                    Sign In
+                    <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</form>
+<!-- Divider -->
+<div class="relative my-8">
+<div class="absolute inset-0 flex items-center">
+<span class="w-full border-t border-outline-variant"></span>
+</div>
+<div class="relative flex justify-center text-xs uppercase">
+<span class="bg-surface-container-lowest px-4 font-label-sm text-label-sm text-outline">Or secure access via</span>
+</div>
+</div>
+<!-- Single Sign On (SSO) -->
+<button class="w-full bg-surface border border-outline-variant text-on-surface py-2.5 rounded-lg font-label-md text-label-md flex items-center justify-center gap-3 hover:bg-surface-container-low transition-colors active:scale-[0.98]">
+<div class="w-5 h-5 bg-white rounded-full flex items-center justify-center shadow-sm border border-outline-variant overflow-hidden">
+<img class="w-full h-full object-contain" data-alt="A clean, minimalist logo of a prestigious university, featuring classic shield and crest elements in maroon and gold, set against a crisp white background with sharp vector lines." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBw7vbQdKefmt6yEb1jn8_rH9VFEv6b9WcUVxJuG5K7OaquTgnYl_Ewsy5L-LT0dSPdWZbSFgkbMcw5z79RLcsm4ca7LguoB2mcymK4Zez4zhZ9qOH7B5zsxL34fviUqKhKlqaBtvRxXPC8Zu19M7D2XDkCeJ7GNPVj7gD6I2CvhfGu3DiSqSHhCjkEE-58wfWBPqXJ23XlOKDrsUc76ODCN1AT1nZ-5zVKknLNPXk54hjAXc3ukQFQdQ"/>
+</div>
+                Sign in with University ID
+            </button>
+</div>
+<!-- Footer Help -->
+<p class="mt-8 text-center font-body-sm text-body-sm text-on-surface-variant">
+            Having trouble? <a class="text-primary-container font-semibold hover:underline" href="#">Contact System Administrator</a>
+</p>
+</main>
+<!-- Decorative Illustration Side (Bento-style element) -->
+<div class="hidden lg:block fixed right-0 top-0 h-full w-[45%] bg-surface-container border-l border-outline-variant overflow-hidden">
+<div class="absolute inset-0 opacity-40 mix-blend-multiply">
+<div class="w-full h-full bg-cover bg-center" data-alt="An expansive, high-angle architectural shot of a modern university campus library at dusk. The building features large glass windows emitting a warm, golden glow, while the surrounding landscape is bathed in a soft blue hour light. The atmosphere is quiet, intellectual, and professional." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCigHv-IZqRi-Fb2159Hpvcay5vUvHYZU3KYAGMOARfN2lTVWBsXXLRiJaq1HewpIEvxLJAt-0hfsNxNGotw_3xyUt6nL9gq2HNpdpzejm4xxiGPL40Fog5swQGI7-om6BHSeodhbN9qy3lHXWkkuh-6Nkk-F1_pxq6XBW44RHTqEYCCp-YMwPtFGElng72inLx9kty9t7rYrg6kduBERieu8mr6Z2jp-vx9ncHdgL3d29O3kqgEjskLA')"></div>
+</div>
+<div class="relative h-full flex flex-col justify-end p-16 space-y-6">
+<div class="bg-white/80 backdrop-blur-md p-8 rounded-xl border border-white/50 max-w-lg shadow-xl">
+<div class="flex gap-1 mb-4">
+<span class="material-symbols-outlined text-primary-container" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="material-symbols-outlined text-primary-container" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="material-symbols-outlined text-primary-container" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="material-symbols-outlined text-primary-container" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="material-symbols-outlined text-primary-container" style="font-variation-settings: 'FILL' 1">star</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-2">Empowering Student Leadership</h3>
+<p class="font-body-md text-body-md text-on-surface-variant italic">"CampusHub has completely transformed how we manage our engineering club. The centralized portal makes event planning and member tracking effortless."</p>
+<div class="mt-6 flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a female university student leader with a warm, confident expression. She is wearing a modern blazer, and the background is a softly blurred office environment with natural lighting and professional corporate colors." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWF_JAZDvRr1vBeWEtOEuwwqWiYFuckeQG4gygZICdn7GE_-eplnBvBRnfDicDHPY43PxbnoJBkAe1TOyXEq3Z0_bAVlcC3uDtnJTlbEqLkRDiiA8W9PHrZgvR3AJO6Fqfxynv-gcs0LISOdj6Z2DTkvliEom2W7uUZt7gP6CywxsJhTtkOPV6unopDgx_9NawnMXi18NafJAJkYWm2h-tM_KJUG8bQTtMj3ZOfuCUMsy6sy4BREZhng"/>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Sarah Jenkins</p>
+<p class="font-label-sm text-label-sm text-outline">President, IEEE Student Chapter</p>
+</div>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="flex -space-x-3">
+<div class="w-8 h-8 rounded-full border-2 border-surface-container bg-surface flex items-center justify-center text-[10px] font-bold">+500</div>
+<div class="w-8 h-8 rounded-full border-2 border-surface-container bg-primary-container"></div>
+<div class="w-8 h-8 rounded-full border-2 border-surface-container bg-secondary-container"></div>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant flex items-center">Trusted by over 450 campus organizations</p>
+</div>
+</div>
+</div>
+<!-- Background Atmospheric Elements -->
+<div class="fixed -bottom-32 -left-32 w-96 h-96 bg-primary-container/5 rounded-full blur-[120px] pointer-events-none"></div>
+<div class="fixed -top-32 right-[45%] w-64 h-64 bg-secondary-container/10 rounded-full blur-[80px] pointer-events-none"></div>
+<script>
+        // Micro-interaction for input fields
+        const inputs = document.querySelectorAll('input');
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                input.parentElement.parentElement.querySelector('label')?.classList.add('text-primary-container');
+            });
+            input.addEventListener('blur', () => {
+                input.parentElement.parentElement.querySelector('label')?.classList.remove('text-primary-container');
+            });
+        });
+
+        // Simple button active state visual feedback
+        const loginBtn = document.querySelector('button[type="submit"]');
+        loginBtn.addEventListener('click', function() {
+            this.innerHTML = `<span class="animate-spin material-symbols-outlined text-[18px]">progress_activity</span> Authenticating...`;
+            setTimeout(() => {
+                this.innerHTML = `Sign In <span class="material-symbols-outlined text-[18px]">arrow_forward</span>`;
+            }, 1500);
+        });
+    </script>
+</body></html>

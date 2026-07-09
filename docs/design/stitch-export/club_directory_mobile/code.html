@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#f2dee1",
+                        "error": "#ba1a1a",
+                        "on-tertiary-container": "#71a87d",
+                        "surface-variant": "#f2dee1",
+                        "on-surface": "#23191b",
+                        "on-tertiary-fixed": "#00210c",
+                        "surface-tint": "#a4355d",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-container": "#003c1b",
+                        "tertiary-fixed-dim": "#9bd4a5",
+                        "secondary-fixed-dim": "#b9c7e0",
+                        "error-container": "#ffdad6",
+                        "secondary-container": "#d5e3fd",
+                        "on-surface-variant": "#554246",
+                        "on-secondary-fixed-variant": "#3a485c",
+                        "inverse-primary": "#ffb1c5",
+                        "on-secondary": "#ffffff",
+                        "background": "#fff8f8",
+                        "tertiary-fixed": "#b6f0c0",
+                        "tertiary": "#00240e",
+                        "on-primary-container": "#f1719a",
+                        "on-secondary-fixed": "#0d1c2f",
+                        "secondary": "#515f74",
+                        "primary-container": "#6a0032",
+                        "on-primary-fixed-variant": "#851b46",
+                        "surface": "#fff8f8",
+                        "outline-variant": "#dbc0c5",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed-variant": "#1b512d",
+                        "surface-dim": "#e9d5d8",
+                        "inverse-on-surface": "#ffecef",
+                        "on-background": "#23191b",
+                        "surface-container-low": "#fff0f2",
+                        "on-secondary-container": "#57657b",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed": "#3f001b",
+                        "surface-container": "#fde9ec",
+                        "surface-container-high": "#f7e3e7",
+                        "on-tertiary": "#ffffff",
+                        "surface-bright": "#fff8f8",
+                        "primary": "#43001d",
+                        "outline": "#887176",
+                        "on-error-container": "#93000a",
+                        "inverse-surface": "#392d30",
+                        "primary-fixed": "#ffd9e1",
+                        "secondary-fixed": "#d5e3fd",
+                        "primary-fixed-dim": "#ffb1c5"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "sidebar-width": "260px",
+                        "topbar-height": "64px",
+                        "container-padding": "24px",
+                        "unit": "4px",
+                        "gutter": "16px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "label-sm": ["11px", {"lineHeight": "14px", "fontWeight": "500"}],
+                        "label-sm-mobile": ["10px", {"lineHeight": "12px", "fontWeight": "500"}],
+                        "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface">
+<!-- Top Navigation Bar (Mobile Focused) -->
+<header class="bg-surface docked full-width top-0 border-b border-outline-variant shadow-sm flex justify-between items-center w-full h-[64px] px-container-padding sticky top-0 z-50">
+<div class="flex items-center gap-3">
+<span class="font-headline-sm text-headline-sm font-bold text-primary">CampusHub</span>
+</div>
+<div class="flex items-center gap-4 text-primary">
+<span class="material-symbols-outlined cursor-pointer active:opacity-80 transition-colors hover:bg-secondary-container rounded-full p-2" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined cursor-pointer active:opacity-80 transition-colors hover:bg-secondary-container rounded-full p-2" data-icon="apps">apps</span>
+</div>
+</header>
+<!-- Fixed Search & Categories Section -->
+<div class="sticky top-[64px] z-40 bg-surface border-b border-outline-variant pb-3">
+<!-- Search Bar -->
+<div class="px-4 pt-4 pb-2">
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3 text-on-surface-variant pointer-events-none" data-icon="search">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container-low border border-outline-variant rounded-lg text-body-md focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all" placeholder="Search for clubs or interests..." type="text"/>
+</div>
+</div>
+<!-- Horizontal Categories -->
+<div class="flex overflow-x-auto no-scrollbar gap-2 px-4 pt-2">
+<button class="flex-none px-4 py-1.5 rounded-full bg-primary-container text-on-primary-container font-label-md text-label-md transition-colors">All Clubs</button>
+<button class="flex-none px-4 py-1.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-md text-label-md hover:bg-secondary-container transition-colors">Academic</button>
+<button class="flex-none px-4 py-1.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-md text-label-md hover:bg-secondary-container transition-colors">Sports</button>
+<button class="flex-none px-4 py-1.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-md text-label-md hover:bg-secondary-container transition-colors">Cultural</button>
+<button class="flex-none px-4 py-1.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-md text-label-md hover:bg-secondary-container transition-colors">Technology</button>
+<button class="flex-none px-4 py-1.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-md text-label-md hover:bg-secondary-container transition-colors">Service</button>
+<button class="flex-none px-4 py-1.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-md text-label-md hover:bg-secondary-container transition-colors">Arts</button>
+</div>
+</div>
+<!-- Main Content: Single-Column List -->
+<main class="px-4 py-6 mb-24 max-w-3xl mx-auto">
+<div class="space-y-4">
+<!-- Club Card 1 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-[0px_1px_3px_rgba(0,0,0,0.05)] active:scale-[0.98] transition-transform">
+<div class="relative h-40">
+<img class="w-full h-full object-cover" data-alt="A group of university students collaborating on a high-tech robotic project in a brightly lit modern laboratory. The scene is clean and professional with soft maroon accents in the equipment and furniture, reflecting a serious academic yet creative atmosphere. High-key lighting highlights the intricate details of the electronic components and the focused expressions of the diverse team." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDb-FOd2ihwR8RKt_mCxEXpxYbUQDgvkVHVq7_MJKO0RO67qHaBaVlwYO0rL_H2tyl9sBN5czc5mbXDr_6RSNxW1uOPixdx8dKrwHi1Nbw_HfwJu2CRey2mQIt9OrupC_2_PnI7aRH5ozPEMpac8PTVU71LiOfURR9XDUIrU7fS5yrkRCn34rYDUoj2PsESmFeyzpTduhJDrS6DDgdK9mwcoRtFbl6j4i9vbruwN6KP8Smam-kzkLiK2w"/>
+<div class="absolute top-3 right-3">
+<span class="bg-tertiary-fixed text-on-tertiary-fixed px-3 py-1 rounded-full font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="check_circle">check_circle</span> Verified
+                        </span>
+</div>
+</div>
+<div class="p-4">
+<div class="flex justify-between items-start mb-2">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Robotics &amp; AI Society</h3>
+<p class="text-on-surface-variant font-body-sm text-body-sm">Tech &amp; Engineering</p>
+</div>
+<button class="text-primary active:scale-125 transition-transform">
+<span class="material-symbols-outlined" data-icon="favorite_border">favorite_border</span>
+</button>
+</div>
+<p class="text-on-surface-variant font-body-md text-body-md line-clamp-2 mb-4">Dedicated to exploring the frontiers of automation and machine learning through hands-on projects and national competitions.</p>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="flex -space-x-2">
+<div class="w-7 h-7 rounded-full border-2 border-white bg-secondary-container flex items-center justify-center text-[10px] font-bold">JS</div>
+<div class="w-7 h-7 rounded-full border-2 border-white bg-primary-fixed flex items-center justify-center text-[10px] font-bold">AM</div>
+<div class="w-7 h-7 rounded-full border-2 border-white bg-tertiary-fixed flex items-center justify-center text-[10px] font-bold">+42</div>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Active Members</span>
+</div>
+<button class="px-5 py-2 bg-primary-container text-on-primary text-label-md font-label-md rounded-lg active:opacity-80">Join Club</button>
+</div>
+</div>
+</div>
+<!-- Club Card 2 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-[0px_1px_3px_rgba(0,0,0,0.05)] active:scale-[0.98] transition-transform">
+<div class="relative h-40">
+<img class="w-full h-full object-cover" data-alt="A lush campus garden at sunset where students are gathering for an outdoor meeting. The atmosphere is warm and golden, with soft shadows falling across a wooden table covered in environmental flyers. The color palette features deep greens of the foliage and warm maroon tones from student hoodies, creating a peaceful and purposeful service-oriented mood." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYlmETgPCljI3v2DYJh7qU_EJLxKL2VzLbOC-1uXyGWOw9ifnXL8_3zh95UE0oGdUMOcj5XXpXRfTk4FvbtsIaWupPl038FY6SCcL2Ab56J6hA2ls0lLA_QVThzJbDV8XSrde2tL9N2Et8V9m6V4Rw2RawJy-0qGPKoSUBmFBkMUtwseGlESnZELU9RdXclpgFg7ArkQKtmcKVnOQ1TnawMMvKzqo7hUISpLaPTH6XgWkTxrdUYLvG1Q"/>
+<div class="absolute top-3 right-3">
+<span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full font-label-sm text-label-sm">Recruiting</span>
+</div>
+</div>
+<div class="p-4">
+<div class="flex justify-between items-start mb-2">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Eco-Warriors Alliance</h3>
+<p class="text-on-surface-variant font-body-sm text-body-sm">Environmental Service</p>
+</div>
+<button class="text-primary active:scale-125 transition-transform">
+<span class="material-symbols-outlined" data-icon="favorite_border">favorite_border</span>
+</button>
+</div>
+<p class="text-on-surface-variant font-body-md text-body-md line-clamp-2 mb-4">Promoting sustainability on campus through waste reduction initiatives, community gardening, and awareness campaigns.</p>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="flex -space-x-2">
+<div class="w-7 h-7 rounded-full border-2 border-white bg-tertiary-container text-white flex items-center justify-center text-[10px] font-bold">LC</div>
+<div class="w-7 h-7 rounded-full border-2 border-white bg-outline flex items-center justify-center text-[10px] font-bold">RK</div>
+<div class="w-7 h-7 rounded-full border-2 border-white bg-surface-variant flex items-center justify-center text-[10px] font-bold">+15</div>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Growing Fast</span>
+</div>
+<button class="px-5 py-2 border border-primary text-primary text-label-md font-label-md rounded-lg active:bg-surface-container-high transition-colors">Learn More</button>
+</div>
+</div>
+</div>
+<!-- Club Card 3 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-[0px_1px_3px_rgba(0,0,0,0.05)] active:scale-[0.98] transition-transform">
+<div class="relative h-40">
+<img class="w-full h-full object-cover" data-alt="A sophisticated architectural design studio filled with scale models and blueprints. The lighting is focused and professional, highlighting the clean lines of modern structures. The aesthetic is minimalist and corporate, utilizing a color scheme of cool grays and sharp maroon accents that suggest precision and high-level academic excellence." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCLsZYT4Ef_oEgxuK9-nj1K4kMfMCclF4kpU_Q9-5EnUZ8HUriKT7Vb9StfMuf6TvkkaV2zwKW5JdyOBTISVMCvNwKgjWv4fi_yNzpc91LVLCeKYa3-yftAL5lBap9zk1XSWco1fqX7-dwBQjzbn9DPVGrGqp0Ov97_UArJsdm9wOentCcvgvSRJvuvbqdX1iJHwdUjrYVUBC7Ps8a94Z4Oxg67wEkWzwjKQW389BugfMPY9a082rKF4w"/>
+</div>
+<div class="p-4">
+<div class="flex justify-between items-start mb-2">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Architectural Guild</h3>
+<p class="text-on-surface-variant font-body-sm text-body-sm">Arts &amp; Design</p>
+</div>
+<button class="text-primary active:scale-125 transition-transform">
+<span class="material-symbols-outlined text-fill" data-icon="favorite" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</button>
+</div>
+<p class="text-on-surface-variant font-body-md text-body-md line-clamp-2 mb-4">A community of aspiring architects and designers sharing inspiration, critiques, and professional networking opportunities.</p>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="flex -space-x-2">
+<div class="w-7 h-7 rounded-full border-2 border-white bg-secondary-fixed flex items-center justify-center text-[10px] font-bold">TW</div>
+<div class="w-7 h-7 rounded-full border-2 border-white bg-error-container flex items-center justify-center text-[10px] font-bold">MS</div>
+<div class="w-7 h-7 rounded-full border-2 border-white bg-surface-container-highest flex items-center justify-center text-[10px] font-bold">+8</div>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Top Choice</span>
+</div>
+<button class="px-5 py-2 bg-primary-container text-on-primary text-label-md font-label-md rounded-lg active:opacity-80">Join Club</button>
+</div>
+</div>
+</div>
+<!-- Empty State / Load More Suggestion -->
+<div class="py-12 text-center">
+<span class="material-symbols-outlined text-outline text-4xl mb-2" data-icon="groups_2">groups_2</span>
+<p class="text-on-surface-variant font-body-md text-body-md">Can't find what you're looking for?</p>
+<button class="mt-4 text-primary font-label-md text-label-md underline">Start your own club</button>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe bg-surface rounded-t-xl border-t border-outline-variant shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
+<a class="flex flex-col items-center justify-center text-on-surface-variant active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-sm text-label-sm-mobile">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="explore">explore</span>
+<span class="font-label-sm text-label-sm-mobile">Directory</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="event">event</span>
+<span class="font-label-sm text-label-sm-mobile">Events</span>
+</a>
+</nav>
+<script>
+        // Micro-interaction for category pills
+        const categoryButtons = document.querySelectorAll('.flex-none');
+        categoryButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                categoryButtons.forEach(b => {
+                    b.classList.remove('bg-primary-container', 'text-on-primary-container');
+                    b.classList.add('bg-surface-container-high', 'text-on-surface-variant');
+                });
+                btn.classList.add('bg-primary-container', 'text-on-primary-container');
+                btn.classList.remove('bg-surface-container-high', 'text-on-surface-variant');
+            });
+        });
+
+        // Favorite Toggle Logic
+        const heartIcons = document.querySelectorAll('[data-icon="favorite_border"], [data-icon="favorite"]');
+        heartIcons.forEach(icon => {
+            icon.parentElement.addEventListener('click', () => {
+                const isFilled = icon.getAttribute('data-icon') === 'favorite';
+                if (isFilled) {
+                    icon.setAttribute('data-icon', 'favorite_border');
+                    icon.style.fontVariationSettings = "'FILL' 0";
+                } else {
+                    icon.setAttribute('data-icon', 'favorite');
+                    icon.style.fontVariationSettings = "'FILL' 1";
+                }
+            });
+        });
+    </script>
+</body></html>

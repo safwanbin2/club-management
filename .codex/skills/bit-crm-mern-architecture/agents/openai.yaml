@@ -1,4 +1,0 @@
-interface:
-  display_name: "Bit CRM MERN Architecture"
-  short_description: "Build MERN apps using Bit CRM structure"
-  default_prompt: "Use $bit-crm-mern-architecture to scaffold a React, Express, and MongoDB feature that follows the Bit CRM project structure."

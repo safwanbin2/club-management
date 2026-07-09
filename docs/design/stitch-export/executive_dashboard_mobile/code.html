@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CampusHub | Executive Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#f2dee1",
+                        "error": "#ba1a1a",
+                        "on-tertiary-container": "#71a87d",
+                        "surface-variant": "#f2dee1",
+                        "on-surface": "#23191b",
+                        "on-tertiary-fixed": "#00210c",
+                        "surface-tint": "#a4355d",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-container": "#003c1b",
+                        "tertiary-fixed-dim": "#9bd4a5",
+                        "secondary-fixed-dim": "#b9c7e0",
+                        "error-container": "#ffdad6",
+                        "secondary-container": "#d5e3fd",
+                        "on-surface-variant": "#554246",
+                        "on-secondary-fixed-variant": "#3a485c",
+                        "inverse-primary": "#ffb1c5",
+                        "on-secondary": "#ffffff",
+                        "background": "#fff8f8",
+                        "tertiary-fixed": "#b6f0c0",
+                        "tertiary": "#00240e",
+                        "on-primary-container": "#f1719a",
+                        "on-secondary-fixed": "#0d1c2f",
+                        "secondary": "#515f74",
+                        "primary-container": "#6a0032",
+                        "on-primary-fixed-variant": "#851b46",
+                        "surface": "#fff8f8",
+                        "outline-variant": "#dbc0c5",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed-variant": "#1b512d",
+                        "surface-dim": "#e9d5d8",
+                        "inverse-on-surface": "#ffecef",
+                        "on-background": "#23191b",
+                        "surface-container-low": "#fff0f2",
+                        "on-secondary-container": "#57657b",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed": "#3f001b",
+                        "surface-container": "#fde9ec",
+                        "surface-container-high": "#f7e3e7",
+                        "on-tertiary": "#ffffff",
+                        "surface-bright": "#fff8f8",
+                        "primary": "#43001d",
+                        "outline": "#887176",
+                        "on-error-container": "#93000a",
+                        "inverse-surface": "#392d30",
+                        "primary-fixed": "#ffd9e1",
+                        "secondary-fixed": "#d5e3fd",
+                        "primary-fixed-dim": "#ffb1c5"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "sidebar-width": "260px",
+                        "topbar-height": "64px",
+                        "container-padding": "24px",
+                        "unit": "4px",
+                        "gutter": "16px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "label-sm-mobile": ["10px", {"lineHeight": "12px", "fontWeight": "500"}],
+                        "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "label-sm": ["11px", {"lineHeight": "14px", "fontWeight": "500"}],
+                        "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface min-h-screen pb-24">
+<!-- TopNavBar -->
+<nav class="bg-surface dark:bg-surface-container flex justify-between items-center w-full h-[64px] px-container-padding sticky top-0 z-50 border-b border-outline-variant dark:border-outline shadow-sm">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm font-bold text-primary dark:text-primary-fixed">CampusHub</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer active:opacity-80" data-icon="notifications">notifications</span>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a university administrator for an executive profile, set against a clean, minimalist architectural background of a modern campus building. The lighting is soft and diffused, creating a professional corporate aesthetic in a bright light-mode environment with subtle maroon accents." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBdvkmsIFlg5HiFKFLNCpaz3727w3Uoa9OqjMW0sQz7iGIvOHz0HZVzEfYsebmFl2z1ukc8x1Qf3Bne96WFG0yzmahPUwT30KWTQxB-cfsNJviApTi58CWoZ5d8DqnzBtq3lZUAD8A96QNOYmUxt4l0ElIPdR6jHpxwsL-EItXM-GQyJgA40yRgzHgBwKq1lwNQFFJiYx-vV3ZKiYVE_tms1ZQIesiqxcC0onThywz-B8HhmYmeLHqWwQ"/>
+</div>
+</div>
+</nav>
+<main class="p-container-padding space-y-6">
+<!-- Header Section -->
+<header class="space-y-1">
+<h1 class="font-headline-md text-headline-md text-on-surface">Admin Dashboard</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Welcome back, Dean Sanders.</p>
+</header>
+<!-- 2x2 Metrics Grid -->
+<section class="grid grid-cols-2 gap-4">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant shadow-[0px_1px_3px_rgba(0,0,0,0.05)] hover:shadow-md transition-shadow">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="groups">groups</span>
+<span class="font-label-md text-label-md text-on-surface-variant">Active Clubs</span>
+</div>
+<div class="font-headline-sm text-headline-sm text-on-surface">142</div>
+<div class="flex items-center gap-1 text-tertiary-fixed-dim mt-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="trending_up">trending_up</span>
+<span class="text-[11px] font-bold">+12%</span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant shadow-[0px_1px_3px_rgba(0,0,0,0.05)]">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="person_add">person_add</span>
+<span class="font-label-md text-label-md text-on-surface-variant">New Members</span>
+</div>
+<div class="font-headline-sm text-headline-sm text-on-surface">843</div>
+<div class="flex items-center gap-1 text-tertiary-fixed-dim mt-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="trending_up">trending_up</span>
+<span class="text-[11px] font-bold">+5.2%</span>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant shadow-[0px_1px_3px_rgba(0,0,0,0.05)]">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="calendar_today">calendar_today</span>
+<span class="font-label-md text-label-md text-on-surface-variant">Events Held</span>
+</div>
+<div class="font-headline-sm text-headline-sm text-on-surface">28</div>
+<div class="flex items-center gap-1 text-on-surface-variant mt-1 opacity-60">
+<span class="material-symbols-outlined text-[14px]" data-icon="horizontal_rule">horizontal_rule</span>
+<span class="text-[11px] font-bold">Stable</span>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant shadow-[0px_1px_3px_rgba(0,0,0,0.05)]">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="account_balance_wallet">account_balance_wallet</span>
+<span class="font-label-md text-label-md text-on-surface-variant">Budget Util.</span>
+</div>
+<div class="font-headline-sm text-headline-sm text-on-surface">64%</div>
+<div class="flex items-center gap-1 text-error mt-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="warning">warning</span>
+<span class="text-[11px] font-bold">High</span>
+</div>
+</div>
+</section>
+<!-- Quick Actions List -->
+<section class="space-y-3">
+<h2 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Quick Actions</h2>
+<div class="grid grid-cols-1 gap-2">
+<button class="flex items-center justify-between w-full p-4 bg-primary-container text-on-primary rounded-xl active:scale-95 transition-transform">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
+<span class="font-body-md text-body-md font-semibold">Approve New Club Requests</span>
+</div>
+<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</button>
+<button class="flex items-center justify-between w-full p-4 bg-surface-container text-on-surface rounded-xl border border-outline-variant active:scale-95 transition-transform">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="mail">mail</span>
+<span class="font-body-md text-body-md font-semibold">Send Campus Announcement</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="chevron_right">chevron_right</span>
+</button>
+<button class="flex items-center justify-between w-full p-4 bg-surface-container text-on-surface rounded-xl border border-outline-variant active:scale-95 transition-transform">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="analytics">analytics</span>
+<span class="font-body-md text-body-md font-semibold">Generate Monthly Report</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</section>
+<!-- Recent Registrations -->
+<section class="space-y-3">
+<div class="flex justify-between items-center">
+<h2 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Recent Registrations</h2>
+<button class="text-primary font-label-md text-label-md">View All</button>
+</div>
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden">
+<div class="divide-y divide-outline-variant">
+<!-- Registration 1 -->
+<div class="p-4 flex items-center justify-between hover:bg-surface-container transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary" data-icon="code">code</span>
+</div>
+<div>
+<div class="font-body-md text-body-md font-bold text-on-surface">Data Science Society</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">Submitted 2h ago</div>
+</div>
+</div>
+<span class="bg-[#FEF3C7] text-[#92400E] px-2 py-1 rounded-full font-label-sm text-[10px] uppercase">Pending</span>
+</div>
+<!-- Registration 2 -->
+<div class="p-4 flex items-center justify-between hover:bg-surface-container transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary" data-icon="palette">palette</span>
+</div>
+<div>
+<div class="font-body-md text-body-md font-bold text-on-surface">Digital Arts Collective</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">Submitted 5h ago</div>
+</div>
+</div>
+<span class="bg-[#DCFCE7] text-[#166534] px-2 py-1 rounded-full font-label-sm text-[10px] uppercase">Reviewing</span>
+</div>
+<!-- Registration 3 -->
+<div class="p-4 flex items-center justify-between hover:bg-surface-container transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary" data-icon="fitness_center">fitness_center</span>
+</div>
+<div>
+<div class="font-body-md text-body-md font-bold text-on-surface">Powerlifting Club</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">Submitted yesterday</div>
+</div>
+</div>
+<span class="bg-[#FEF3C7] text-[#92400E] px-2 py-1 rounded-full font-label-sm text-[10px] uppercase">Pending</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe bg-surface dark:bg-surface-container-high border-t border-outline-variant dark:border-outline shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] rounded-t-xl">
+<!-- Home / Dashboard (Active) -->
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="font-label-sm text-label-sm-mobile">Dashboard</span>
+</a>
+<!-- Directory -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant active:scale-95 transition-transform active:bg-surface-container-highest" href="#">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+<span class="font-label-sm text-label-sm-mobile">Clubs</span>
+</a>
+<!-- Events -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant active:scale-95 transition-transform active:bg-surface-container-highest" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span>
+<span class="font-label-sm text-label-sm-mobile">Events</span>
+</a>
+<!-- Settings -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant active:scale-95 transition-transform active:bg-surface-container-highest" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-sm text-label-sm-mobile">Settings</span>
+</a>
+</nav>
+</body></html>

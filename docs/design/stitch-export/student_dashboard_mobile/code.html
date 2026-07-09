@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#f2dee1",
+                        "error": "#ba1a1a",
+                        "on-tertiary-container": "#71a87d",
+                        "surface-variant": "#f2dee1",
+                        "on-surface": "#23191b",
+                        "on-tertiary-fixed": "#00210c",
+                        "surface-tint": "#a4355d",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-container": "#003c1b",
+                        "tertiary-fixed-dim": "#9bd4a5",
+                        "secondary-fixed-dim": "#b9c7e0",
+                        "error-container": "#ffdad6",
+                        "secondary-container": "#d5e3fd",
+                        "on-surface-variant": "#554246",
+                        "on-secondary-fixed-variant": "#3a485c",
+                        "inverse-primary": "#ffb1c5",
+                        "on-secondary": "#ffffff",
+                        "background": "#fff8f8",
+                        "tertiary-fixed": "#b6f0c0",
+                        "tertiary": "#00240e",
+                        "on-primary-container": "#f1719a",
+                        "on-secondary-fixed": "#0d1c2f",
+                        "secondary": "#515f74",
+                        "primary-container": "#6a0032",
+                        "on-primary-fixed-variant": "#851b46",
+                        "surface": "#fff8f8",
+                        "outline-variant": "#dbc0c5",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed-variant": "#1b512d",
+                        "surface-dim": "#e9d5d8",
+                        "inverse-on-surface": "#ffecef",
+                        "on-background": "#23191b",
+                        "surface-container-low": "#fff0f2",
+                        "on-secondary-container": "#57657b",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed": "#3f001b",
+                        "surface-container": "#fde9ec",
+                        "surface-container-high": "#f7e3e7",
+                        "on-tertiary": "#ffffff",
+                        "surface-bright": "#fff8f8",
+                        "primary": "#43001d",
+                        "outline": "#887176",
+                        "on-error-container": "#93000a",
+                        "inverse-surface": "#392d30",
+                        "primary-fixed": "#ffd9e1",
+                        "secondary-fixed": "#d5e3fd",
+                        "primary-fixed-dim": "#ffb1c5"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "sidebar-width": "260px",
+                        "topbar-height": "64px",
+                        "container-padding": "24px",
+                        "unit": "4px",
+                        "gutter": "16px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "label-sm-mobile": ["10px", {"lineHeight": "12px", "fontWeight": "500"}],
+                        "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "label-sm": ["11px", {"lineHeight": "14px", "fontWeight": "500"}],
+                        "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen pb-24">
+<!-- Top Navigation Bar -->
+<header class="bg-surface dark:bg-surface-container flex justify-between items-center w-full h-[64px] px-container-padding sticky top-0 z-50 border-b border-outline-variant dark:border-outline shadow-sm">
+<div class="flex items-center gap-3 flex-1">
+<button class="p-2 hover:bg-secondary-container dark:hover:bg-secondary transition-colors cursor-pointer active:opacity-80" onclick="toggleMenu()">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed">menu</span>
+</button>
+<div class="relative flex-1 max-w-xs">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded-full py-1.5 pl-10 pr-4 font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary-container" placeholder="Search CampusHub" type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-2 ml-4">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed cursor-pointer active:opacity-80">notifications</span>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A professional portrait of a university student with a friendly expression, captured in soft natural lighting against a blurred modern campus backdrop. The image uses a clean, light-mode aesthetic with soft tonal shifts and high-clarity details to match the professional minimal design system." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDiQjkboLjZ9Z9ApblVp-sDZEAwaEjY0E1qRXybQjtP_1aFzb57DbGA8G2bPDRbaP2D3cbl9h5mSYIezCVysSfVZsMeyFXW0hAhfQGmOJtPMZrwhXgzZzdhTs9qFLXkeYwvnHrj7gWK9p1gW8eEXucRB56WPxwscbOj6NQwA5gW9sq0wkXa2XW1UTMFsTchk0HGl72rRtgQFNtK63ZaiidgY-WBtcpHhvYaIfpUiMFF8RDH8ZcxIXYajg"/>
+</div>
+</div>
+</header>
+<!-- Sidebar Drawer (Hidden by default) -->
+<div class="fixed inset-0 bg-black/40 z-[60] hidden transition-opacity" id="sidebarOverlay" onclick="toggleMenu()"></div>
+<aside class="fixed left-0 top-0 h-full w-sidebar-width bg-surface-container-low dark:bg-surface-dim border-r border-outline-variant dark:border-outline z-[70] -translate-x-full transition-transform duration-300 ease-in-out py-6 flex flex-col" id="sideNav">
+<div class="px-6 mb-8">
+<h1 class="font-headline-sm text-headline-sm font-black text-primary dark:text-primary-fixed">CampusHub</h1>
+<p class="font-label-md text-label-md text-on-surface-variant">Student Portal</p>
+</div>
+<nav class="flex-1 px-2 space-y-1">
+<a class="flex items-center gap-3 bg-primary-container text-on-primary-container font-bold rounded-lg px-4 py-2 border-l-4 border-primary" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 text-secondary dark:text-secondary-fixed-dim px-4 py-2 hover:bg-secondary-container transition-all" href="#">
+<span class="material-symbols-outlined">groups</span>
+<span class="font-label-md text-label-md">Club Directory</span>
+</a>
+<a class="flex items-center gap-3 text-secondary dark:text-secondary-fixed-dim px-4 py-2 hover:bg-secondary-container transition-all" href="#">
+<span class="material-symbols-outlined">newspaper</span>
+<span class="font-label-md text-label-md">News Feed</span>
+</a>
+<a class="flex items-center gap-3 text-secondary dark:text-secondary-fixed-dim px-4 py-2 hover:bg-secondary-container transition-all" href="#">
+<span class="material-symbols-outlined">calendar_month</span>
+<span class="font-label-md text-label-md">Events</span>
+</a>
+<a class="flex items-center gap-3 text-secondary dark:text-secondary-fixed-dim px-4 py-2 hover:bg-secondary-container transition-all" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</nav>
+<div class="px-4 mt-auto">
+<button class="w-full bg-primary-container text-on-primary text-label-md font-bold py-3 rounded-xl hover:opacity-90 transition-opacity">
+                Create New Club
+            </button>
+</div>
+</aside>
+<main class="px-container-padding py-6">
+<!-- Welcome Section -->
+<section class="mb-8">
+<h2 class="font-headline-md text-headline-md text-primary mb-1">Welcome back, Alex</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Check your schedule for today.</p>
+</section>
+<!-- Upcoming Events (Swipeable) -->
+<section class="mb-10">
+<div class="flex justify-between items-center mb-4">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Upcoming Events</h3>
+<a class="font-label-md text-label-md text-primary-container font-bold" href="#">See all</a>
+</div>
+<div class="flex overflow-x-auto gap-4 no-scrollbar pb-4 snap-x">
+<!-- Card 1 -->
+<div class="flex-none w-[280px] snap-start bg-surface-container-lowest border border-outline-variant rounded-xl shadow-sm overflow-hidden">
+<div class="h-32 bg-cover bg-center" data-alt="A professional architectural photograph of a modern university building during twilight. The sky is a deep indigo, and the building glows with warm interior lighting. The shot emphasizes geometric symmetry and the use of glass and concrete, fitting the minimalist corporate university aesthetic." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAXS0paTB2SCTduTjA2_Dkjtnor1Ce9VbPOEaPCvCnpVzxe9qxd-T9W5pbkrDLp3qiPSTCi4dHGTSk0m5E_2kEH1yETFP3XQo7xFoFCs2EDZHStiZlOFvgNn8PUa5tzKWjVRpFuzGY4Cry_-tqrY-DbmUzwm0VR1C2_iAYtU6YxhOHQk5RY-dOp-qUlzS0abbhgs_t4qjB-Fek0zytwiOzMqLTnTwV53K5ufSD4QgV3jcjxLXsvlo-ZwQ')"></div>
+<div class="p-4">
+<span class="inline-block px-2 py-0.5 rounded bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm mb-2">Academic</span>
+<h4 class="font-headline-sm text-headline-sm text-on-surface leading-tight mb-1">Career Fair 2024</h4>
+<div class="flex items-center gap-2 text-on-surface-variant mb-4">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+<span class="font-body-sm text-body-sm">Oct 12, 10:00 AM</span>
+</div>
+<button class="w-full border border-outline text-primary font-label-md text-label-md py-2 rounded-lg hover:bg-surface-container-low transition-colors">Join Waitlist</button>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="flex-none w-[280px] snap-start bg-surface-container-lowest border border-outline-variant rounded-xl shadow-sm overflow-hidden">
+<div class="h-32 bg-cover bg-center" data-alt="A dynamic, high-energy shot of students collaborating in a high-tech university lab. The environment is filled with digital screens, robotic components, and warm overhead lighting. The composition is sleek and professional, using a shallow depth of field to focus on the collaborative atmosphere." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAy1AWsjP7y9qjsnauf1dwUkl4pmBC2Ir2Cgmbaq5xrUzohXHgP29FYaimBohSwmiMF5DzDAw34Lkx4AtKPDe7yBVeLfWlaa7E0hm5FMZYf4y4ZeazDcPREEEYwrjzADaSv19qs8vQ5DIC7HhDtudsJF8l888c8CaFttuBKPsFyCzgAuEwvQp2aE5pm-DYc9Am1WchV_HY9XlQksUTCja-Qe0MApnPcR11AjvgtngHPY_R5PHcF7QMcVA')"></div>
+<div class="p-4">
+<span class="inline-block px-2 py-0.5 rounded bg-secondary-container text-on-secondary-container font-label-sm text-label-sm mb-2">Social</span>
+<h4 class="font-headline-sm text-headline-sm text-on-surface leading-tight mb-1">Robotics Workshop</h4>
+<div class="flex items-center gap-2 text-on-surface-variant mb-4">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+<span class="font-body-sm text-body-sm">Oct 14, 2:30 PM</span>
+</div>
+<button class="w-full border border-outline text-primary font-label-md text-label-md py-2 rounded-lg hover:bg-surface-container-low transition-colors">RSVP Now</button>
+</div>
+</div>
+</div>
+</section>
+<!-- My Clubs (Swipeable) -->
+<section>
+<div class="flex justify-between items-center mb-4">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">My Clubs</h3>
+<span class="font-label-md text-label-md text-on-surface-variant">3 Active</span>
+</div>
+<div class="flex overflow-x-auto gap-4 no-scrollbar pb-4 snap-x">
+<!-- Club 1 -->
+<div class="flex-none w-[180px] snap-start p-5 bg-surface-container-low border border-outline-variant rounded-xl flex flex-col items-center text-center">
+<div class="w-16 h-16 rounded-full bg-primary-container flex items-center justify-center mb-4 shadow-sm">
+<span class="material-symbols-outlined text-on-primary text-[32px]">code</span>
+</div>
+<h5 class="font-headline-sm text-[16px] text-on-surface mb-1">Code Society</h5>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Lead Developer</p>
+</div>
+<!-- Club 2 -->
+<div class="flex-none w-[180px] snap-start p-5 bg-surface-container-low border border-outline-variant rounded-xl flex flex-col items-center text-center">
+<div class="w-16 h-16 rounded-full bg-on-tertiary-container flex items-center justify-center mb-4 shadow-sm">
+<span class="material-symbols-outlined text-white text-[32px]">palette</span>
+</div>
+<h5 class="font-headline-sm text-[16px] text-on-surface mb-1">Fine Arts Union</h5>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Member</p>
+</div>
+<!-- Club 3 -->
+<div class="flex-none w-[180px] snap-start p-5 bg-surface-container-low border border-outline-variant rounded-xl flex flex-col items-center text-center">
+<div class="w-16 h-16 rounded-full bg-on-secondary-fixed-variant flex items-center justify-center mb-4 shadow-sm">
+<span class="material-symbols-outlined text-white text-[32px]">sports_basketball</span>
+</div>
+<h5 class="font-headline-sm text-[16px] text-on-surface mb-1">Varsity Hoop</h5>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Captain</p>
+</div>
+</div>
+</section>
+<!-- Bento Stats Section -->
+<section class="mt-8 grid grid-cols-2 gap-4">
+<div class="bg-surface-variant p-4 rounded-xl flex flex-col justify-between h-32">
+<span class="material-symbols-outlined text-on-surface-variant">query_stats</span>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">GPA Score</p>
+<p class="font-headline-md text-headline-md text-on-surface">3.82</p>
+</div>
+</div>
+<div class="bg-tertiary-fixed p-4 rounded-xl flex flex-col justify-between h-32">
+<span class="material-symbols-outlined text-on-tertiary-fixed-variant">task_alt</span>
+<div>
+<p class="font-label-sm text-label-sm text-on-tertiary-fixed-variant">Assignments</p>
+<p class="font-headline-md text-headline-md text-on-tertiary-fixed">12 Due</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe bg-surface dark:bg-surface-container-high border-t border-outline-variant dark:border-outline shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] rounded-t-xl">
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-sm text-label-sm-mobile">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant active:bg-surface-container-highest active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">explore</span>
+<span class="font-label-sm text-label-sm-mobile">Directory</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant active:bg-surface-container-highest active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">event</span>
+<span class="font-label-sm text-label-sm-mobile">Events</span>
+</a>
+</nav>
+<script>
+        function toggleMenu() {
+            const sideNav = document.getElementById('sideNav');
+            const overlay = document.getElementById('sidebarOverlay');
+            const isOpen = !sideNav.classList.contains('-translate-x-full');
+
+            if (isOpen) {
+                sideNav.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            } else {
+                sideNav.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+            }
+        }
+
+        // Handle scroll behavior for horizontal lists
+        const lists = document.querySelectorAll('.no-scrollbar');
+        lists.forEach(list => {
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+
+            list.addEventListener('mousedown', (e) => {
+                isDown = true;
+                startX = e.pageX - list.offsetLeft;
+                scrollLeft = list.scrollLeft;
+            });
+            list.addEventListener('mouseleave', () => {
+                isDown = false;
+            });
+            list.addEventListener('mouseup', () => {
+                isDown = false;
+            });
+            list.addEventListener('mousemove', (e) => {
+                if(!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - list.offsetLeft;
+                const walk = (x - startX) * 2;
+                list.scrollLeft = scrollLeft - walk;
+            });
+        });
+    </script>
+</body></html>

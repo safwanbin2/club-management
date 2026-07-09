@@ -1,0 +1,27 @@
+---
+description: Project-wide instructions for the University Club Management System.
+alwaysApply: true
+---
+
+# University Club Management System
+
+Follow @docs/agent-instructions.md for shared AI agent instructions.
+
+Before meaningful work, read:
+
+- @AGENTS.md
+- @docs/ai-workflow.md
+- @docs/university-club-management-system.md
+- @docs/roadmap.md
+- @docs/domain-model.md
+- @docs/api-contract.md
+- @docs/ui-system.md
+- @docs/design/stitch-source.md
+- @docs/design/page-map.md
+- @docs/design/implementation-notes.md
+- @docs/feature-slices.md
+- @.cursor/skills/architecture/SKILL.md
+
+Use vertical slices, not disconnected edits. Keep the product aligned with Student, Club Executive, and University Administration workflows. Use Ant Design plus Tailwind with shared theme tokens. Before frontend UI work, inspect the closest Stitch screenshots under @docs/design/stitch-export/ and derive missing screens from @docs/design/page-map.md. Do not hard-code brand colors. Remove `.gitkeep` when adding real tracked files to a directory.
+
+Run `pnpm check` after meaningful changes and `pnpm build` after build-impacting changes.
