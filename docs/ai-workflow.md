@@ -31,7 +31,8 @@ Before planning or editing code, read these files in order:
 9. `docs/design/implementation-notes.md`
 10. The relevant `architecture` skill reference under the active agent's skill folder.
 
-For feature work, also read `docs/feature-slices.md` and the relevant existing module/page files.
+For feature work, also read `docs/feature-slices.md`, `docs/feature-status.md`, and the relevant existing module/page files.
+Before continuing pending implementation, use `docs/feature-status.md` to confirm the current build pointer and slice status.
 For frontend work, also inspect the closest Stitch desktop and mobile screenshots under `docs/design/stitch-export/`.
 
 ## Work Style

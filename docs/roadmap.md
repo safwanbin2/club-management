@@ -33,11 +33,12 @@ This roadmap is optimized for AI-assisted delivery: each phase creates a working
 - Attendance QR token and check-in flow.
 - Attendance reports and history.
 
-## Phase 5: Polls, Notifications, Badges
+## Phase 5: Polls, Notifications, Profiles, Settings
 
 - Club polls and vote restrictions.
 - Notification system and unread state.
 - Badge rules and profile achievements.
+- Own profile, public profile, and account settings.
 
 ## Phase 6: Resource Requests, Analytics, Search
 
@@ -47,4 +48,6 @@ This roadmap is optimized for AI-assisted delivery: each phase creates a working
 
 ## Current Recommended Next Slice
 
-Start with Phase 1: Auth And App Shell. It unlocks role-aware behavior for every later module.
+Start with Phase 2: Clubs And Membership. Phase 1 and the database foundation are complete enough to support the next vertical slice.
+
+For the live feature ledger, use `docs/feature-status.md`.

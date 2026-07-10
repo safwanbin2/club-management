@@ -73,7 +73,7 @@ Route middleware should handle authentication and broad capabilities. Services s
 Planned route groups:
 
 - `/auth`: login, register, logout, refresh, forgot password, reset password
-- `/users`: profile, public profile, admin user management
+- `/users`: own profile, public profile, account settings, admin user management
 - `/clubs`: club directory, details, membership, executive management
 - `/feed`: posts, announcements, comments, likes, pins
 - `/events`: event CRUD, registration, cancellation, waitlist

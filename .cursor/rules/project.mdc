@@ -20,6 +20,7 @@ Before meaningful work, read:
 - @docs/design/page-map.md
 - @docs/design/implementation-notes.md
 - @docs/feature-slices.md
+- @docs/feature-status.md
 - @.cursor/skills/architecture/SKILL.md
 
 Use vertical slices, not disconnected edits. Keep the product aligned with Student, Club Executive, and University Administration workflows. Use Ant Design plus Tailwind with shared theme tokens. Before frontend UI work, inspect the closest Stitch screenshots under @docs/design/stitch-export/ and derive missing screens from @docs/design/page-map.md. Do not hard-code brand colors. Remove `.gitkeep` when adding real tracked files to a directory.

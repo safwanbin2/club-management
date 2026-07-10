@@ -17,6 +17,7 @@ Before meaningful planning or code changes, read:
 9. `docs/design/page-map.md`
 10. `docs/design/implementation-notes.md`
 11. `docs/feature-slices.md` for feature work
+12. `docs/feature-status.md` before continuing pending implementation
 
 For architecture decisions, use the local `architecture` skill:
 

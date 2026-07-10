@@ -103,6 +103,7 @@ This repository is set up for AI-assisted development. Before large feature work
 - `docs/design/page-map.md`
 - `docs/design/implementation-notes.md`
 - `docs/feature-slices.md`
+- `docs/feature-status.md`
 
 The Stitch design export is stored in `docs/design/stitch-export/`. New frontend pages should follow the closest available Stitch screenshot and use Ant Design plus Tailwind with the shared project theme.
 

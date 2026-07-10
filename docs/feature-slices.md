@@ -71,14 +71,16 @@ Acceptance:
 - Polls close automatically after closing date.
 - Live and final results display correctly.
 
-## Slice 7: Notifications, Badges, And Profile
+## Slice 7: Notifications, Badges, Profile, And Settings
 
-Goal: user activity becomes visible and motivating.
+Goal: user activity becomes visible and motivating, while users can manage their own profile and account preferences.
 
 Acceptance:
 
 - Notification inbox and unread count work.
 - Badge earning rules exist for core activities.
+- Private own profile view and edit flows work.
+- Account settings support password/security, notification preferences, and public profile visibility.
 - Public profile shows clubs, executive positions, attendance, badges, and activity timeline.
 
 ## Slice 8: Resource Requests And Admin Analytics

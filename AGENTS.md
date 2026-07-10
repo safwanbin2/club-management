@@ -14,6 +14,7 @@ Before planning or editing code in this repository, read the project context in 
 8. `docs/design/page-map.md`
 9. `docs/design/implementation-notes.md`
 10. `docs/feature-slices.md` for feature work
+11. `docs/feature-status.md` before continuing pending implementation
 
 Treat the product brief as the canonical scope and behavior guide. If a task implements only part of the brief, make the slice explicit instead of quietly replacing the full product direction with a smaller assumption.
 

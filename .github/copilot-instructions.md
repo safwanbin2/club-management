@@ -15,6 +15,7 @@ Before making substantial suggestions or edits, follow `docs/agent-instructions.
 - `docs/design/page-map.md`
 - `docs/design/implementation-notes.md`
 - `docs/feature-slices.md`
+- `docs/feature-status.md`
 - `.codex/skills/architecture/SKILL.md`
 
 Use the `architecture` skill rules:

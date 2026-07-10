@@ -14,6 +14,7 @@ Read these project files before substantial work:
 @docs/design/page-map.md
 @docs/design/implementation-notes.md
 @docs/feature-slices.md
+@docs/feature-status.md
 @.claude/skills/architecture/SKILL.md
 
 For frontend work, also read:

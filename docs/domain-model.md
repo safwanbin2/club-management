@@ -23,7 +23,7 @@ This document captures the first-pass domain language for the University Club Ma
 
 User:
 
-- identity, email, password hash, role, avatar, student information, profile visibility, status
+- identity, email, password hash, role, avatar, student information, profile visibility, notification preferences, account settings, status
 
 Club:
 

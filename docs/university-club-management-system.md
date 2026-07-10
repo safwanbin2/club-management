@@ -18,6 +18,7 @@ Students can:
 
 - Register/Login
 - View and edit their profile
+- Manage account settings and profile visibility
 - Browse clubs
 - Join or leave clubs
 - View club information
@@ -97,6 +98,21 @@ Implement:
 - Protected routes
 - Secure authentication
 - Session persistence
+
+---
+
+# Account Settings
+
+Authenticated users can:
+
+- Update their own profile information
+- Update avatar and basic student details
+- Change password
+- Manage notification preferences
+- Control public profile visibility
+- Review active sessions and sign out from other sessions when supported
+
+Settings should be available from the app shell and should use the same protected account context as the authenticated user.
 
 ---
 
@@ -313,6 +329,11 @@ Notify users when:
 
 # Member Profile
 
+The product has two profile surfaces:
+
+- Private own profile and account settings for the authenticated user
+- Public profile view for other users, controlled by visibility settings
+
 Each profile displays:
 
 - Avatar
@@ -326,6 +347,7 @@ Each profile displays:
 - Activity timeline
 
 Profiles should be shareable via a public URL.
+Public profiles should not expose private settings, security fields, or hidden profile sections.
 
 ---
 
