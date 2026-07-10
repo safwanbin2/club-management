@@ -17,14 +17,13 @@ Do not mark a slice `Complete` because only models, pages, or mock data exist. C
 
 ## Current Build Pointer
 
-The next recommended slice is **Slice 2: Clubs And Membership**.
+The next recommended slice is **Slice 3: Central News Feed**.
 
 Why:
 
-- Slice 1 and the database foundation are already in place.
-- Clubs and memberships unlock the core Student, Club Executive, and University Administration workflows.
-- Existing Stitch references directly cover Club Directory and Club Detail.
-- Later slices depend on knowing club membership and executive permissions.
+- Slice 2 now provides real club directory, detail, membership request, leave, and executive review workflows.
+- Feed creation, moderation, events, polls, chat, and attendance can now depend on club membership status and club-scoped executive authorization.
+- Existing Stitch references directly cover the News Feed screen.
 
 ## Priority Queue
 
@@ -32,8 +31,8 @@ Why:
 | -------- | ------------------------------------------ | ----------- | --------------------------------------------------------------------- |
 | P0       | Project foundation and database foundation | Complete    | Keep docs and migrations current as new entities/rules are added.     |
 | P1       | Auth and role-aware app shell              | Complete    | Add production email delivery later; do not block feature work on it. |
-| P2       | Clubs and membership                       | Not Started | Build backend APIs, frontend pages, membership actions, and tests.    |
-| P3       | Central news feed                          | Not Started | Build after club membership permissions exist.                        |
+| P2       | Clubs and membership                       | Complete    | Expand admin club management later; core slice is demonstrable.       |
+| P3       | Central news feed                          | Not Started | Build feed APIs, frontend page, likes/comments, and moderation.       |
 | P4       | Events and waitlists                       | Not Started | Build after clubs and memberships are functional.                     |
 | P5       | Attendance                                 | Not Started | Build after event registration exists.                                |
 | P6       | Polls                                      | Not Started | Build after club membership permission checks are reliable.           |
@@ -122,6 +121,42 @@ Verification:
 - `/api/dashboard/summary` returns role-aware data for all three roles.
 - Standard quality checks passed.
 
+### Slice 2: Clubs And Membership
+
+Status: `Complete`
+
+Implemented:
+
+- Backend club routes:
+  - `GET /api/clubs`
+  - `GET /api/clubs/:clubId`
+  - `POST /api/clubs/:clubId/memberships/request`
+  - `POST /api/clubs/:clubId/memberships/leave`
+  - `GET /api/clubs/:clubId/memberships/requests`
+  - `PATCH /api/clubs/:clubId/memberships/requests/:membershipId`
+- Club list search, category/status filters, membership filters, pagination, and sorting.
+- Club detail with membership summary, current-user membership status, executive committee, and upcoming event previews.
+- Student membership request and leave/cancel flows.
+- Executive/admin pending request review with approve/reject actions.
+- Club-scoped executive authorization in the service layer.
+- Validation schemas for list/detail/request-review inputs.
+- Frontend `/clubs` directory page with search, filters, pagination, loading, empty, error, toast, and membership status states.
+- Frontend `/clubs/:clubId` detail page with membership actions, executive committee, upcoming events, contact context, and executive request queue.
+- Club Directory navigation is enabled in the role-aware app shell.
+
+Known follow-up:
+
+- Admin create/disable club management remains a later administration expansion, not part of the Slice 2 student/executive membership acceptance.
+- Demo seed clubs currently rely on generated category visuals when no club cover/logo URL exists.
+
+Verification:
+
+- `pnpm ts-check` passed.
+- `pnpm lint` passed.
+- `pnpm test` passed.
+- `pnpm build` passed.
+- `pnpm format:check` still reports a pre-existing formatting issue in `backend/tests/README.md`, which was not touched by this slice.
+
 ## Partial Work
 
 ### Dashboard Details And Analytics
@@ -158,7 +193,7 @@ Implemented:
 Missing:
 
 - Domain-scoped service checks for most workflows.
-- Club-scoped executive authorization.
+- Club-scoped executive authorization outside the implemented membership review workflow.
 - Member-only access checks for polls, chat, and private club content.
 - Admin moderation and approval permissions in real routes.
 
@@ -167,39 +202,6 @@ Recommended timing:
 - Add domain-scoped authorization inside each feature service as that feature is built.
 
 ## Pending Feature Slices
-
-### Slice 2: Clubs And Membership
-
-Status: `Not Started`
-
-Build next.
-
-Required backend:
-
-- Club list API with search, category/status filters, pagination, and sorting.
-- Club detail API with executive committee and membership summary.
-- Membership request API.
-- Leave club API.
-- Executive request review API with approve/reject.
-- Club-scoped authorization for executive actions.
-- Validation schemas and focused service tests.
-
-Required frontend:
-
-- `/clubs` directory page using `club_directory_desktop` and `club_directory_mobile`.
-- `/clubs/:clubId` detail page using `club_detail_desktop` and `club_detail_mobile`.
-- Search/filter/pagination UI.
-- Membership status indicators.
-- Join/request/leave actions with confirmation and toast states.
-- Executive pending request management UI.
-- Loading, empty, error, and validation states.
-
-Completion criteria:
-
-- Students can browse clubs, view details, request membership, and leave clubs.
-- Executives can approve or reject requests for their club.
-- Membership status is visible in cards and detail views.
-- Backend and frontend checks pass.
 
 ### Slice 3: Central News Feed
 

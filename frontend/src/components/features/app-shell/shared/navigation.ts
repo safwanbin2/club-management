@@ -29,7 +29,7 @@ const sharedItems: AppNavItem[] = [
     path: '/dashboard'
   },
   {
-    enabled: false,
+    enabled: true,
     icon: Users,
     key: 'clubs',
     label: 'Club Directory',

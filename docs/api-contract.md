@@ -84,6 +84,19 @@ Planned route groups:
 - `/resource-requests`: room bookings and funding requests
 - `/search`: global search across clubs, events, students, and posts
 
+## Implemented Clubs And Membership Routes
+
+The Slice 2 club workflow is implemented under `/clubs`:
+
+- `GET /clubs`: paginated club directory with search, category/status filters, membership filters, and sorting.
+- `GET /clubs/:clubId`: club detail by slug or ObjectId with membership summary, executive committee, upcoming events, and current-user membership status.
+- `POST /clubs/:clubId/memberships/request`: create or reopen the authenticated user's membership request.
+- `POST /clubs/:clubId/memberships/leave`: leave an active membership or cancel a pending membership request.
+- `GET /clubs/:clubId/memberships/requests`: club-scoped executive/admin pending request queue.
+- `PATCH /clubs/:clubId/memberships/requests/:membershipId`: approve or reject a pending request.
+
+Club-scoped executive authorization is enforced in the service layer. A `club_executive` can review requests only for clubs where they have an active `executive` or `advisor` membership; university administrators can review any club.
+
 ## Validation
 
 Validate input at the route boundary with Zod. Keep simple schemas inline in routes and move reusable or complex schemas into `*.validation.ts`.
