@@ -2,6 +2,7 @@
   "name": "university-club-management-system",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "pnpm --filter frontend build && pnpm --filter backend build",
     "check": "pnpm ts-check && pnpm lint && pnpm format:check && pnpm test",

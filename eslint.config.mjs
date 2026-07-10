@@ -24,7 +24,7 @@ export default [
     }
   },
   {
-    files: ['**/*.cjs'],
+    files: ['**/*.cjs', 'api/**/*.js'],
     languageOptions: {
       globals: globals.node
     }
