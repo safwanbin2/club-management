@@ -1,3 +1,5 @@
+import './types/express.js'
+
 import cors from 'cors'
 import express from 'express'
 import type { Express } from 'express'
