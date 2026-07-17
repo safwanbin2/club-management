@@ -10,6 +10,9 @@ export type NotificationType =
   | 'poll_created'
   | 'poll_ending'
   | 'registration_confirmed'
+  | 'resource_request_approved'
+  | 'resource_request_rejected'
+  | 'resource_request_submitted'
   | 'waitlist_promoted'
 
 export type Notification = {

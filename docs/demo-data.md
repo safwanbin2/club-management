@@ -27,7 +27,9 @@ Demo data should make the product feel alive and should exercise the tricky work
 - A completed event produces a feed post.
 - A QR attendance check-in records attendance history.
 - A poll closes and exposes final results.
-- A funding request is approved by administration.
+- Aisha has an unread membership notification and seeded first-club badge for profile and notification demos.
+- A room booking request is pending admin review and a funding request is approved by administration.
+- Robotics Club has a pinned chat welcome message with Aisha marked as seen.
 
 ## Seed Strategy
 
@@ -41,7 +43,7 @@ It:
 
 1. Runs pending database migrations first.
 2. Upserts users with known demo credentials.
-3. Upserts clubs, memberships, events, posts, polls, resource requests, notifications, badges, chat, and attendance.
+3. Upserts clubs, memberships, events, posts, post likes, comments, polls, resource requests, notifications, badges, chat, and attendance.
 4. Prints demo login credentials.
 
 The script is idempotent and does not clear arbitrary data. Do not run demo seeding against production data.

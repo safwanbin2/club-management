@@ -8,13 +8,14 @@ import type { LoginPayload } from '../shared/types'
 
 export default function useLogin() {
   return useMutation({
-    mutationFn: (payload: LoginPayload) =>
-      request<ApiResponse<AuthSession>>('auth/login', payload, 'POST', {
+    mutationFn: async (payload: LoginPayload) => {
+      const response = await request<ApiResponse<AuthSession>>('auth/login', payload, 'POST', {
         skipAuth: true,
         skipAuthRefresh: true
-      }),
-    onSuccess: response => {
+      })
+
       setAuthSession(response.data)
+      return response.data
     }
   })
 }

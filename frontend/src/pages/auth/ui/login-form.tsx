@@ -10,8 +10,13 @@ export default function LoginForm() {
   const login = useLogin()
   const navigate = useNavigate()
   const location = useLocation()
-  const redirectTo =
+  const redirectPath =
     (location.state as { from?: { pathname?: string } } | null)?.from?.pathname ?? '/dashboard'
+  const redirectTo = ['/forgot-password', '/login', '/register', '/reset-password'].includes(
+    redirectPath
+  )
+    ? '/dashboard'
+    : redirectPath
 
   const handleSubmit = (values: LoginPayload) => {
     login.mutate(values, {

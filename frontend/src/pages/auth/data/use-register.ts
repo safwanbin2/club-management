@@ -8,13 +8,14 @@ import type { RegisterPayload } from '../shared/types'
 
 export default function useRegister() {
   return useMutation({
-    mutationFn: (payload: RegisterPayload) =>
-      request<ApiResponse<AuthSession>>('auth/register', payload, 'POST', {
+    mutationFn: async (payload: RegisterPayload) => {
+      const response = await request<ApiResponse<AuthSession>>('auth/register', payload, 'POST', {
         skipAuth: true,
         skipAuthRefresh: true
-      }),
-    onSuccess: response => {
+      })
+
       setAuthSession(response.data)
+      return response.data
     }
   })
 }

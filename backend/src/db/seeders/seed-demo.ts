@@ -9,6 +9,8 @@ import { ClubModel } from '../../modules/club/club.model.js'
 import type { Club } from '../../modules/club/club.types.js'
 import { EventModel } from '../../modules/event/event.model.js'
 import { EventRegistrationModel } from '../../modules/event/event-registration.model.js'
+import { CommentModel } from '../../modules/feed/comment.model.js'
+import { PostLikeModel } from '../../modules/feed/post-like.model.js'
 import { PostModel } from '../../modules/feed/post.model.js'
 import { MembershipModel } from '../../modules/membership/membership.model.js'
 import { NotificationModel } from '../../modules/notification/notification.model.js'
@@ -169,6 +171,12 @@ async function seedUsers() {
           department: user.department,
           email: user.email,
           name: user.name,
+          notificationPreferences: {
+            emailDigest: true,
+            eventReminders: true,
+            inApp: true,
+            membershipUpdates: true
+          },
           passwordHash: await hashPassword(user.password),
           role: user.role,
           status: 'active',
@@ -374,15 +382,17 @@ async function seedActivity(
     { new: true, setDefaultsOnInsert: true, upsert: true }
   )
 
-  await PostModel.findOneAndUpdate(
+  const roboticsAnnouncement = await PostModel.findOneAndUpdate(
     { club: clubs.robotics._id, title: 'Robotics Club opens AI workshop registration' },
     {
       $set: {
         author: users.nabila._id,
         body: 'Registration is now open for our AI Robotics Workshop. Seats are limited and waitlists are enabled.',
         club: clubs.robotics._id,
+        commentCount: 2,
         highlighted: true,
         images: [],
+        likeCount: 2,
         moderationStatus: 'visible',
         pinned: true,
         relatedEvent: roboticsWorkshop!._id,
@@ -428,6 +438,142 @@ async function seedActivity(
     },
     { new: true, setDefaultsOnInsert: true, upsert: true }
   )
+
+  const debateEventPost = await PostModel.findOneAndUpdate(
+    { club: clubs.debate._id, title: 'Grand finals return to the auditorium' },
+    {
+      $set: {
+        author: users.rafi._id,
+        body: 'The inter-university debate finals are back in the main auditorium. Members can help with judging logistics, stage setup, and guest reception.',
+        club: clubs.debate._id,
+        commentCount: 1,
+        highlighted: false,
+        images: [],
+        likeCount: 1,
+        moderationStatus: 'visible',
+        pinned: false,
+        relatedEvent: debateTournament!._id,
+        relatedPoll: null,
+        title: 'Grand finals return to the auditorium',
+        type: 'event',
+        visibility: 'public'
+      }
+    },
+    { new: true, setDefaultsOnInsert: true, upsert: true }
+  )
+
+  const roboticsPollPost = await PostModel.findOneAndUpdate(
+    { club: clubs.robotics._id, title: 'Vote on the next robotics track' },
+    {
+      $set: {
+        author: users.nabila._id,
+        body: 'Members can now vote on the next technical track. The winning track will shape our August lab schedule.',
+        club: clubs.robotics._id,
+        commentCount: 0,
+        highlighted: false,
+        images: [],
+        likeCount: 1,
+        moderationStatus: 'visible',
+        pinned: false,
+        relatedEvent: null,
+        relatedPoll: poll!._id,
+        title: 'Vote on the next robotics track',
+        type: 'poll',
+        visibility: 'members'
+      }
+    },
+    { new: true, setDefaultsOnInsert: true, upsert: true }
+  )
+
+  const photographyAchievement = await PostModel.findOneAndUpdate(
+    { club: clubs.photography._id, title: 'Photography Club opens the summer gallery' },
+    {
+      $set: {
+        author: users.admin._id,
+        body: 'The summer campus gallery is live with student work from the July photo walk. Congratulations to the students whose collections were selected for display.',
+        club: clubs.photography._id,
+        commentCount: 1,
+        highlighted: true,
+        images: [],
+        likeCount: 1,
+        moderationStatus: 'visible',
+        pinned: false,
+        relatedEvent: null,
+        relatedPoll: null,
+        title: 'Photography Club opens the summer gallery',
+        type: 'achievement',
+        visibility: 'public'
+      }
+    },
+    { new: true, setDefaultsOnInsert: true, upsert: true }
+  )
+
+  const comments = [
+    {
+      author: users.aisha._id,
+      body: 'Saved my seat. Looking forward to the hands-on session!',
+      post: roboticsAnnouncement!._id
+    },
+    {
+      author: users.omar._id,
+      body: 'If a waitlist spot opens, I can join the afternoon lab.',
+      post: roboticsAnnouncement!._id
+    },
+    {
+      author: users.omar._id,
+      body: 'Debate Society needs volunteers for guest registration too.',
+      post: debateEventPost!._id
+    },
+    {
+      author: users.aisha._id,
+      body: 'The gallery wall looks excellent this semester.',
+      post: photographyAchievement!._id
+    }
+  ]
+
+  for (const comment of comments) {
+    await CommentModel.findOneAndUpdate(
+      {
+        author: comment.author,
+        body: comment.body,
+        post: comment.post
+      },
+      {
+        $set: {
+          author: comment.author,
+          body: comment.body,
+          deletedAt: null,
+          moderationStatus: 'visible',
+          post: comment.post
+        }
+      },
+      { new: true, setDefaultsOnInsert: true, upsert: true }
+    )
+  }
+
+  const likes = [
+    { post: roboticsAnnouncement!._id, user: users.aisha._id },
+    { post: roboticsAnnouncement!._id, user: users.omar._id },
+    { post: debateEventPost!._id, user: users.omar._id },
+    { post: roboticsPollPost!._id, user: users.aisha._id },
+    { post: photographyAchievement!._id, user: users.aisha._id }
+  ]
+
+  for (const like of likes) {
+    await PostLikeModel.findOneAndUpdate(
+      {
+        post: like.post,
+        user: like.user
+      },
+      {
+        $set: {
+          post: like.post,
+          user: like.user
+        }
+      },
+      { new: true, setDefaultsOnInsert: true, upsert: true }
+    )
+  }
 
   await ChatMessageModel.findOneAndUpdate(
     {

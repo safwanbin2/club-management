@@ -20,6 +20,7 @@ pnpm seed:demo
 - `clubs`
 - `memberships`
 - `posts`
+- `post_likes`
 - `comments`
 - `events`
 - `event_registrations`
@@ -39,3 +40,7 @@ Role capabilities are defined in `backend/src/constants/capabilities.ts`.
 - Students receive browse, join, participation, profile, notification, and own-history capabilities.
 - Club executives inherit student capabilities and receive club-scoped management capabilities.
 - University administrators inherit broad capabilities and receive platform-wide management capabilities.
+
+## User Preferences
+
+User documents persist profile visibility and notification preferences. These settings currently drive public profile access and in-app notification surfaces, and leave room for later email digest and reminder delivery.

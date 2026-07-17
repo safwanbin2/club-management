@@ -51,6 +51,12 @@ export function getDashboardSummarySkeleton(user: UserDto): DashboardSummary {
     return {
       actions: [
         { id: 'members', label: 'Review Members', path: '/clubs', tone: 'primary' },
+        {
+          id: 'resources',
+          label: 'Submit Resource Request',
+          path: '/resources',
+          tone: 'secondary'
+        },
         { id: 'broadcast', label: 'Broadcast News', path: '/feed', tone: 'secondary' }
       ],
       generatedAt: new Date().toISOString(),
@@ -117,7 +123,7 @@ export function getDashboardSummarySkeleton(user: UserDto): DashboardSummary {
         {
           id: 'approvals',
           label: 'Open Approval Queue',
-          path: '/admin/approvals',
+          path: '/resources',
           tone: 'primary'
         },
         { id: 'clubs', label: 'Manage Clubs', path: '/clubs', tone: 'secondary' }
@@ -248,7 +254,10 @@ async function getStudentDashboardSummary(user: UserDto): Promise<DashboardSumma
     attendanceCount,
     badgeCount,
     memberships,
-    registrations
+    registrations,
+    notifications,
+    badges,
+    attendanceRows
   ] = await Promise.all([
     MembershipModel.countDocuments({ status: 'active', user: userId }),
     EventRegistrationModel.countDocuments({ status: { $ne: 'cancelled' }, user: userId }),
@@ -262,7 +271,10 @@ async function getStudentDashboardSummary(user: UserDto): Promise<DashboardSumma
     EventRegistrationModel.find({ status: { $in: ['registered', 'waitlisted'] }, user: userId })
       .sort({ registeredAt: -1 })
       .limit(4)
-      .lean()
+      .lean(),
+    NotificationModel.find({ recipient: userId }).sort({ createdAt: -1 }).limit(4).lean(),
+    BadgeModel.find({ user: userId }).sort({ earnedAt: -1 }).limit(4).lean(),
+    AttendanceModel.find({ user: userId }).sort({ checkedInAt: -1 }).limit(4).lean()
   ])
 
   const clubs = await ClubModel.find({
@@ -270,7 +282,12 @@ async function getStudentDashboardSummary(user: UserDto): Promise<DashboardSumma
   }).lean()
   const clubMap = new Map(clubs.map(club => [club._id.toString(), club]))
   const events = await EventModel.find({
-    _id: { $in: registrations.map(registration => registration.event) }
+    _id: {
+      $in: [
+        ...registrations.map(registration => registration.event),
+        ...attendanceRows.map(attendance => attendance.event)
+      ]
+    }
   }).lean()
   const eventMap = new Map(events.map(event => [event._id.toString(), event]))
 
@@ -347,6 +364,47 @@ async function getStudentDashboardSummary(user: UserDto): Promise<DashboardSumma
           tone: registration.status === 'waitlisted' ? 'warning' : 'info'
         }
       })
+    ),
+    createPanel(
+      'notifications',
+      'Notifications',
+      'Inbox clear',
+      'Unread membership, event, badge, and platform updates will appear here.',
+      notifications.map(notification => ({
+        description: notification.body,
+        id: notification._id.toString(),
+        meta: notification.createdAt.toDateString(),
+        status: notification.readAt ? 'read' : 'unread',
+        title: notification.title,
+        tone: notification.readAt ? 'success' : 'warning'
+      }))
+    ),
+    createPanel(
+      'badges',
+      'Badges And Attendance',
+      'No badges or check-ins yet',
+      'Earn badges and check in to events to build your activity record.',
+      [
+        ...badges.map(badge => ({
+          description: badge.description,
+          id: badge._id.toString(),
+          meta: badge.earnedAt.toDateString(),
+          status: badge.badgeType,
+          title: badge.title,
+          tone: 'primary' as const
+        })),
+        ...attendanceRows.map(attendance => {
+          const event = eventMap.get(attendance.event.toString())
+          return {
+            description: event?.venue ?? 'Event check-in',
+            id: attendance._id.toString(),
+            meta: attendance.checkedInAt.toDateString(),
+            status: attendance.method,
+            title: event ? `Checked in: ${event.title}` : 'Attendance recorded',
+            tone: 'success' as const
+          }
+        })
+      ].slice(0, 4)
     )
   ]
 
@@ -372,20 +430,40 @@ async function getExecutiveDashboardSummary(user: UserDto): Promise<DashboardSum
     .limit(4)
     .lean()
 
-  const [pendingRequests, openPolls, eventRegistrationCount, attendanceCount, pendingMemberships] =
-    await Promise.all([
-      MembershipModel.countDocuments({ club: { $in: managedClubIds }, status: 'pending' }),
-      PollModel.countDocuments({ club: { $in: managedClubIds }, status: 'open' }),
-      EventRegistrationModel.countDocuments({
-        event: { $in: managedEvents.map(event => event._id) },
-        status: 'registered'
-      }),
-      AttendanceModel.countDocuments({ event: { $in: managedEvents.map(event => event._id) } }),
-      MembershipModel.find({ club: { $in: managedClubIds }, status: 'pending' })
-        .sort({ requestedAt: -1 })
-        .limit(4)
-        .lean()
-    ])
+  const [
+    pendingRequests,
+    pendingResources,
+    openPolls,
+    eventRegistrationCount,
+    attendanceCount,
+    pendingMemberships,
+    managedClubs,
+    resourceRequests,
+    openPollRows
+  ] = await Promise.all([
+    MembershipModel.countDocuments({ club: { $in: managedClubIds }, status: 'pending' }),
+    ResourceRequestModel.countDocuments({ club: { $in: managedClubIds }, status: 'pending' }),
+    PollModel.countDocuments({ club: { $in: managedClubIds }, status: 'open' }),
+    EventRegistrationModel.countDocuments({
+      event: { $in: managedEvents.map(event => event._id) },
+      status: 'registered'
+    }),
+    AttendanceModel.countDocuments({ event: { $in: managedEvents.map(event => event._id) } }),
+    MembershipModel.find({ club: { $in: managedClubIds }, status: 'pending' })
+      .sort({ requestedAt: -1 })
+      .limit(4)
+      .lean(),
+    ClubModel.find({ _id: { $in: managedClubIds } }).lean(),
+    ResourceRequestModel.find({ club: { $in: managedClubIds } })
+      .sort({ createdAt: -1 })
+      .limit(4)
+      .lean(),
+    PollModel.find({ club: { $in: managedClubIds }, status: 'open' })
+      .sort({ closesAt: 1 })
+      .limit(4)
+      .lean()
+  ])
+  const managedClubMap = new Map(managedClubs.map(club => [club._id.toString(), club]))
 
   summary.metrics = [
     {
@@ -396,11 +474,11 @@ async function getExecutiveDashboardSummary(user: UserDto): Promise<DashboardSum
       value: formatNumber(managedClubIds.length)
     },
     {
-      change: pendingRequests > 0 ? 'Review queue open' : 'No waiting requests',
+      change: pendingRequests + pendingResources > 0 ? 'Review queue open' : 'No waiting requests',
       id: 'pendingRequests',
-      label: 'Pending Requests',
-      tone: pendingRequests > 0 ? 'warning' : 'success',
-      value: formatNumber(pendingRequests)
+      label: 'Pending Work',
+      tone: pendingRequests + pendingResources > 0 ? 'warning' : 'success',
+      value: formatNumber(pendingRequests + pendingResources)
     },
     {
       change:
@@ -449,6 +527,39 @@ async function getExecutiveDashboardSummary(user: UserDto): Promise<DashboardSum
         title: event.title,
         tone: event.status === 'published' ? 'info' : 'warning'
       }))
+    ),
+    createPanel(
+      'resources',
+      'Resource Requests',
+      'No resource requests yet',
+      'Funding and room booking requests for your clubs will appear here.',
+      resourceRequests.map(request => ({
+        description: request.details.description,
+        id: request._id.toString(),
+        meta: managedClubMap.get(request.club.toString())?.name ?? request.createdAt.toDateString(),
+        status: request.status,
+        title: request.details.title,
+        tone:
+          request.status === 'approved'
+            ? 'success'
+            : request.status === 'rejected'
+              ? 'danger'
+              : 'warning'
+      }))
+    ),
+    createPanel(
+      'polls',
+      'Open Polls',
+      'No open polls',
+      'Open polls and closing dates for your clubs will appear here.',
+      openPollRows.map(poll => ({
+        description: managedClubMap.get(poll.club.toString())?.name ?? 'Club poll',
+        id: poll._id.toString(),
+        meta: poll.closesAt.toDateString(),
+        status: poll.type,
+        title: poll.question,
+        tone: 'info'
+      }))
     )
   ]
 
@@ -470,7 +581,9 @@ async function getAdminDashboardSummary(user: UserDto): Promise<DashboardSummary
     monthlyPosts,
     monthlyEvents,
     resourceQueue,
-    clubs
+    clubs,
+    upcomingEvents,
+    recentPosts
   ] = await Promise.all([
     ClubModel.countDocuments({ deletedAt: null }),
     MembershipModel.distinct('user', { status: 'active' }).then(users => users.length),
@@ -480,7 +593,22 @@ async function getAdminDashboardSummary(user: UserDto): Promise<DashboardSummary
     PostModel.countDocuments({ createdAt: { $gte: monthStart }, moderationStatus: 'visible' }),
     EventModel.countDocuments({ createdAt: { $gte: monthStart }, deletedAt: null }),
     ResourceRequestModel.find({ status: 'pending' }).sort({ createdAt: -1 }).limit(4).lean(),
-    ClubModel.find({ deletedAt: null }).sort({ updatedAt: -1 }).limit(4).lean()
+    ClubModel.find({ deletedAt: null }).sort({ updatedAt: -1 }).limit(4).lean(),
+    EventModel.find({
+      deletedAt: null,
+      startsAt: { $gte: new Date() },
+      status: 'published'
+    })
+      .sort({ startsAt: 1 })
+      .limit(4)
+      .lean(),
+    PostModel.find({
+      deletedAt: null,
+      moderationStatus: 'visible'
+    })
+      .sort({ createdAt: -1 })
+      .limit(4)
+      .lean()
   ])
 
   const monthlyActivity = monthlyMemberships + monthlyPosts + monthlyEvents
@@ -545,6 +673,62 @@ async function getAdminDashboardSummary(user: UserDto): Promise<DashboardSummary
         tone:
           club.status === 'active' ? 'success' : club.status === 'pending' ? 'warning' : 'danger'
       }))
+    ),
+    createPanel(
+      'engagement',
+      'Monthly Engagement',
+      'No engagement this month',
+      'Membership, feed, and event activity totals will appear here.',
+      [
+        {
+          description: 'New membership records created this month.',
+          id: 'monthly-memberships',
+          meta: monthStart.toDateString(),
+          status: 'memberships',
+          title: `${formatNumber(monthlyMemberships)} memberships`,
+          tone: 'success' as const
+        },
+        {
+          description: 'Visible feed posts created this month.',
+          id: 'monthly-posts',
+          meta: monthStart.toDateString(),
+          status: 'posts',
+          title: `${formatNumber(monthlyPosts)} feed posts`,
+          tone: 'primary' as const
+        },
+        {
+          description: 'Events created this month.',
+          id: 'monthly-events',
+          meta: monthStart.toDateString(),
+          status: 'events',
+          title: `${formatNumber(monthlyEvents)} events`,
+          tone: 'info' as const
+        }
+      ]
+    ),
+    createPanel(
+      'activity',
+      'Campus Activity',
+      'No recent activity',
+      'Upcoming events and recent feed items will appear here.',
+      [
+        ...upcomingEvents.map(event => ({
+          description: event.venue,
+          id: event._id.toString(),
+          meta: event.startsAt.toDateString(),
+          status: event.status,
+          title: event.title,
+          tone: 'info' as const
+        })),
+        ...recentPosts.map(post => ({
+          description: post.body,
+          id: post._id.toString(),
+          meta: post.createdAt.toDateString(),
+          status: post.type,
+          title: post.title ?? 'Feed post',
+          tone: post.highlighted ? ('primary' as const) : ('success' as const)
+        }))
+      ].slice(0, 4)
     )
   ]
 

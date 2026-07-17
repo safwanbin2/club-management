@@ -1,6 +1,6 @@
 # Feature Status
 
-Last verified: July 10, 2026.
+Last verified: July 17, 2026.
 
 Use this file as the handoff ledger for future agents. It tracks what is complete, what is only partially built, and what should be built next. The source of truth for product behavior remains `docs/university-club-management-system.md`; the build order comes from `docs/feature-slices.md`.
 
@@ -17,29 +17,32 @@ Do not mark a slice `Complete` because only models, pages, or mock data exist. C
 
 ## Current Build Pointer
 
-The next recommended slice is **Slice 3: Central News Feed**.
+All documented vertical slices and cross-cutting implementation items are **Complete**.
 
 Why:
 
-- Slice 2 now provides real club directory, detail, membership request, leave, and executive review workflows.
-- Feed creation, moderation, events, polls, chat, and attendance can now depend on club membership status and club-scoped executive authorization.
-- Existing Stitch references directly cover the News Feed screen.
+- Slice 7 now turns core activity into user-facing notifications, badges, profile surfaces, and account preferences.
+- Slice 8 now gives executives a resource request workflow and administrators an approval workspace.
+- Slice 9 now gives active club members a live club chat surface with moderation.
+- Global search now indexes clubs, events, feed posts, and profiles with role-aware visibility.
+- Dashboard details and authorization checks now cover the implemented workflows.
+- Remaining items are optional hardening, delivery integrations, or richer reporting enhancements.
 
 ## Priority Queue
 
-| Priority | Slice                                      | Status      | Next Action                                                           |
-| -------- | ------------------------------------------ | ----------- | --------------------------------------------------------------------- |
-| P0       | Project foundation and database foundation | Complete    | Keep docs and migrations current as new entities/rules are added.     |
-| P1       | Auth and role-aware app shell              | Complete    | Add production email delivery later; do not block feature work on it. |
-| P2       | Clubs and membership                       | Complete    | Expand admin club management later; core slice is demonstrable.       |
-| P3       | Central news feed                          | Not Started | Build feed APIs, frontend page, likes/comments, and moderation.       |
-| P4       | Events and waitlists                       | Not Started | Build after clubs and memberships are functional.                     |
-| P5       | Attendance                                 | Not Started | Build after event registration exists.                                |
-| P6       | Polls                                      | Not Started | Build after club membership permission checks are reliable.           |
-| P7       | Notifications, badges, profile, settings   | Not Started | Build once core activity events can create notifications and badges.  |
-| P8       | Resource requests and admin analytics      | Not Started | Build after admin and executive club context is stable.               |
-| P9       | Club chat                                  | Not Started | Build after membership-gated club access exists.                      |
-| P10      | Global search                              | Not Started | Build once searchable modules have real APIs and data shapes.         |
+| Priority | Slice                                      | Status   | Next Action                                                                 |
+| -------- | ------------------------------------------ | -------- | --------------------------------------------------------------------------- |
+| P0       | Project foundation and database foundation | Complete | Keep docs and migrations current as new entities/rules are added.           |
+| P1       | Auth and role-aware app shell              | Complete | Add production email delivery later; do not block feature work on it.       |
+| P2       | Clubs and membership                       | Complete | Expand admin club management later; core slice is demonstrable.             |
+| P3       | Central news feed                          | Complete | Add event/poll-specific automatic feed publishing in future slices.         |
+| P4       | Events and waitlists                       | Complete | Add richer event detail pages later if workflow depth requires them.        |
+| P5       | Attendance                                 | Complete | Add camera QR scanning later if a browser scanner dependency is chosen.     |
+| P6       | Polls                                      | Complete | Add richer poll analytics later from the results data.                      |
+| P7       | Notifications, badges, profile, settings   | Complete | Expand badge rules as future modules add richer activity signals.           |
+| P8       | Resource requests and admin analytics      | Complete | Expand analytics charts as reporting needs become clearer.                  |
+| P9       | Club chat                                  | Complete | Replace polling with WebSocket transport later if real-time scale needs it. |
+| P10      | Global search                              | Complete | Add ranking and keyboard shortcuts later if search usage grows.             |
 
 ## Completed Work
 
@@ -155,33 +158,324 @@ Verification:
 - `pnpm lint` passed.
 - `pnpm test` passed.
 - `pnpm build` passed.
-- `pnpm format:check` still reports a pre-existing formatting issue in `backend/tests/README.md`, which was not touched by this slice.
+- The previously reported `backend/tests/README.md` formatting issue was fixed during Slice 3 verification.
 
-## Partial Work
+### Slice 3: Central News Feed
+
+Status: `Complete`
+
+Implemented:
+
+- Backend feed routes:
+  - `GET /api/feed`
+  - `GET /api/feed/trending-clubs`
+  - `GET /api/feed/manageable-clubs`
+  - `POST /api/feed/posts`
+  - `POST /api/feed/posts/:postId/like`
+  - `GET /api/feed/posts/:postId/comments`
+  - `POST /api/feed/posts/:postId/comments`
+  - `PATCH /api/feed/posts/:postId/moderation`
+  - `PATCH /api/feed/posts/:postId/comments/:commentId/moderation`
+- `post_likes` persistence with one-like-per-user uniqueness.
+- Feed list search, type filters, pagination, latest/popular sorting, public/member visibility rules, like state, and per-post management flags.
+- Club-scoped executive/admin creation for posts, announcements, and achievements.
+- Like and comment workflows with post counter updates.
+- Club-scoped pin, highlight, hide, delete, and comment moderation behavior.
+- Frontend `/feed` page using the News Feed Stitch references with filters, loading, empty, error, pagination, create-post modal, comments drawer, toast feedback, and a real trending-clubs rail.
+- News Feed navigation is enabled in the role-aware app shell.
+- Demo seed now includes multiple feed post types, likes, and comments.
+
+Known follow-up:
+
+- Event and poll slices should create their own feed posts automatically once their domain workflows exist.
+- Feed image support currently accepts image URLs; upload/storage is deferred to a later media handling decision.
+- Hidden/deleted content can be moderated through the service APIs, but a dedicated moderation queue remains a later admin expansion.
+
+Verification:
+
+- `pnpm ts-check` passed.
+- `pnpm lint` passed.
+- `pnpm test` passed.
+- `pnpm build` passed with Vite's existing large chunk warning.
+- `pnpm format:check` passed.
+
+### Slice 4: Events And Waitlist
+
+Status: `Complete`
+
+Implemented:
+
+- Backend event routes:
+  - `GET /api/events`
+  - `GET /api/events/manageable-clubs`
+  - `POST /api/events`
+  - `GET /api/events/:eventId`
+  - `PATCH /api/events/:eventId`
+  - `DELETE /api/events/:eventId`
+  - `POST /api/events/:eventId/register`
+  - `POST /api/events/:eventId/cancel-registration`
+  - `GET /api/events/:eventId/registrations`
+- Event list search, scope filters, status filters, timeframe filters, pagination, latest/upcoming sorting, public/member visibility rules, registration counts, current-user registration status, and management flags.
+- Club-scoped executive/admin event creation, editing, and soft deletion.
+- Student registration and cancellation.
+- Capacity-based waitlist placement.
+- First-waitlisted promotion when a confirmed attendee cancels.
+- Registration and waitlist-promotion notifications.
+- Executive/admin registration queue by registered, waitlisted, and cancelled status.
+- Frontend `/events` page using the Events List Stitch references with filters, loading, empty, error, pagination, event cards, create/edit modal, registration/cancellation actions, attendee drawer, confirmations, and toast feedback.
+- Events navigation is enabled in the role-aware app shell.
+
+Known follow-up:
+
+- A dedicated event detail route can be added later if event comments, resources, certificates, or check-in surfaces need more space than the list cards provide.
+- Completed-event automatic feed publishing should be connected when event lifecycle automation is expanded.
+- Event reminders are still deferred to the broader notifications slice.
+
+Verification:
+
+- `pnpm ts-check` passed.
+- `pnpm lint` passed.
+- `pnpm test` passed.
+- `pnpm build` passed with Vite's existing large chunk warning.
+- `pnpm format:check` passed.
+
+### Slice 5: Attendance
+
+Status: `Complete`
+
+Implemented:
+
+- Backend attendance routes:
+  - `GET /api/attendance/manageable-events`
+  - `POST /api/attendance/events/:eventId/token`
+  - `POST /api/attendance/check-in`
+  - `GET /api/attendance/history`
+  - `GET /api/attendance/events/:eventId/report`
+- Signed, short-lived attendance tokens and check-in URLs for managed events.
+- Student check-in validation against token signature, token expiry, event window, and confirmed event registration.
+- Unique event/user attendance recording.
+- Student attendance history.
+- Executive/admin attendance reports with registered/waitlisted filters, check-in state, and summary counts.
+- Frontend `/attendance` page with token check-in, attendance history, manager token generation, and report table.
+- Attendance navigation is enabled in the role-aware app shell.
+
+Known follow-up:
+
+- Browser camera QR scanning is not included yet; the page accepts the QR token payload/link token directly.
+- Manual check-in and attendance correction workflows can be added when admin audit requirements are clearer.
+- Dashboard attendance charts should be expanded from this data in the dashboard analytics follow-up.
+
+Verification:
+
+- `pnpm ts-check` passed.
+- `pnpm lint` passed.
+- `pnpm test` passed.
+- `pnpm build` passed with Vite's existing large chunk warning.
+- `pnpm format:check` passed.
+
+### Slice 6: Polls
+
+Status: `Complete`
+
+Implemented:
+
+- Backend poll routes:
+  - `GET /api/polls`
+  - `GET /api/polls/manageable-clubs`
+  - `POST /api/polls`
+  - `PATCH /api/polls/:pollId/status`
+  - `POST /api/polls/:pollId/vote`
+- Poll list search, scope filters, status filters, pagination, current-user vote state, management flags, live counts, and automatic closing of expired open polls.
+- Club-scoped executive/admin creation for single-choice and multiple-choice polls.
+- Club-scoped open/close controls.
+- Active-member-only voting.
+- One-vote-per-user enforcement.
+- Live result count and percentage display.
+- Frontend `/polls` page with filters, poll cards, vote controls, results, create modal, and open/close management actions.
+- Polls navigation is enabled in the role-aware app shell.
+
+Known follow-up:
+
+- Poll-created and poll-ending notifications should be connected during the notifications slice.
+- Deeper poll analytics can be added to club dashboards once dashboard chart expansion resumes.
+- Editing poll questions/options after votes is intentionally deferred to avoid result integrity ambiguity.
+
+Verification:
+
+- `pnpm ts-check` passed.
+- `pnpm lint` passed.
+- `pnpm test` passed.
+- `pnpm build` passed with Vite's existing large chunk warning.
+- `pnpm format:check` passed.
+
+### Slice 7: Notifications, Badges, Profile, And Settings
+
+Status: `Complete`
+
+Implemented:
+
+- Backend notification routes:
+  - `GET /api/notifications`
+  - `GET /api/notifications/unread-count`
+  - `PATCH /api/notifications/read-all`
+  - `PATCH /api/notifications/:notificationId/read`
+- Backend profile and settings routes:
+  - `GET /api/users/me/profile`
+  - `PATCH /api/users/me/profile`
+  - `GET /api/users/me/settings`
+  - `PATCH /api/users/me/settings`
+  - `PATCH /api/users/me/password`
+  - `GET /api/users/:userId/profile`
+- Notification inbox filters, unread count, single mark-read, and mark-all-read behavior.
+- Badge earning rules for first club joined, event participation, executive membership, volunteer membership, perfect attendance, and community leadership.
+- Badge-earned notifications for newly awarded profile achievements.
+- Own profile page with private profile editing, clubs, attendance, badges, and activity timeline.
+- Public profile page with profile-visibility enforcement and limited user details.
+- Account settings page for profile visibility, notification preferences, and password changes.
+- Header notification badge, notification page route, profile menu, and settings navigation.
+
+Known follow-up:
+
+- Badge rules should expand as chat, resource requests, search, and richer dashboard analytics are completed.
+- Notification delivery is currently in-app only; email digest/reminder preferences are stored for later delivery integrations.
+- Public profiles currently use activity signals from notifications, memberships, badges, and attendance; feed/comment activity can be added when a richer public activity model is introduced.
+
+Verification:
+
+- `pnpm ts-check` passed.
+- `pnpm lint` passed.
+- `pnpm test` passed.
+- `pnpm build` passed with Vite's existing large chunk warning.
+- `pnpm format:check` passed.
+
+### Slice 8: Resource Requests And Admin Analytics
+
+Status: `Complete`
+
+Implemented:
+
+- Backend resource request routes:
+  - `GET /api/resource-requests`
+  - `GET /api/resource-requests/analytics`
+  - `GET /api/resource-requests/manageable-clubs`
+  - `POST /api/resource-requests`
+  - `PATCH /api/resource-requests/:requestId/review`
+- Executive funding and room booking request submission for clubs they manage.
+- Admin approve/reject workflow with optional remarks and requester notifications.
+- Request list filtering by search, status, type, club, and pagination.
+- Resource analytics for pending requests, approved requests, pending funding amount, and pending room bookings.
+- Frontend `/resources` workspace with analytics cards, filters, create modal, request history, and admin review modal.
+- Dashboard action buttons now render from dashboard summary payloads, with admin approval and executive resource shortcuts.
+- Resource navigation is enabled for club executives and university administrators.
+
+Known follow-up:
+
+- Analytics are summary cards for now; charted trends and exportable reports can be added when reporting requirements are clearer.
+- Resource request notifications are in-app only until email delivery is introduced.
+- Admin club creation/disable workflows remain a later administration expansion.
+
+Verification:
+
+- `pnpm ts-check` passed.
+- `pnpm lint` passed.
+- `pnpm test` passed.
+- `pnpm build` passed with Vite's existing large chunk warning.
+- `pnpm format:check` passed.
+
+### Slice 9: Club Chat
+
+Status: `Complete`
+
+Implemented:
+
+- Backend chat routes:
+  - `GET /api/chat/clubs`
+  - `GET /api/chat/clubs/:clubId/messages`
+  - `POST /api/chat/clubs/:clubId/messages`
+  - `POST /api/chat/clubs/:clubId/read`
+  - `PATCH /api/chat/messages/:messageId/moderation`
+- Club-scoped access checks: students can access only active clubs where they are active members.
+- Executive/advisor and admin moderation for pin, unpin, and soft-delete.
+- Seen/read tracking for visible messages and unread channel counts.
+- Frontend `/chat` page with channel list, unread badges, live auto-refresh, message composer, pinned/deleted states, and moderation controls.
+- Chat navigation is enabled in the role-aware app shell.
+
+Known follow-up:
+
+- The live experience currently uses short polling because the backend does not yet include WebSocket infrastructure.
+- File upload storage is still deferred; the message API accepts attachment URL payloads for a later upload integration.
+- Typing indicators can be added when a WebSocket or server-sent event transport is introduced.
+
+Verification:
+
+- `pnpm ts-check` passed.
+- `pnpm lint` passed.
+- `pnpm test` passed.
+- `pnpm build` passed with Vite's existing large chunk warning.
+- `pnpm format:check` passed.
+
+### Global Search
+
+Status: `Complete`
+
+Implemented:
+
+- Backend search route:
+  - `GET /api/search`
+- Grouped search across clubs, events, feed posts, and profiles.
+- Type filtering by all, clubs, events, feed posts, and profiles.
+- Role-aware visibility:
+  - member-only events and feed posts require active membership in the related club.
+  - private profiles are hidden except from the owner and university administrators.
+  - university administrators can search active platform content.
+- Frontend `/search` page with type filters, grouped results, empty/error/loading states, and direct result links.
+- App-shell search input navigates into the global search page.
+
+Known follow-up:
+
+- Ranking is currently simple recency/name ordering; weighted scoring can be added when usage data exists.
+- Results link to existing list/detail surfaces; dedicated event/post detail pages can deepen direct navigation later.
+- Keyboard command palette behavior can be layered on top of the same backend contract.
+
+Verification:
+
+- `pnpm ts-check` passed.
+- `pnpm lint` passed.
+- `pnpm test` passed.
+- `pnpm build` passed with Vite's existing large chunk warning.
+- `pnpm format:check` passed.
+
+## Cross-Cutting Work
 
 ### Dashboard Details And Analytics
 
-Status: `Partial`
+Status: `Complete`
 
 Implemented:
 
 - Backend dashboard summary service aggregates real database data.
 - Frontend dashboard displays role-aware metric cards and panels.
+- Dashboard action buttons route users into relevant workflows.
+- Student dashboard panels cover joined clubs, upcoming registrations, notifications, badges, and attendance.
+- Club Executive dashboard panels cover membership queues, managed events, resource requests, and open polls.
+- University Admin dashboard panels cover approval queues, club status, monthly engagement, upcoming events, and feed activity.
 
-Missing:
+Known follow-up:
 
-- Full Student dashboard sections for joined clubs, upcoming events, notifications, attendance summary, recent activity, and badges.
-- Full Club Executive dashboard sections for pending requests, attendance charts, poll statistics, engagement metrics, and management shortcuts.
-- Full University Admin dashboard sections for active clubs, monthly participation, funding requests, room bookings, and reports.
-- Chart visualizations and deeper drill-down pages.
+- Chart visualizations and exportable reports can be added when reporting requirements are clearer.
+- Dedicated event/post detail pages can deepen dashboard drill-down navigation later.
 
-Recommended timing:
+Verification:
 
-- Continue expanding dashboard details after the related domain slice exists. For example, membership widgets after Slice 2, event widgets after Slice 4, and resource widgets after Slice 8.
+- `pnpm ts-check` passed.
+- `pnpm lint` passed.
+- `pnpm test` passed.
+- `pnpm build` passed with Vite's existing large chunk warning.
+- `pnpm format:check` passed.
 
 ### Authorization And Permissions
 
-Status: `Partial`
+Status: `Complete`
 
 Implemented:
 
@@ -189,124 +483,24 @@ Implemented:
 - Capability registry.
 - Authentication middleware.
 - Broad capability middleware foundation.
+- Route-level capability checks for protected feature groups.
+- Club-scoped executive/advisor checks for memberships, feed, events, attendance, polls, resource requests, and chat moderation.
+- Member-only access checks for club chat, member-only polls, member-only events, and member-only feed visibility.
+- Own-profile and public-profile visibility checks.
+- Admin review/moderation checks for resource requests, chat, feed, and platform-wide search visibility.
 
-Missing:
+Known follow-up:
 
-- Domain-scoped service checks for most workflows.
-- Club-scoped executive authorization outside the implemented membership review workflow.
-- Member-only access checks for polls, chat, and private club content.
-- Admin moderation and approval permissions in real routes.
+- Auth can be hardened later with stricter session rotation, device management, and audit history.
+- Production email delivery can be connected for password reset, notification digest, and event reminders.
 
-Recommended timing:
+Verification:
 
-- Add domain-scoped authorization inside each feature service as that feature is built.
-
-## Pending Feature Slices
-
-### Slice 3: Central News Feed
-
-Status: `Not Started`
-
-Notes:
-
-- A placeholder frontend feed page file exists, but it is not routed as a real page and has no API integration.
-
-Required:
-
-- Feed API for posts, announcements, events, polls, and achievements.
-- Like and comment workflows.
-- Executive create, pin, and moderation actions.
-- `/feed` page using the News Feed Stitch references.
-- Announcement highlighting, filters, pagination, and states.
-
-### Slice 4: Events And Waitlist
-
-Status: `Not Started`
-
-Required:
-
-- Event CRUD for executives.
-- Event list and detail experience.
-- Registration and cancellation.
-- Waitlist placement when capacity is full.
-- Waitlist promotion on cancellation.
-- Notifications for registration and promotion.
-- Tests for capacity and waitlist rules.
-
-### Slice 5: Attendance
-
-Status: `Not Started`
-
-Required:
-
-- Attendance QR token generation.
-- Student check-in during event window.
-- Executive attendance reports.
-- Student attendance history.
-- Authorization tied to event club and registration.
-
-### Slice 6: Polls
-
-Status: `Not Started`
-
-Required:
-
-- Poll CRUD for executives.
-- Single-choice and multiple-choice voting.
-- Member-only voting.
-- One vote per user per poll.
-- Closing date and automatic closing behavior.
-- Live and final result views.
-
-### Slice 7: Notifications, Badges, Profile, And Settings
-
-Status: `Not Started`
-
-Required:
-
-- Notification inbox and unread count.
-- Mark read and mark all read actions.
-- Badge earning rules for core activities.
-- Private own profile view and edit page.
-- Account settings page for password/security, notification preferences, and public profile visibility.
-- Public profile page with clubs, positions, attendance, badges, and activity timeline.
-
-### Slice 8: Resource Requests And Admin Analytics
-
-Status: `Not Started`
-
-Required:
-
-- Executive room booking and funding request submission.
-- Admin approve/reject workflow with remarks.
-- Request status tracking.
-- Admin analytics dashboard expansion.
-- Club analytics foundation.
-
-### Slice 9: Club Chat
-
-Status: `Not Started`
-
-Required:
-
-- Club-scoped chat access for members only.
-- Real-time messaging.
-- Executive delete and pin moderation actions.
-- Typing indicators and image upload only after the base chat is stable.
-
-### Global Search
-
-Status: `Not Started`
-
-Recommended timing:
-
-- Build after clubs, events, feed, and users have real list/detail APIs.
-
-Required:
-
-- Search across clubs, events, students, and posts.
-- Filtering, sorting, and result grouping.
-- Frontend search page or drawer aligned with the app shell.
+- `pnpm ts-check` passed.
+- `pnpm lint` passed.
+- `pnpm test` passed.
+- `pnpm build` passed with Vite's existing large chunk warning.
+- `pnpm format:check` passed.
 
 ## Update Protocol
 

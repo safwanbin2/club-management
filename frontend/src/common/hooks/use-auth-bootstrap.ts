@@ -1,18 +1,29 @@
 import { useQuery } from '@tanstack/react-query'
 import { useEffect } from 'react'
 
-import { useAuthActions, useAuthStatus } from '@common/globalStates/use-auth-store'
+import {
+  hasAuthSessionMarker,
+  useAuthActions,
+  useAuthStatus
+} from '@common/globalStates/use-auth-store'
 import { refreshAuthSession } from '@common/helpers/request'
 
 export function useAuthBootstrap() {
   const status = useAuthStatus()
   const { markGuest } = useAuthActions()
+  const shouldRefreshSession = status === 'unknown' && hasAuthSessionMarker()
   const query = useQuery({
-    enabled: status === 'unknown',
+    enabled: shouldRefreshSession,
     queryFn: refreshAuthSession,
     queryKey: ['auth', 'bootstrap'],
     retry: false
   })
+
+  useEffect(() => {
+    if (status === 'unknown' && !shouldRefreshSession) {
+      markGuest()
+    }
+  }, [markGuest, shouldRefreshSession, status])
 
   useEffect(() => {
     if (query.isError) {
@@ -21,6 +32,6 @@ export function useAuthBootstrap() {
   }, [markGuest, query.isError])
 
   return {
-    isAuthBootstrapping: status === 'unknown' && query.isPending
+    isAuthBootstrapping: shouldRefreshSession && query.isPending
   }
 }

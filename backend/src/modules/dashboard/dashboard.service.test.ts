@@ -13,6 +13,12 @@ function buildUser(role: UserDto['role']): UserDto {
     id: role,
     lastLoginAt: null,
     name: 'Aisha Rahman',
+    notificationPreferences: {
+      emailDigest: true,
+      eventReminders: true,
+      inApp: true,
+      membershipUpdates: true
+    },
     profileVisibility: 'university',
     role,
     status: 'active',

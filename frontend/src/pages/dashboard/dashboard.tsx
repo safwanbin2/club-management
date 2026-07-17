@@ -1,5 +1,6 @@
 import { Alert, Button } from 'antd'
 import { RefreshCw } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 
 import AppShell from '@features/app-shell'
 import useDashboardSummary from './data/use-dashboard-summary'
@@ -8,6 +9,7 @@ import DashboardSkeleton from './ui/dashboard-skeleton'
 import MetricCard from './ui/metric-card'
 
 export default function DashboardPage() {
+  const navigate = useNavigate()
   const { dashboardSummary, isDashboardError, isDashboardPending, refetchDashboardSummary } =
     useDashboardSummary()
 
@@ -44,13 +46,20 @@ export default function DashboardPage() {
                     {dashboardSummary.hero.subtitle}
                   </p>
                 </div>
-                <Button
-                  icon={<RefreshCw size={16} />}
-                  onClick={() => refetchDashboardSummary()}
-                  type="primary"
-                >
-                  Refresh Dashboard
-                </Button>
+                <div className="flex flex-wrap gap-2 lg:justify-end">
+                  {dashboardSummary.actions.map(action => (
+                    <Button
+                      key={action.id}
+                      onClick={() => navigate(action.path)}
+                      type={action.tone === 'primary' ? 'primary' : 'default'}
+                    >
+                      {action.label}
+                    </Button>
+                  ))}
+                  <Button icon={<RefreshCw size={16} />} onClick={() => refetchDashboardSummary()}>
+                    Refresh
+                  </Button>
+                </div>
               </div>
             </section>
 

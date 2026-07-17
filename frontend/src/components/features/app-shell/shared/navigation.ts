@@ -1,8 +1,11 @@
 import {
   Bell,
+  BarChart3,
   CalendarDays,
+  ClipboardCheck,
   ClipboardList,
   LayoutDashboard,
+  MessageSquare,
   Newspaper,
   Settings,
   ShieldCheck,
@@ -36,18 +39,39 @@ const sharedItems: AppNavItem[] = [
     path: '/clubs'
   },
   {
-    enabled: false,
+    enabled: true,
     icon: Newspaper,
     key: 'feed',
     label: 'News Feed',
     path: '/feed'
   },
   {
-    enabled: false,
+    enabled: true,
     icon: CalendarDays,
     key: 'events',
     label: 'Events',
     path: '/events'
+  },
+  {
+    enabled: true,
+    icon: ClipboardCheck,
+    key: 'attendance',
+    label: 'Attendance',
+    path: '/attendance'
+  },
+  {
+    enabled: true,
+    icon: BarChart3,
+    key: 'polls',
+    label: 'Polls',
+    path: '/polls'
+  },
+  {
+    enabled: true,
+    icon: MessageSquare,
+    key: 'chat',
+    label: 'Chat',
+    path: '/chat'
   }
 ]
 
@@ -55,31 +79,31 @@ export const ROLE_NAV_ITEMS: Record<UserRole, AppNavItem[]> = {
   [USER_ROLES.clubExecutive]: [
     ...sharedItems,
     {
-      enabled: false,
+      enabled: true,
       icon: ClipboardList,
-      key: 'member-requests',
-      label: 'Member Requests',
-      path: '/executive/members'
+      key: 'resources',
+      label: 'Resources',
+      path: '/resources'
     },
     {
-      enabled: false,
+      enabled: true,
       icon: Settings,
       key: 'settings',
-      label: 'Club Settings',
+      label: 'Settings',
       path: '/settings'
     }
   ],
   [USER_ROLES.student]: [
     ...sharedItems,
     {
-      enabled: false,
+      enabled: true,
       icon: Bell,
       key: 'notifications',
       label: 'Notifications',
       path: '/notifications'
     },
     {
-      enabled: false,
+      enabled: true,
       icon: Settings,
       key: 'settings',
       label: 'Settings',
@@ -89,17 +113,17 @@ export const ROLE_NAV_ITEMS: Record<UserRole, AppNavItem[]> = {
   [USER_ROLES.universityAdmin]: [
     ...sharedItems,
     {
-      enabled: false,
+      enabled: true,
       icon: ShieldCheck,
-      key: 'approval-queue',
-      label: 'Approval Queue',
-      path: '/admin/approvals'
+      key: 'resource-approvals',
+      label: 'Approvals',
+      path: '/resources'
     },
     {
-      enabled: false,
+      enabled: true,
       icon: Settings,
       key: 'settings',
-      label: 'System Settings',
+      label: 'Settings',
       path: '/settings'
     }
   ]

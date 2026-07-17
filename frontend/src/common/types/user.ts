@@ -8,6 +8,12 @@ export type UserProfile = {
   id: string
   lastLoginAt: null | string
   name: string
+  notificationPreferences: {
+    emailDigest: boolean
+    eventReminders: boolean
+    inApp: boolean
+    membershipUpdates: boolean
+  }
   profileVisibility: 'private' | 'public' | 'university'
   role: UserRole
   status: 'active' | 'disabled'

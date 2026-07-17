@@ -3,7 +3,19 @@ import mongoose from 'mongoose'
 import type { Types } from 'mongoose'
 
 import { USER_ROLES, type UserRole } from '../../constants/roles.js'
-import type { ProfileVisibility, UserDto, UserStatus } from './user.types.js'
+import type {
+  NotificationPreferences,
+  ProfileVisibility,
+  UserDto,
+  UserStatus
+} from './user.types.js'
+
+const defaultNotificationPreferences: NotificationPreferences = {
+  emailDigest: true,
+  eventReminders: true,
+  inApp: true,
+  membershipUpdates: true
+}
 
 export type User = {
   avatarUrl: null | string
@@ -13,6 +25,7 @@ export type User = {
   email: string
   lastLoginAt: Date | null
   name: string
+  notificationPreferences: NotificationPreferences
   passwordHash: string
   passwordResetExpiresAt: Date | null
   passwordResetTokenHash: null | string
@@ -58,6 +71,24 @@ const userSchema = new mongoose.Schema<User>(
       required: true,
       trim: true,
       type: String
+    },
+    notificationPreferences: {
+      emailDigest: {
+        default: true,
+        type: Boolean
+      },
+      eventReminders: {
+        default: true,
+        type: Boolean
+      },
+      inApp: {
+        default: true,
+        type: Boolean
+      },
+      membershipUpdates: {
+        default: true,
+        type: Boolean
+      }
     },
     passwordHash: {
       required: true,
@@ -116,6 +147,10 @@ export function toUserDto(user: UserDocument): UserDto {
     id: user._id.toString(),
     lastLoginAt: user.lastLoginAt ? user.lastLoginAt.toISOString() : null,
     name: user.name,
+    notificationPreferences: {
+      ...defaultNotificationPreferences,
+      ...(user.notificationPreferences ?? {})
+    },
     profileVisibility: user.profileVisibility,
     role: user.role,
     status: user.status,
