@@ -60,9 +60,9 @@ Default local URLs:
 - API base URL: `http://localhost:5000/api`
 - MongoDB: configured by `backend/.env` as `MONGODB_URI`
 
-The backend CORS policy is intentionally open for this university project: browser
-requests from any origin are allowed and preflight requests are handled globally.
-`FRONTEND_ORIGIN` is still used to generate attendance check-in links.
+The backend CORS policy allows `FRONTEND_ORIGIN`, optional comma-separated
+`FRONTEND_ORIGINS`, and local loopback/private-network origins during development.
+`FRONTEND_ORIGIN` is also used to generate attendance check-in links.
 
 ## Available Scripts
 

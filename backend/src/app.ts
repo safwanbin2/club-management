@@ -4,6 +4,7 @@ import cors from 'cors'
 import express from 'express'
 import type { Express, RequestHandler } from 'express'
 
+import { isAllowedCorsOrigin } from './config/cors.js'
 import { connectDatabase } from './db/mongoose.js'
 import { errorHandler } from './http/middleware/error-handler.js'
 import { notFound } from './http/middleware/not-found.js'
@@ -20,13 +21,15 @@ const ensureDatabaseConnection: RequestHandler = async (_req, _res, next) => {
   }
 }
 
-const openCorsOptions = {
-  credentials: true,
-  origin: true,
-  optionsSuccessStatus: 204
-}
-
-app.use(cors(openCorsOptions))
+app.use(
+  cors({
+    credentials: true,
+    optionsSuccessStatus: 204,
+    origin(origin, callback) {
+      callback(null, isAllowedCorsOrigin(origin))
+    }
+  })
+)
 app.use(express.json())
 
 app.use('/api', ensureDatabaseConnection, apiRoutes)
