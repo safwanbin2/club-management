@@ -60,10 +60,9 @@ Default local URLs:
 - API base URL: `http://localhost:5000/api`
 - MongoDB: configured by `backend/.env` as `MONGODB_URI`
 
-If Vite starts on a fallback port such as `5174`, or you open the app through
-`127.0.0.1`, `0.0.0.0`, or a private LAN address, the backend development CORS
-policy allows those local origins. For production, set exact origins with
-`FRONTEND_ORIGIN` or comma-separated `FRONTEND_ORIGINS` in `backend/.env`.
+The backend CORS policy is intentionally open for this university project: browser
+requests from any origin are allowed and preflight requests are handled globally.
+`FRONTEND_ORIGIN` is still used to generate attendance check-in links.
 
 ## Available Scripts
 
