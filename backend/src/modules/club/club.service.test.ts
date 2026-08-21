@@ -1,7 +1,11 @@
 import { describe, expect, it } from 'vitest'
 
 import { ApplicationError } from '../../utils/application-error.js'
-import { assertMembershipCanLeave, getMembershipRequestPlan } from './club.service.js'
+import {
+  assertMembershipCanLeave,
+  getMembershipRequestPlan,
+  getMembershipRoleUpdatePlan
+} from './club.service.js'
 
 describe('club.service membership rules', () => {
   it('creates a pending request for a new membership', () => {
@@ -44,5 +48,47 @@ describe('club.service membership rules', () => {
     expect(() => assertMembershipCanLeave({ clubRole: 'executive', status: 'active' })).toThrow(
       ApplicationError
     )
+  })
+
+  it('promotes an active member to executive with a position', () => {
+    expect(
+      getMembershipRoleUpdatePlan(
+        { clubRole: 'member', executivePosition: null, status: 'active' },
+        { clubRole: 'executive', executivePosition: 'Treasurer' }
+      )
+    ).toEqual({
+      clubRole: 'executive',
+      executivePosition: 'Treasurer'
+    })
+  })
+
+  it('requires a position when promoting an executive', () => {
+    expect(() =>
+      getMembershipRoleUpdatePlan(
+        { clubRole: 'member', executivePosition: null, status: 'active' },
+        { clubRole: 'executive', executivePosition: '' }
+      )
+    ).toThrow(ApplicationError)
+  })
+
+  it('demotes an executive to member and clears the position', () => {
+    expect(
+      getMembershipRoleUpdatePlan(
+        { clubRole: 'executive', executivePosition: 'Treasurer', status: 'active' },
+        { clubRole: 'member' }
+      )
+    ).toEqual({
+      clubRole: 'member',
+      executivePosition: null
+    })
+  })
+
+  it('blocks role changes for inactive memberships', () => {
+    expect(() =>
+      getMembershipRoleUpdatePlan(
+        { clubRole: 'member', executivePosition: null, status: 'pending' },
+        { clubRole: 'executive', executivePosition: 'Secretary' }
+      )
+    ).toThrow(ApplicationError)
   })
 })

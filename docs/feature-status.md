@@ -36,8 +36,8 @@ Why:
 | P1       | Auth and role-aware app shell              | Complete | Add production email delivery later; do not block feature work on it.       |
 | P2       | Clubs and membership                       | Complete | Expand admin club management later; core slice is demonstrable.             |
 | P3       | Central news feed                          | Complete | Add event/poll-specific automatic feed publishing in future slices.         |
-| P4       | Events and waitlists                       | Complete | Add richer event detail pages later if workflow depth requires them.        |
-| P5       | Attendance                                 | Complete | Add camera QR scanning later if a browser scanner dependency is chosen.     |
+| P4       | Events, waitlists, and paid review         | Complete | Add richer event detail pages later if workflow depth requires them.        |
+| P5       | Attendance                                 | Removed  | Removed by product decision to avoid QR/check-in complexity.                |
 | P6       | Polls                                      | Complete | Add richer poll analytics later from the results data.                      |
 | P7       | Notifications, badges, profile, settings   | Complete | Expand badge rules as future modules add richer activity signals.           |
 | P8       | Resource requests and admin analytics      | Complete | Expand analytics charts as reporting needs become clearer.                  |
@@ -66,7 +66,6 @@ Evidence:
   - comments
   - events
   - event registrations
-  - attendance
   - polls
   - poll votes
   - chat messages
@@ -135,16 +134,20 @@ Implemented:
   - `GET /api/clubs/:clubId`
   - `POST /api/clubs/:clubId/memberships/request`
   - `POST /api/clubs/:clubId/memberships/leave`
+  - `GET /api/clubs/:clubId/memberships`
+  - `PATCH /api/clubs/:clubId/memberships/:membershipId/role`
   - `GET /api/clubs/:clubId/memberships/requests`
   - `PATCH /api/clubs/:clubId/memberships/requests/:membershipId`
 - Club list search, category/status filters, membership filters, pagination, and sorting.
 - Club detail with membership summary, current-user membership status, executive committee, and upcoming event previews.
 - Student membership request and leave/cancel flows.
 - Executive/admin pending request review with approve/reject actions.
+- Active-member roster visible to active members and managers.
+- Executive/admin member role promotion and demotion for active memberships.
 - Club-scoped executive authorization in the service layer.
 - Validation schemas for list/detail/request-review inputs.
 - Frontend `/clubs` directory page with search, filters, pagination, loading, empty, error, toast, and membership status states.
-- Frontend `/clubs/:clubId` detail page with membership actions, executive committee, upcoming events, contact context, and executive request queue.
+- Frontend `/clubs/:clubId` detail page with membership actions, executive committee, member roster, upcoming events, contact context, and manager-only request queue.
 - Club Directory navigation is enabled in the role-aware app shell.
 
 Known follow-up:
@@ -199,7 +202,7 @@ Verification:
 - `pnpm build` passed with Vite's existing large chunk warning.
 - `pnpm format:check` passed.
 
-### Slice 4: Events And Waitlist
+### Slice 4: Events, Waitlist, And Paid Registration Review
 
 Status: `Complete`
 
@@ -215,14 +218,18 @@ Implemented:
   - `POST /api/events/:eventId/register`
   - `POST /api/events/:eventId/cancel-registration`
   - `GET /api/events/:eventId/registrations`
+  - `PATCH /api/events/:eventId/registrations/:registrationId/review`
 - Event list search, scope filters, status filters, timeframe filters, pagination, latest/upcoming sorting, public/member visibility rules, registration counts, current-user registration status, and management flags.
 - Club-scoped executive/admin event creation, editing, and soft deletion.
+- Paid event creation with fee amount and bKash send-money number.
 - Student registration and cancellation.
+- Paid registration transaction ID submission with pending status.
+- Executive/admin approval or decline for pending paid registrations.
 - Capacity-based waitlist placement.
 - First-waitlisted promotion when a confirmed attendee cancels.
 - Registration and waitlist-promotion notifications.
-- Executive/admin registration queue by registered, waitlisted, and cancelled status.
-- Frontend `/events` page using the Events List Stitch references with filters, loading, empty, error, pagination, event cards, create/edit modal, registration/cancellation actions, attendee drawer, confirmations, and toast feedback.
+- Executive/admin registration queue by pending, registered, waitlisted, declined, and cancelled status.
+- Frontend `/events` page using the Events List Stitch references with filters, loading, empty, error, pagination, event cards, create/edit modal with fee fields, paid registration payment modal, registration/cancellation actions, review drawer, confirmations, and toast feedback.
 - Events navigation is enabled in the role-aware app shell.
 
 Known follow-up:
@@ -241,37 +248,13 @@ Verification:
 
 ### Slice 5: Attendance
 
-Status: `Complete`
+Status: `Removed`
 
-Implemented:
+Decision:
 
-- Backend attendance routes:
-  - `GET /api/attendance/manageable-events`
-  - `POST /api/attendance/events/:eventId/token`
-  - `POST /api/attendance/check-in`
-  - `GET /api/attendance/history`
-  - `GET /api/attendance/events/:eventId/report`
-- Signed, short-lived attendance tokens and check-in URLs for managed events.
-- Student check-in validation against token signature, token expiry, event window, and confirmed event registration.
-- Unique event/user attendance recording.
-- Student attendance history.
-- Executive/admin attendance reports with registered/waitlisted filters, check-in state, and summary counts.
-- Frontend `/attendance` page with token check-in, attendance history, manager token generation, and report table.
-- Attendance navigation is enabled in the role-aware app shell.
-
-Known follow-up:
-
-- Browser camera QR scanning is not included yet; the page accepts the QR token payload/link token directly.
-- Manual check-in and attendance correction workflows can be added when admin audit requirements are clearer.
-- Dashboard attendance charts should be expanded from this data in the dashboard analytics follow-up.
-
-Verification:
-
-- `pnpm ts-check` passed.
-- `pnpm lint` passed.
-- `pnpm test` passed.
-- `pnpm build` passed with Vite's existing large chunk warning.
-- `pnpm format:check` passed.
+- Attendance QR/check-in/reporting was removed from product scope to avoid adding QR complexity to the event workflow.
+- The `/attendance` API group, frontend attendance route, navigation item, attendance model, and attendance-derived dashboard/profile/badge behavior were removed.
+- Event participation now relies on registration status and paid-registration review state.
 
 ### Slice 6: Polls
 
@@ -327,9 +310,9 @@ Implemented:
   - `PATCH /api/users/me/password`
   - `GET /api/users/:userId/profile`
 - Notification inbox filters, unread count, single mark-read, and mark-all-read behavior.
-- Badge earning rules for first club joined, event participation, executive membership, volunteer membership, perfect attendance, and community leadership.
+- Badge earning rules for first club joined, event registration, executive membership, volunteer membership, and community leadership.
 - Badge-earned notifications for newly awarded profile achievements.
-- Own profile page with private profile editing, clubs, attendance, badges, and activity timeline.
+- Own profile page with private profile editing, clubs, badges, and activity timeline.
 - Public profile page with profile-visibility enforcement and limited user details.
 - Account settings page for profile visibility, notification preferences, and password changes.
 - Header notification badge, notification page route, profile menu, and settings navigation.
@@ -338,7 +321,7 @@ Known follow-up:
 
 - Badge rules should expand as chat, resource requests, search, and richer dashboard analytics are completed.
 - Notification delivery is currently in-app only; email digest/reminder preferences are stored for later delivery integrations.
-- Public profiles currently use activity signals from notifications, memberships, badges, and attendance; feed/comment activity can be added when a richer public activity model is introduced.
+- Public profiles currently use activity signals from notifications, memberships, and badges; feed/comment activity can be added when a richer public activity model is introduced.
 
 Verification:
 
@@ -456,7 +439,7 @@ Implemented:
 - Backend dashboard summary service aggregates real database data.
 - Frontend dashboard displays role-aware metric cards and panels.
 - Dashboard action buttons route users into relevant workflows.
-- Student dashboard panels cover joined clubs, upcoming registrations, notifications, badges, and attendance.
+- Student dashboard panels cover joined clubs, upcoming registrations, notifications, badges, and campus activity.
 - Club Executive dashboard panels cover membership queues, managed events, resource requests, and open polls.
 - University Admin dashboard panels cover approval queues, club status, monthly engagement, upcoming events, and feed activity.
 
@@ -484,7 +467,7 @@ Implemented:
 - Authentication middleware.
 - Broad capability middleware foundation.
 - Route-level capability checks for protected feature groups.
-- Club-scoped executive/advisor checks for memberships, feed, events, attendance, polls, resource requests, and chat moderation.
+- Club-scoped executive/advisor checks for memberships, feed, events, polls, resource requests, and chat moderation.
 - Member-only access checks for club chat, member-only polls, member-only events, and member-only feed visibility.
 - Own-profile and public-profile visibility checks.
 - Admin review/moderation checks for resource requests, chat, feed, and platform-wide search visibility.

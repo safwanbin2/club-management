@@ -7,6 +7,8 @@ import type {
   CreateEventInput,
   EventListQuery,
   EventRegistrationsQuery,
+  RegisterEventInput,
+  ReviewEventRegistrationInput,
   UpdateEventInput
 } from './event.validation.js'
 
@@ -20,6 +22,10 @@ function getValidatedBody<TBody>(req: Request) {
 
 function getEventId(req: Request) {
   return (req.validated?.params as { eventId: string }).eventId
+}
+
+function getRegistrationId(req: Request) {
+  return (req.validated?.params as { registrationId: string }).registrationId
 }
 
 export async function index(req: Request, res: Response) {
@@ -69,7 +75,11 @@ export async function destroy(req: Request, res: Response) {
 export async function register(req: Request, res: Response) {
   return success(
     res,
-    await eventService.registerForEvent(getEventId(req), req.auth!.user),
+    await eventService.registerForEvent(
+      getEventId(req),
+      getValidatedBody<RegisterEventInput>(req),
+      req.auth!.user
+    ),
     'Event registration updated'
   )
 }
@@ -94,5 +104,18 @@ export async function registrations(req: Request, res: Response) {
       getValidatedQuery<EventRegistrationsQuery>(req),
       req.auth!.user
     )
+  )
+}
+
+export async function reviewRegistration(req: Request, res: Response) {
+  return success(
+    res,
+    await eventService.reviewEventRegistration(
+      getEventId(req),
+      getRegistrationId(req),
+      getValidatedBody<ReviewEventRegistrationInput>(req),
+      req.auth!.user
+    ),
+    'Event registration reviewed'
   )
 }

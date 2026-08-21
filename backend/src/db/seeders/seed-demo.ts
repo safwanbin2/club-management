@@ -2,7 +2,6 @@ import type { HydratedDocument, Types } from 'mongoose'
 
 import { connectDatabase, disconnectDatabase } from '../mongoose.js'
 import { runMigrations } from '../migrations/run-migrations.js'
-import { AttendanceModel } from '../../modules/attendance/attendance.model.js'
 import { BadgeModel } from '../../modules/badge/badge.model.js'
 import { ChatMessageModel } from '../../modules/chat/chat-message.model.js'
 import { ClubModel } from '../../modules/club/club.model.js'
@@ -362,21 +361,6 @@ async function seedActivity(
         status: 'waitlisted',
         user: users.omar._id,
         waitlistPosition: 1
-      }
-    },
-    { new: true, setDefaultsOnInsert: true, upsert: true }
-  )
-
-  await AttendanceModel.findOneAndUpdate(
-    { event: debateTournament!._id, user: users.omar._id },
-    {
-      $set: {
-        checkedInAt: new Date('2026-07-01T10:05:00.000Z'),
-        event: debateTournament!._id,
-        method: 'qr',
-        registration: null,
-        user: users.omar._id,
-        verifiedBy: users.rafi._id
       }
     },
     { new: true, setDefaultsOnInsert: true, upsert: true }

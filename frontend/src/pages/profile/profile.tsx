@@ -1,4 +1,4 @@
-import { Alert, App as AntApp, Avatar, Button, Empty, Form, Input, List, Progress, Tag } from 'antd'
+import { Alert, App as AntApp, Avatar, Button, Empty, Form, Input, List, Tag } from 'antd'
 import { Award, Building2, RefreshCw, Save, UserRound } from 'lucide-react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 
@@ -160,15 +160,6 @@ export default function ProfilePage() {
               </div>
 
               <aside className="space-y-5">
-                <section className="rounded-app border border-border bg-surface p-5 shadow-panel">
-                  <h2 className="m-0 mb-4 text-xl font-bold text-text">Attendance</h2>
-                  <Progress percent={profile.attendance.percentage} strokeColor="#6a0032" />
-                  <p className="m-0 mt-2 text-sm text-text-soft">
-                    {profile.attendance.attended} check-ins from {profile.attendance.registered}{' '}
-                    registrations
-                  </p>
-                </section>
-
                 <section className="rounded-app border border-border bg-surface p-5 shadow-panel">
                   <h2 className="m-0 mb-4 inline-flex items-center gap-2 text-xl font-bold text-text">
                     <Award aria-hidden="true" size={20} />

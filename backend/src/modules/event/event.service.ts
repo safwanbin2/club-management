@@ -22,6 +22,8 @@ import type {
   CreateEventInput,
   EventListQuery,
   EventRegistrationsQuery,
+  RegisterEventInput,
+  ReviewEventRegistrationInput,
   UpdateEventInput
 } from './event.validation.js'
 import type {
@@ -56,6 +58,11 @@ type UserLean = User & {
 
 type RegistrationPlacement = {
   status: Extract<EventRegistrationStatus, 'registered' | 'waitlisted'>
+  waitlistPosition: null | number
+}
+
+type InitialRegistrationPlacement = {
+  status: Extract<EventRegistrationStatus, 'pending' | 'registered' | 'waitlisted'>
   waitlistPosition: null | number
 }
 
@@ -131,6 +138,12 @@ function toRegistrationDto(registration: EventRegistrationLean): EventRegistrati
     cancelledAt: formatDate(registration.cancelledAt),
     eventId: registration.event.toString(),
     id: registration._id.toString(),
+    paymentMethod: registration.paymentMethod ?? null,
+    paymentReviewedAt: formatDate(registration.paymentReviewedAt),
+    paymentReviewedBy: registration.paymentReviewedBy ? registration.paymentReviewedBy.toString() : null,
+    paymentReviewRemarks: registration.paymentReviewRemarks ?? null,
+    paymentSubmittedAt: formatDate(registration.paymentSubmittedAt),
+    paymentTransactionId: registration.paymentTransactionId ?? null,
     promotedAt: formatDate(registration.promotedAt),
     registeredAt: registration.registeredAt.toISOString(),
     status: registration.status,
@@ -159,6 +172,30 @@ export function getRegistrationPlacement(
     status: 'waitlisted',
     waitlistPosition: waitlistedCount + 1
   }
+}
+
+export function getInitialRegistrationPlacement(input: {
+  capacity: number
+  feeAmount: number
+  registeredCount: number
+  waitlistedCount: number
+}): InitialRegistrationPlacement {
+  if (input.feeAmount > 0) {
+    return {
+      status: 'pending',
+      waitlistPosition: null
+    }
+  }
+
+  return getRegistrationPlacement(input.registeredCount, input.capacity, input.waitlistedCount)
+}
+
+export function getReviewedRegistrationPlacement(
+  registeredCount: number,
+  capacity: number,
+  waitlistedCount: number
+): RegistrationPlacement {
+  return getRegistrationPlacement(registeredCount, capacity, waitlistedCount)
 }
 
 export function shouldPromoteFromWaitlist(cancelledStatus: EventRegistrationStatus) {
@@ -335,7 +372,7 @@ async function buildEventFilter(
 
   if (query.scope === 'registered') {
     const registrations = (await EventRegistrationModel.find({
-      status: { $in: ['registered', 'waitlisted'] },
+      status: { $in: ['pending', 'registered', 'waitlisted'] },
       user: toObjectId(actor.id)
     }).lean()) as EventRegistrationLean[]
 
@@ -408,6 +445,7 @@ async function createEventDtos(events: EventLean[], actor: UserDto): Promise<Eve
       return {
         availableSpots: Math.max(event.capacity - registeredCount, 0),
         bannerUrl: event.bannerUrl ?? null,
+        bkashNumber: event.bkashNumber ?? null,
         canManage: manageableClubIds.has(event.club.toString()),
         capacity: event.capacity,
         club: toClubDto(club),
@@ -417,7 +455,9 @@ async function createEventDtos(events: EventLean[], actor: UserDto): Promise<Eve
           : null,
         description: event.description,
         endsAt: event.endsAt.toISOString(),
+        feeAmount: event.feeAmount ?? 0,
         id: event._id.toString(),
+        paymentMethod: event.paymentMethod ?? 'none',
         registrationDeadline: event.registrationDeadline.toISOString(),
         registeredCount,
         startsAt: event.startsAt.toISOString(),
@@ -570,14 +610,18 @@ export async function createEvent(input: CreateEventInput, actor: UserDto) {
     throw new ApplicationError('You cannot create events for this club.', 403, 'FORBIDDEN')
   }
 
+  const feeAmount = input.feeAmount ?? 0
   const event = await EventModel.create({
     bannerUrl: input.bannerUrl ?? null,
+    bkashNumber: feeAmount > 0 ? (input.bkashNumber ?? null) : null,
     capacity: input.capacity,
     club: club._id,
     createdBy: toObjectId(actor.id),
     deletedAt: null,
     description: input.description,
     endsAt: new Date(input.endsAt),
+    feeAmount,
+    paymentMethod: feeAmount > 0 ? 'bkash_send_money' : 'none',
     registrationDeadline: new Date(input.registrationDeadline),
     startsAt: new Date(input.startsAt),
     status: input.status,
@@ -595,8 +639,10 @@ export async function updateEvent(eventId: string, input: UpdateEventInput, acto
   await assertActorCanManageEvent(actor, event)
 
   const update: Partial<Event> = {}
+  const nextFeeAmount = input.feeAmount ?? event.feeAmount ?? 0
 
   if (input.bannerUrl !== undefined) update.bannerUrl = input.bannerUrl ?? null
+  if (input.feeAmount !== undefined) update.feeAmount = input.feeAmount
   if (input.capacity !== undefined) update.capacity = input.capacity
   if (input.description !== undefined) update.description = input.description
   if (input.endsAt !== undefined) update.endsAt = new Date(input.endsAt)
@@ -608,6 +654,24 @@ export async function updateEvent(eventId: string, input: UpdateEventInput, acto
   if (input.title !== undefined) update.title = input.title
   if (input.venue !== undefined) update.venue = input.venue
   if (input.visibility !== undefined) update.visibility = input.visibility
+
+  if (nextFeeAmount > 0) {
+    const bkashNumber = input.bkashNumber ?? event.bkashNumber
+
+    if (!bkashNumber) {
+      throw new ApplicationError(
+        'bKash number is required when the event has a fee.',
+        422,
+        'EVENT_PAYMENT_REQUIRED'
+      )
+    }
+
+    update.bkashNumber = bkashNumber
+    update.paymentMethod = 'bkash_send_money'
+  } else if (input.feeAmount !== undefined || input.bkashNumber !== undefined) {
+    update.bkashNumber = null
+    update.paymentMethod = 'none'
+  }
 
   const updatedEvent = (await EventModel.findByIdAndUpdate(
     event._id,
@@ -646,7 +710,11 @@ export async function deleteEvent(eventId: string, actor: UserDto) {
   return dto
 }
 
-export async function registerForEvent(eventId: string, actor: UserDto) {
+export async function registerForEvent(
+  eventId: string,
+  input: RegisterEventInput,
+  actor: UserDto
+) {
   const event = await findEventById(eventId, actor)
   const now = new Date()
 
@@ -663,12 +731,25 @@ export async function registerForEvent(eventId: string, actor: UserDto) {
   }
 
   const userId = toObjectId(actor.id)
+  const feeAmount = event.feeAmount ?? 0
+
+  if (feeAmount > 0 && !input.paymentTransactionId) {
+    throw new ApplicationError(
+      'Transaction ID is required for paid event registration.',
+      422,
+      'PAYMENT_TRANSACTION_REQUIRED'
+    )
+  }
+
   const existingRegistration = (await EventRegistrationModel.findOne({
     event: event._id,
     user: userId
   }).lean()) as EventRegistrationLean | null
 
-  if (existingRegistration && ['registered', 'waitlisted'].includes(existingRegistration.status)) {
+  if (
+    existingRegistration &&
+    ['pending', 'registered', 'waitlisted'].includes(existingRegistration.status)
+  ) {
     return toRegistrationDto(existingRegistration)
   }
 
@@ -676,7 +757,12 @@ export async function registerForEvent(eventId: string, actor: UserDto) {
     EventRegistrationModel.countDocuments({ event: event._id, status: 'registered' }),
     EventRegistrationModel.countDocuments({ event: event._id, status: 'waitlisted' })
   ])
-  const placement = getRegistrationPlacement(registeredCount, event.capacity, waitlistedCount)
+  const placement = getInitialRegistrationPlacement({
+    capacity: event.capacity,
+    feeAmount,
+    registeredCount,
+    waitlistedCount
+  })
   const registration = (await EventRegistrationModel.findOneAndUpdate(
     { event: event._id, user: userId },
     {
@@ -684,6 +770,12 @@ export async function registerForEvent(eventId: string, actor: UserDto) {
         cancellationReason: null,
         cancelledAt: null,
         event: event._id,
+        paymentMethod: feeAmount > 0 ? 'bkash_send_money' : null,
+        paymentReviewedAt: null,
+        paymentReviewedBy: null,
+        paymentReviewRemarks: null,
+        paymentSubmittedAt: feeAmount > 0 ? now : null,
+        paymentTransactionId: feeAmount > 0 ? (input.paymentTransactionId ?? null) : null,
         promotedAt: null,
         registeredAt: now,
         status: placement.status,
@@ -694,7 +786,9 @@ export async function registerForEvent(eventId: string, actor: UserDto) {
     { new: true, setDefaultsOnInsert: true, upsert: true }
   ).lean()) as EventRegistrationLean
 
-  await createRegistrationNotification(userId, event, placement.status)
+  if (placement.status !== 'pending') {
+    await createRegistrationNotification(userId, event, placement.status)
+  }
 
   return toRegistrationDto(registration)
 }
@@ -710,7 +804,7 @@ export async function cancelEventRegistration(
     user: toObjectId(actor.id)
   }).lean()) as EventRegistrationLean | null
 
-  if (!registration || registration.status === 'cancelled') {
+  if (!registration || ['cancelled', 'declined'].includes(registration.status)) {
     throw new ApplicationError(
       'Active event registration not found.',
       404,
@@ -740,6 +834,22 @@ export async function cancelEventRegistration(
   }
 
   return toRegistrationDto(cancelledRegistration)
+}
+
+function createEventRegistrationListItemDto(
+  registration: EventRegistrationLean,
+  usersById: Map<string, UserLean>
+): EventRegistrationListItemDto | null {
+  const user = usersById.get(registration.user.toString())
+
+  if (!user) {
+    return null
+  }
+
+  return {
+    ...toRegistrationDto(registration),
+    user: toUserDto(user)
+  }
 }
 
 export async function listEventRegistrations(
@@ -782,23 +892,107 @@ export async function listEventRegistrations(
 
   return getPagination(
     registrationRows
-      .map(registration => {
-        const user = usersById.get(registration.user.toString())
-
-        if (!user) {
-          return null
-        }
-
-        return {
-          ...toRegistrationDto(registration),
-          user: toUserDto(user)
-        }
-      })
+      .map(registration => createEventRegistrationListItemDto(registration, usersById))
       .filter((registration): registration is EventRegistrationListItemDto =>
         Boolean(registration)
       ),
     total,
     query.page,
     query.perPage
+  )
+}
+
+export async function reviewEventRegistration(
+  eventId: string,
+  registrationId: string,
+  input: ReviewEventRegistrationInput,
+  actor: UserDto
+) {
+  const event = await findEventById(eventId, actor, true)
+  await assertActorCanManageEvent(actor, event)
+
+  if (!isObjectId(registrationId)) {
+    throw new ApplicationError('Event registration not found.', 404, 'REGISTRATION_NOT_FOUND')
+  }
+
+  const registration = (await EventRegistrationModel.findOne({
+    _id: toObjectId(registrationId),
+    event: event._id
+  }).lean()) as EventRegistrationLean | null
+
+  if (!registration) {
+    throw new ApplicationError('Event registration not found.', 404, 'REGISTRATION_NOT_FOUND')
+  }
+
+  if (registration.status !== 'pending') {
+    throw new ApplicationError(
+      'Only pending paid registrations can be reviewed.',
+      409,
+      'REGISTRATION_NOT_PENDING'
+    )
+  }
+
+  const now = new Date()
+  const reviewerId = toObjectId(actor.id)
+
+  if (input.action === 'decline') {
+    const declinedRegistration = (await EventRegistrationModel.findByIdAndUpdate(
+      registration._id,
+      {
+        $set: {
+          paymentReviewedAt: now,
+          paymentReviewedBy: reviewerId,
+          paymentReviewRemarks: input.remarks ?? null,
+          status: 'declined',
+          waitlistPosition: null
+        }
+      },
+      { new: true }
+    ).lean()) as EventRegistrationLean
+    const user = (await UserModel.findById(declinedRegistration.user).lean()) as UserLean | null
+
+    if (!user) {
+      throw new ApplicationError('Registration user not found.', 404, 'USER_NOT_FOUND')
+    }
+
+    return createEventRegistrationListItemDto(
+      declinedRegistration,
+      new Map([[user._id.toString(), user]])
+    )
+  }
+
+  const [registeredCount, waitlistedCount] = await Promise.all([
+    EventRegistrationModel.countDocuments({ event: event._id, status: 'registered' }),
+    EventRegistrationModel.countDocuments({ event: event._id, status: 'waitlisted' })
+  ])
+  const placement = getReviewedRegistrationPlacement(
+    registeredCount,
+    event.capacity,
+    waitlistedCount
+  )
+  const approvedRegistration = (await EventRegistrationModel.findByIdAndUpdate(
+    registration._id,
+    {
+      $set: {
+        paymentReviewedAt: now,
+        paymentReviewedBy: reviewerId,
+        paymentReviewRemarks: input.remarks ?? null,
+        status: placement.status,
+        waitlistPosition: placement.waitlistPosition
+      }
+    },
+    { new: true }
+  ).lean()) as EventRegistrationLean
+  const user = (await UserModel.findById(approvedRegistration.user).lean()) as UserLean | null
+
+  if (!user) {
+    throw new ApplicationError('Registration user not found.', 404, 'USER_NOT_FOUND')
+  }
+
+  await createRegistrationNotification(approvedRegistration.user, event, placement.status)
+
+  return createEventRegistrationListItemDto(
+    approvedRegistration,
+    new Map([[user._id.toString(), user]])
   )
 }

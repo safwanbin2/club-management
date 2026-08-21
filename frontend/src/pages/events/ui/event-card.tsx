@@ -1,8 +1,19 @@
 import { Avatar, Button, Popconfirm, Tag } from 'antd'
-import { CalendarDays, Clock, Edit3, Lock, MapPin, Trash2, Users, XCircle } from 'lucide-react'
+import {
+  CalendarDays,
+  Clock,
+  Edit3,
+  Lock,
+  MapPin,
+  Trash2,
+  Users,
+  WalletCards,
+  XCircle
+} from 'lucide-react'
 
 import {
   formatDateTime,
+  formatEventFee,
   formatEventStatus,
   formatRegistrationStatus,
   formatTimeRange,
@@ -30,6 +41,14 @@ function getStatusColor(status: EventItem['status']) {
   return 'red'
 }
 
+function getRegistrationStatusColor(status: NonNullable<EventItem['currentUserRegistration']>['status']) {
+  if (status === 'registered') return 'green'
+  if (status === 'waitlisted') return 'gold'
+  if (status === 'pending') return 'blue'
+  if (status === 'declined') return 'red'
+  return 'default'
+}
+
 export default function EventCard({
   event,
   isDeleting,
@@ -43,9 +62,12 @@ export default function EventCard({
   const dateBadge = getEventDateBadge(event.startsAt)
   const activeRegistration =
     event.currentUserRegistration?.status === 'registered' ||
-    event.currentUserRegistration?.status === 'waitlisted'
+    event.currentUserRegistration?.status === 'waitlisted' ||
+    event.currentUserRegistration?.status === 'pending'
       ? event.currentUserRegistration
       : null
+  const declinedRegistration =
+    event.currentUserRegistration?.status === 'declined' ? event.currentUserRegistration : null
   const registrationOpen =
     event.status === 'published' &&
     isEventRegistrationOpen(event.startsAt, event.registrationDeadline)
@@ -54,9 +76,13 @@ export default function EventCard({
       ? 'Cancel'
       : activeRegistration?.status === 'waitlisted'
         ? 'Leave Waitlist'
-        : event.availableSpots > 0
-          ? 'Register'
-          : 'Join Waitlist'
+        : activeRegistration?.status === 'pending'
+          ? 'Cancel Request'
+          : declinedRegistration
+            ? 'Resubmit Payment'
+            : event.availableSpots > 0
+              ? 'Register'
+              : 'Join Waitlist'
 
   return (
     <article className="grid gap-4 rounded-app border border-border bg-surface p-5 shadow-panel md:grid-cols-[92px_minmax(0,1fr)]">
@@ -81,6 +107,13 @@ export default function EventCard({
                   Members
                 </Tag>
               ) : null}
+              {event.feeAmount > 0 ? (
+                <Tag icon={<WalletCards size={13} />} color="blue">
+                  {formatEventFee(event.feeAmount)}
+                </Tag>
+              ) : (
+                <Tag color="green">Free</Tag>
+              )}
             </div>
             <h2 className="m-0 text-2xl font-bold text-text">{event.title}</h2>
             <p className="m-0 mt-2 line-clamp-2 text-sm leading-6 text-text-soft">
@@ -131,9 +164,15 @@ export default function EventCard({
             <span>{event.waitlistedCount} waitlisted</span>
             <span>{event.availableSpots} spots left</span>
             {activeRegistration ? (
-              <Tag color={activeRegistration.status === 'registered' ? 'green' : 'gold'}>
+              <Tag color={getRegistrationStatusColor(activeRegistration.status)}>
                 {formatRegistrationStatus(activeRegistration.status)}
               </Tag>
+            ) : null}
+            {declinedRegistration ? (
+              <Tag color="red">{formatRegistrationStatus(declinedRegistration.status)}</Tag>
+            ) : null}
+            {event.feeAmount > 0 && event.bkashNumber ? (
+              <span>bKash: {event.bkashNumber}</span>
             ) : null}
           </div>
 
@@ -144,7 +183,9 @@ export default function EventCard({
               title={
                 activeRegistration.status === 'registered'
                   ? 'Cancel this event registration?'
-                  : 'Leave this event waitlist?'
+                  : activeRegistration.status === 'waitlisted'
+                    ? 'Leave this event waitlist?'
+                    : 'Cancel this pending payment request?'
               }
             >
               <Button icon={<XCircle size={16} />} loading={isRegistering}>

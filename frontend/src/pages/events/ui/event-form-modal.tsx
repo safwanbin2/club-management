@@ -12,10 +12,12 @@ import type {
 
 type EventFormValues = {
   bannerUrl?: string
+  bkashNumber?: string
   capacity: number
   clubId?: string
   description: string
   endsAt: string
+  feeAmount: number
   registrationDeadline: string
   startsAt: string
   status: EventStatus
@@ -45,6 +47,7 @@ export default function EventFormModal({
 }: EventFormModalProps) {
   const [form] = Form.useForm<EventFormValues>()
   const isEditing = Boolean(event)
+  const feeAmount = Form.useWatch('feeAmount', form) ?? 0
 
   useEffect(() => {
     if (!isOpen) {
@@ -54,9 +57,11 @@ export default function EventFormModal({
     if (event) {
       form.setFieldsValue({
         bannerUrl: event.bannerUrl ?? undefined,
+        bkashNumber: event.bkashNumber ?? undefined,
         capacity: event.capacity,
         description: event.description,
         endsAt: toDateTimeLocal(event.endsAt),
+        feeAmount: event.feeAmount,
         registrationDeadline: toDateTimeLocal(event.registrationDeadline),
         startsAt: toDateTimeLocal(event.startsAt),
         status: event.status,
@@ -69,6 +74,7 @@ export default function EventFormModal({
 
     form.setFieldsValue({
       capacity: 50,
+      feeAmount: 0,
       status: 'published',
       visibility: 'public'
     })
@@ -77,9 +83,11 @@ export default function EventFormModal({
   const handleFinish = (values: EventFormValues) => {
     const payload = {
       bannerUrl: values.bannerUrl?.trim() || undefined,
+      bkashNumber: values.feeAmount > 0 ? values.bkashNumber?.trim() : undefined,
       capacity: values.capacity,
       description: values.description.trim(),
       endsAt: fromDateTimeLocal(values.endsAt),
+      feeAmount: values.feeAmount ?? 0,
       registrationDeadline: fromDateTimeLocal(values.registrationDeadline),
       startsAt: fromDateTimeLocal(values.startsAt),
       status: values.status,
@@ -197,7 +205,7 @@ export default function EventFormModal({
             </Form.Item>
           </div>
 
-          <div className="grid gap-3 md:grid-cols-4">
+          <div className="grid gap-3 md:grid-cols-3">
             <Form.Item
               label="Capacity"
               name="capacity"
@@ -206,6 +214,40 @@ export default function EventFormModal({
               <InputNumber className="w-full" min={1} />
             </Form.Item>
 
+            <Form.Item
+              label="Event fee"
+              name="feeAmount"
+              rules={[{ message: 'Event fee is required.', required: true }]}
+            >
+              <InputNumber
+                addonBefore="BDT"
+                className="w-full"
+                min={0}
+                placeholder="0"
+              />
+            </Form.Item>
+
+            <Form.Item
+              dependencies={['feeAmount']}
+              label="bKash number"
+              name="bkashNumber"
+              rules={[
+                ({ getFieldValue }) => ({
+                  validator(_, value: string | undefined) {
+                    if (Number(getFieldValue('feeAmount') ?? 0) <= 0 || value?.trim()) {
+                      return Promise.resolve()
+                    }
+
+                    return Promise.reject(new Error('bKash number is required for paid events.'))
+                  }
+                })
+              ]}
+            >
+              <Input disabled={feeAmount <= 0} maxLength={20} placeholder="01XXXXXXXXX" />
+            </Form.Item>
+          </div>
+
+          <div className="grid gap-3 md:grid-cols-3">
             <Form.Item label="Status" name="status" rules={[{ required: true }]}>
               <Select
                 options={[

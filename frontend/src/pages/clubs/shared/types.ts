@@ -42,6 +42,10 @@ export type ClubMembershipRequest = ClubMembership & {
   user: ClubMemberUser
 }
 
+export type ClubMember = ClubMembership & {
+  user: ClubMemberUser
+}
+
 export type ClubExecutive = ClubMembership & {
   user: ClubMemberUser
 }
@@ -111,6 +115,13 @@ export type MembershipRequestsPayload = {
   status: ClubMembershipStatus
 }
 
+export type ClubMembersPayload = {
+  page: number
+  perPage: number
+  role?: ClubRole
+  search: string
+}
+
 export type ReviewMembershipPayload = {
   action: 'approve' | 'reject'
   clubId: string
@@ -118,5 +129,13 @@ export type ReviewMembershipPayload = {
   remarks?: string
 }
 
+export type UpdateMembershipRolePayload = {
+  clubId: string
+  clubRole: ClubRole
+  executivePosition?: string
+  membershipId: string
+}
+
 export type ClubListResponse = PaginatedData<ClubListItem>
+export type ClubMembersResponse = PaginatedData<ClubMember>
 export type ClubMembershipRequestsResponse = PaginatedData<ClubMembershipRequest>

@@ -36,28 +36,20 @@ Acceptance:
 - Executives can create, pin, and moderate posts for their club.
 - Announcements are visually distinct.
 
-## Slice 4: Events And Waitlist
+## Slice 4: Events, Waitlist, And Paid Registration Review
 
-Goal: executives manage events and students register.
+Goal: executives manage events and students register, including paid events reviewed through bKash transaction IDs.
 
 Acceptance:
 
 - Event CRUD exists for executives.
 - Students can register or cancel.
+- Executives can create paid events with a fee and bKash send-money number.
+- Paid registrations collect a transaction ID and stay pending until executive/admin review.
+- Executives/admins can approve or decline paid registration requests with a reason.
 - Capacity produces a waitlist.
 - Cancelling promotes the first waitlisted student.
 - Notifications are created for registration and waitlist promotion.
-
-## Slice 5: Attendance
-
-Goal: event attendance can be recorded and reported.
-
-Acceptance:
-
-- Executives can generate an attendance QR token.
-- Students can check in during the event window.
-- Executives can view attendance reports.
-- Students can view attendance history.
 
 ## Slice 6: Polls
 
@@ -81,7 +73,7 @@ Acceptance:
 - Badge earning rules exist for core activities.
 - Private own profile view and edit flows work.
 - Account settings support password/security, notification preferences, and public profile visibility.
-- Public profile shows clubs, executive positions, attendance, badges, and activity timeline.
+- Public profile shows clubs, executive positions, badges, and activity timeline.
 
 ## Slice 8: Resource Requests And Admin Analytics
 

@@ -25,6 +25,7 @@ import {
   getEntityInitials
 } from '../shared/helpers'
 import type { FeedPost, ModerateFeedPostPayload } from '../shared/types'
+import UserProfileLink from '@features/user-profile-link'
 
 type FeedPostCardProps = {
   isLikePending: boolean
@@ -130,7 +131,15 @@ export default function FeedPostCard({
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
             <h2 className="m-0 truncate text-lg font-bold text-text">
-              {post.club?.name ?? post.author.name}
+              {post.club ? (
+                post.club.name
+              ) : (
+                <UserProfileLink
+                  className="text-text hover:text-primary"
+                  name={post.author.name}
+                  userId={post.author.id}
+                />
+              )}
             </h2>
             <Tag className={`m-0 border ${FEED_POST_TYPE_TONES[post.type]}`}>
               <span className="inline-flex items-center gap-1">
@@ -142,8 +151,13 @@ export default function FeedPostCard({
               <Tag className="m-0 border-primary/20 bg-primary-soft text-primary">Pinned</Tag>
             ) : null}
           </div>
-          <p className="m-0 mt-1 text-sm text-text-soft">
-            {post.author.name} • {formatRelativeTime(post.createdAt)}
+          <p className="m-0 mt-1 flex flex-wrap items-center gap-1 text-sm text-text-soft">
+            <UserProfileLink
+              className="text-text-soft hover:text-primary"
+              name={post.author.name}
+              userId={post.author.id}
+            />
+            <span>• {formatRelativeTime(post.createdAt)}</span>
           </p>
         </div>
 

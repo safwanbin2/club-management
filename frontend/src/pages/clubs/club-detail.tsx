@@ -5,20 +5,24 @@ import { Link, Navigate, useParams } from 'react-router-dom'
 
 import getApiErrorMessage from '@common/helpers/get-api-error-message'
 import AppShell from '@features/app-shell'
+import UserProfileLink from '@features/user-profile-link'
+import useClubMembers from './data/use-club-members'
 import useClubDetail from './data/use-club-detail'
 import useLeaveClub from './data/use-leave-club'
 import useMembershipRequests from './data/use-membership-requests'
 import useRequestMembership from './data/use-request-membership'
 import useReviewMembershipRequest from './data/use-review-membership-request'
+import useUpdateMembershipRole from './data/use-update-membership-role'
 import {
   createMembershipRequestsPayload,
   formatClubCategory,
   formatDateTime,
   formatMemberCount
 } from './shared/helpers'
-import type { ClubMembershipRequest } from './shared/types'
+import type { ClubMember, ClubMembershipRequest } from './shared/types'
 import ClubDetailHero from './ui/club-detail-hero'
 import ClubDetailSkeleton from './ui/club-detail-skeleton'
+import ClubMembersPanel from './ui/club-members-panel'
 import MembershipRequestsPanel from './ui/membership-requests-panel'
 
 export default function ClubDetailPage() {
@@ -27,9 +31,23 @@ export default function ClubDetailPage() {
   const requestMembership = useRequestMembership()
   const leaveClub = useLeaveClub()
   const reviewMembership = useReviewMembershipRequest()
+  const updateMembershipRole = useUpdateMembershipRole()
   const requestPayload = useMemo(() => createMembershipRequestsPayload(), [])
+  const membersPayload = useMemo(() => ({ page: 1, perPage: 50, search: '' }), [])
   const { clubDetail, isClubDetailError, isClubDetailPending, refetchClubDetail } =
     useClubDetail(clubId)
+  const canViewMembers = Boolean(
+    clubDetail?.canManage || clubDetail?.currentUserMembership?.status === 'active'
+  )
+  const {
+    clubMembers,
+    isClubMembersError,
+    isClubMembersFetching,
+    refetchClubMembers,
+    totalClubMembers
+  } = useClubMembers(clubId, membersPayload, {
+    enabled: canViewMembers
+  })
   const {
     isMembershipRequestsError,
     isMembershipRequestsFetching,
@@ -79,6 +97,29 @@ export default function ClubDetailPage() {
         },
         onSuccess: () => {
           message.success(action === 'approve' ? 'Membership approved.' : 'Membership rejected.')
+        }
+      }
+    )
+  }
+
+  const handleUpdateMembershipRole = (
+    member: ClubMember,
+    clubRole: 'executive' | 'member',
+    executivePosition?: string
+  ) => {
+    updateMembershipRole.mutate(
+      {
+        clubId,
+        clubRole,
+        executivePosition,
+        membershipId: member.id
+      },
+      {
+        onError: error => {
+          message.error(getApiErrorMessage(error, 'Membership role could not be updated.'))
+        },
+        onSuccess: () => {
+          message.success('Membership role updated.')
         }
       }
     )
@@ -141,14 +182,16 @@ export default function ClubDetailPage() {
                         {formatMemberCount(clubDetail.membershipSummary.active)}
                       </p>
                     </div>
-                    <div className="rounded-app border border-border bg-muted p-4">
-                      <p className="m-0 text-xs font-semibold uppercase tracking-[0.08em] text-text-soft">
-                        Pending Queue
-                      </p>
-                      <p className="m-0 mt-2 text-lg font-bold text-text">
-                        {formatMemberCount(clubDetail.membershipSummary.pending)}
-                      </p>
-                    </div>
+                    {clubDetail.canManage ? (
+                      <div className="rounded-app border border-border bg-muted p-4">
+                        <p className="m-0 text-xs font-semibold uppercase tracking-[0.08em] text-text-soft">
+                          Pending Queue
+                        </p>
+                        <p className="m-0 mt-2 text-lg font-bold text-text">
+                          {formatMemberCount(clubDetail.membershipSummary.pending)}
+                        </p>
+                      </div>
+                    ) : null}
                   </div>
                 </section>
 
@@ -163,7 +206,11 @@ export default function ClubDetailPage() {
                           <div className="flex flex-wrap items-start justify-between gap-3">
                             <div>
                               <h3 className="m-0 text-base font-semibold text-text">
-                                {executive.user.name}
+                                <UserProfileLink
+                                  className="text-text hover:text-primary"
+                                  name={executive.user.name}
+                                  userId={executive.user.id}
+                                />
                               </h3>
                               <p className="m-0 mt-1 text-sm text-text-soft">
                                 {executive.executivePosition ?? executive.clubRole}
@@ -186,6 +233,19 @@ export default function ClubDetailPage() {
                     </div>
                   )}
                 </section>
+
+                {canViewMembers ? (
+                  <ClubMembersPanel
+                    canManage={clubDetail.canManage}
+                    isError={isClubMembersError}
+                    isFetching={isClubMembersFetching}
+                    isRoleUpdatePending={updateMembershipRole.isPending}
+                    members={clubMembers}
+                    onRefresh={() => refetchClubMembers()}
+                    onUpdateRole={handleUpdateMembershipRole}
+                    totalMembers={totalClubMembers}
+                  />
+                ) : null}
 
                 {clubDetail.canManage ? (
                   <MembershipRequestsPanel

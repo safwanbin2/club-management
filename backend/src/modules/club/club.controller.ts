@@ -3,8 +3,10 @@ import type { Request, Response } from 'express'
 import { success } from '../../http/responses/index.js'
 import type {
   ClubListQuery,
+  ClubMembersQuery,
   ClubMembershipRequestsQuery,
-  ReviewMembershipInput
+  ReviewMembershipInput,
+  UpdateMembershipRoleInput
 } from './club.validation.js'
 import * as clubService from './club.service.js'
 
@@ -58,6 +60,17 @@ export async function membershipRequests(req: Request, res: Response) {
   )
 }
 
+export async function members(req: Request, res: Response) {
+  return success(
+    res,
+    await clubService.listClubMembers(
+      getClubId(req),
+      getValidatedQuery<ClubMembersQuery>(req),
+      req.auth!.user
+    )
+  )
+}
+
 export async function reviewMembership(req: Request, res: Response) {
   return success(
     res,
@@ -68,5 +81,18 @@ export async function reviewMembership(req: Request, res: Response) {
       req.auth!.user
     ),
     'Membership request reviewed'
+  )
+}
+
+export async function updateMembershipRole(req: Request, res: Response) {
+  return success(
+    res,
+    await clubService.updateMembershipRole(
+      getClubId(req),
+      getMembershipId(req),
+      getValidatedBody<UpdateMembershipRoleInput>(req),
+      req.auth!.user
+    ),
+    'Membership role updated'
   )
 }

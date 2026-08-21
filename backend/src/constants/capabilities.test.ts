@@ -18,4 +18,10 @@ describe('role capabilities', () => {
     expect(roleHasCapability(USER_ROLES.universityAdmin, CAPABILITIES.usersManage)).toBe(true)
     expect(roleHasCapability(USER_ROLES.clubExecutive, CAPABILITIES.usersManage)).toBe(false)
   })
+
+  it('does not expose attendance permissions after attendance is removed', () => {
+    expect(Object.values(CAPABILITIES).filter(capability => capability.startsWith('attendance:'))).toEqual(
+      []
+    )
+  })
 })

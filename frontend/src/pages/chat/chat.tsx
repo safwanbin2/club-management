@@ -19,6 +19,7 @@ import { useSearchParams } from 'react-router-dom'
 
 import getApiErrorMessage from '@common/helpers/get-api-error-message'
 import AppShell from '@features/app-shell'
+import UserProfileLink from '@features/user-profile-link'
 import useChatClubs from './data/use-chat-clubs'
 import useChatMessages from './data/use-chat-messages'
 import useMarkChatRead from './data/use-mark-chat-read'
@@ -299,7 +300,16 @@ export default function ChatPage() {
                           ].join(' ')}
                         >
                           <div className="mb-1 flex items-center justify-between gap-3">
-                            <span className="text-xs font-semibold">{chatMessage.author.name}</span>
+                            <UserProfileLink
+                              className={[
+                                'text-xs font-semibold',
+                                chatMessage.isOwn
+                                  ? 'text-white hover:text-white'
+                                  : 'text-text hover:text-primary'
+                              ].join(' ')}
+                              name={chatMessage.author.name}
+                              userId={chatMessage.author.id}
+                            />
                             <span className="text-xs opacity-80">
                               {formatDateTime(chatMessage.createdAt)}
                             </span>

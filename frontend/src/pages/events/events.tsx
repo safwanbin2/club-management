@@ -15,6 +15,7 @@ import useEventRegistrations from './data/use-event-registrations'
 import useEvents from './data/use-events'
 import useManageableEventClubs from './data/use-manageable-event-clubs'
 import useRegisterEvent from './data/use-register-event'
+import useReviewEventRegistration from './data/use-review-event-registration'
 import useUpdateEvent from './data/use-update-event'
 import {
   parseEventScope,
@@ -34,6 +35,7 @@ import type {
 } from './shared/types'
 import EventCard from './ui/event-card'
 import EventFormModal from './ui/event-form-modal'
+import EventPaymentModal from './ui/event-payment-modal'
 import EventRegistrationsDrawer from './ui/event-registrations-drawer'
 import EventsSkeleton from './ui/events-skeleton'
 import EventsToolbar from './ui/events-toolbar'
@@ -50,9 +52,9 @@ export default function EventsPage() {
   const { message } = AntApp.useApp()
   const [isFormOpen, setFormOpen] = useState(false)
   const [editingEvent, setEditingEvent] = useState<EventItem | null>(null)
+  const [paymentEvent, setPaymentEvent] = useState<EventItem | null>(null)
   const [registrationsEventId, setRegistrationsEventId] = useState<null | string>(null)
-  const [registrationStatus, setRegistrationStatus] =
-    useState<EventRegistrationStatus>('registered')
+  const [registrationStatus, setRegistrationStatus] = useState<EventRegistrationStatus>('pending')
   const urlSearchTerm = searchParams.get('search') ?? ''
   const [searchTerm, setSearchTerm] = useState(urlSearchTerm)
   const debouncedSearchTerm = useDebouncedValue(searchTerm, 350)
@@ -124,6 +126,7 @@ export default function EventsPage() {
   const updateEvent = useUpdateEvent()
   const deleteEvent = useDeleteEvent()
   const registerEvent = useRegisterEvent()
+  const reviewEventRegistration = useReviewEventRegistration()
   const cancelEventRegistration = useCancelEventRegistration()
   const registrationsEvent = events.find(event => event.id === registrationsEventId) ?? null
   const {
@@ -173,18 +176,81 @@ export default function EventsPage() {
   }
 
   const handleRegister = (event: EventItem) => {
-    registerEvent.mutate(event.id, {
-      onError: error => {
-        message.error(getApiErrorMessage(error, 'Event registration could not be updated.'))
-      },
-      onSuccess: registration => {
-        message.success(
-          registration.data.status === 'waitlisted'
-            ? 'Added to event waitlist.'
-            : 'Event registration confirmed.'
-        )
+    if (event.feeAmount > 0) {
+      setPaymentEvent(event)
+      return
+    }
+
+    registerEvent.mutate(
+      { eventId: event.id },
+      {
+        onError: error => {
+          message.error(getApiErrorMessage(error, 'Event registration could not be updated.'))
+        },
+        onSuccess: registration => {
+          message.success(
+            registration.data.status === 'waitlisted'
+              ? 'Added to event waitlist.'
+              : 'Event registration confirmed.'
+          )
+        }
       }
-    })
+    )
+  }
+
+  const handlePaymentSubmit = (event: EventItem, paymentTransactionId: string) => {
+    registerEvent.mutate(
+      {
+        eventId: event.id,
+        paymentTransactionId
+      },
+      {
+        onError: error => {
+          message.error(getApiErrorMessage(error, 'Event registration could not be updated.'))
+        },
+        onSuccess: registration => {
+          message.success(
+            registration.data.status === 'pending'
+              ? 'Payment submitted for executive review.'
+              : registration.data.status === 'waitlisted'
+                ? 'Added to event waitlist.'
+                : 'Event registration confirmed.'
+          )
+          setPaymentEvent(null)
+        }
+      }
+    )
+  }
+
+  const handleReviewRegistration = (
+    registrationId: string,
+    action: 'approve' | 'decline',
+    remarks?: string
+  ) => {
+    if (!registrationsEventId) {
+      return
+    }
+
+    reviewEventRegistration.mutate(
+      {
+        action,
+        eventId: registrationsEventId,
+        registrationId,
+        remarks
+      },
+      {
+        onError: error => {
+          message.error(getApiErrorMessage(error, 'Registration could not be reviewed.'))
+        },
+        onSuccess: registration => {
+          message.success(
+            registration.data.status === 'declined'
+              ? 'Registration declined.'
+              : 'Registration approved.'
+          )
+        }
+      }
+    )
   }
 
   const handleCancelRegistration = (event: EventItem) => {
@@ -309,7 +375,7 @@ export default function EventsPage() {
                 event={event}
                 isDeleting={deleteEvent.isPending && deleteEvent.variables === event.id}
                 isRegistering={
-                  (registerEvent.isPending && registerEvent.variables === event.id) ||
+                  (registerEvent.isPending && registerEvent.variables?.eventId === event.id) ||
                   (cancelEventRegistration.isPending &&
                     cancelEventRegistration.variables?.eventId === event.id)
                 }
@@ -376,8 +442,10 @@ export default function EventsPage() {
           isError={isEventRegistrationsError}
           isOpen={Boolean(registrationsEventId)}
           isPending={isEventRegistrationsPending}
+          isReviewPending={reviewEventRegistration.isPending}
           onClose={() => setRegistrationsEventId(null)}
           onRetry={() => refetchEventRegistrations()}
+          onReview={handleReviewRegistration}
           onStatusChange={status => {
             setRegistrationStatus(status)
             updateSearchParams({ registrationStatus: status })
@@ -385,6 +453,14 @@ export default function EventsPage() {
           registrations={eventRegistrations}
           status={registrationStatus}
           totalRegistrations={totalEventRegistrations}
+        />
+
+        <EventPaymentModal
+          event={paymentEvent}
+          isOpen={Boolean(paymentEvent)}
+          isSubmitting={registerEvent.isPending}
+          onClose={() => setPaymentEvent(null)}
+          onSubmit={handlePaymentSubmit}
         />
       </main>
     </AppShell>

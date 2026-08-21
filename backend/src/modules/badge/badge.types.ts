@@ -5,7 +5,6 @@ export type BadgeType =
   | 'event_explorer'
   | 'executive_member'
   | 'first_club_joined'
-  | 'perfect_attendance'
   | 'volunteer'
 
 export type Badge = {

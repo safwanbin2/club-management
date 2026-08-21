@@ -39,16 +39,11 @@ export type ProfileActivityDto = {
   description: string
   id: string
   title: string
-  type: 'attendance' | 'badge' | 'membership' | 'notification'
+  type: 'badge' | 'membership' | 'notification'
 }
 
 export type UserProfileDto = {
   activityTimeline: ProfileActivityDto[]
-  attendance: {
-    attended: number
-    percentage: number
-    registered: number
-  }
   badges: ProfileBadgeDto[]
   clubs: ProfileClubDto[]
   executivePositions: ProfileClubDto[]
@@ -73,7 +68,6 @@ export type BadgePlan = {
 
 export type BadgeRuleStats = {
   activeMemberships: number
-  attendanceCount: number
   communityMemberships: number
   executiveMemberships: number
   registeredEvents: number

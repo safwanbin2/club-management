@@ -2,7 +2,6 @@ import { AuthSessionModel } from '../../modules/auth/auth-session.model.js'
 import { BadgeModel } from '../../modules/badge/badge.model.js'
 import { ChatMessageModel } from '../../modules/chat/chat-message.model.js'
 import { ClubModel } from '../../modules/club/club.model.js'
-import { AttendanceModel } from '../../modules/attendance/attendance.model.js'
 import { CommentModel } from '../../modules/feed/comment.model.js'
 import { PostModel } from '../../modules/feed/post.model.js'
 import { EventModel } from '../../modules/event/event.model.js'
@@ -29,7 +28,6 @@ const models: MigratableModel[] = [
   CommentModel,
   EventModel,
   EventRegistrationModel,
-  AttendanceModel,
   PollModel,
   PollVoteModel,
   ChatMessageModel,

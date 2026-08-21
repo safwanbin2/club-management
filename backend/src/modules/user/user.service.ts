@@ -4,7 +4,6 @@ import mongoose from 'mongoose'
 import { USER_ROLES } from '../../constants/roles.js'
 import { ApplicationError } from '../../utils/application-error.js'
 import { hashPassword, verifyPassword } from '../auth/password.service.js'
-import { AttendanceModel } from '../attendance/attendance.model.js'
 import { BadgeModel } from '../badge/badge.model.js'
 import type { Badge } from '../badge/badge.types.js'
 import { ClubModel } from '../club/club.model.js'
@@ -99,12 +98,12 @@ export function getBadgePlans(stats: BadgeRuleStats): BadgePlan[] {
     })
   }
 
-  if (stats.attendanceCount > 0) {
+  if (stats.registeredEvents > 0) {
     plans.push({
       badgeType: 'event_explorer',
-      description: 'Awarded for checking in to a campus event.',
+      description: 'Awarded for registering for a campus event.',
       icon: 'calendar-check',
-      sourceActivityId: 'first-attendance',
+      sourceActivityId: 'first-event-registration',
       title: 'Event Explorer'
     })
   }
@@ -129,20 +128,10 @@ export function getBadgePlans(stats: BadgeRuleStats): BadgePlan[] {
     })
   }
 
-  if (stats.registeredEvents > 0 && stats.attendanceCount >= stats.registeredEvents) {
-    plans.push({
-      badgeType: 'perfect_attendance',
-      description: 'Awarded for attending every registered event so far.',
-      icon: 'award',
-      sourceActivityId: 'registered-attendance-ratio',
-      title: 'Perfect Attendance'
-    })
-  }
-
-  if (stats.executiveMemberships > 0 && stats.attendanceCount > 0 && stats.activeMemberships > 1) {
+  if (stats.executiveMemberships > 0 && stats.registeredEvents > 0 && stats.activeMemberships > 1) {
     plans.push({
       badgeType: 'community_leader',
-      description: 'Awarded for leadership with sustained campus participation.',
+      description: 'Awarded for leadership with sustained event participation.',
       icon: 'users-round',
       sourceActivityId: 'leadership-participation',
       title: 'Community Leader'
@@ -209,15 +198,10 @@ async function findUser(userId: string) {
 
 async function getProfileStats(userId: Types.ObjectId, memberships: MembershipLean[]) {
   const activeMemberships = memberships.filter(membership => membership.status === 'active')
-  const [registeredEvents, attendanceCount] = await Promise.all([
-    EventRegistrationModel.countDocuments({
-      status: 'registered',
-      user: userId
-    }),
-    AttendanceModel.countDocuments({
-      user: userId
-    })
-  ])
+  const registeredEvents = await EventRegistrationModel.countDocuments({
+    status: 'registered',
+    user: userId
+  })
   const clubRows = (await ClubModel.find({
     _id: { $in: activeMemberships.map(membership => membership.club) },
     deletedAt: null
@@ -226,7 +210,6 @@ async function getProfileStats(userId: Types.ObjectId, memberships: MembershipLe
 
   return {
     activeMemberships: activeMemberships.length,
-    attendanceCount,
     clubsById,
     communityMemberships: activeMemberships.filter(membership => {
       const club = clubsById.get(membership.club.toString())
@@ -297,14 +280,6 @@ export async function getUserProfile(userId: string, actor: UserDto): Promise<Us
 
   return {
     activityTimeline: timeline,
-    attendance: {
-      attended: stats.attendanceCount,
-      percentage:
-        stats.registeredEvents > 0
-          ? Math.round((stats.attendanceCount / stats.registeredEvents) * 100)
-          : 0,
-      registered: stats.registeredEvents
-    },
     badges: (badges as BadgeLean[]).map(toProfileBadgeDto),
     clubs,
     executivePositions: clubs.filter(club => ['advisor', 'executive'].includes(club.clubRole)),

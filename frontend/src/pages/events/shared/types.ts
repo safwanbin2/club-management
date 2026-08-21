@@ -3,7 +3,14 @@ import type { ClubCategory } from '@pages/clubs/shared/types'
 
 export type EventStatus = 'cancelled' | 'completed' | 'draft' | 'published'
 export type EventVisibility = 'members' | 'public'
-export type EventRegistrationStatus = 'cancelled' | 'registered' | 'waitlisted'
+export type EventPaymentMethod = 'bkash_send_money' | 'none'
+export type EventRegistrationPaymentMethod = 'bkash_send_money' | null
+export type EventRegistrationStatus =
+  | 'cancelled'
+  | 'declined'
+  | 'pending'
+  | 'registered'
+  | 'waitlisted'
 export type EventScope = 'all' | 'managed' | 'myClubs' | 'registered'
 export type EventSort = 'latest' | 'upcoming'
 export type EventTimeframe = 'all' | 'past' | 'upcoming'
@@ -21,6 +28,12 @@ export type EventRegistration = {
   cancelledAt: null | string
   eventId: string
   id: string
+  paymentMethod: EventRegistrationPaymentMethod
+  paymentReviewedAt: null | string
+  paymentReviewedBy: null | string
+  paymentReviewRemarks: null | string
+  paymentSubmittedAt: null | string
+  paymentTransactionId: null | string
   promotedAt: null | string
   registeredAt: string
   status: EventRegistrationStatus
@@ -44,6 +57,7 @@ export type EventRegistrationListItem = EventRegistration & {
 export type EventItem = {
   availableSpots: number
   bannerUrl: null | string
+  bkashNumber: null | string
   canManage: boolean
   capacity: number
   club: EventClub
@@ -51,7 +65,9 @@ export type EventItem = {
   currentUserRegistration: EventRegistration | null
   description: string
   endsAt: string
+  feeAmount: number
   id: string
+  paymentMethod: EventPaymentMethod
   registrationDeadline: string
   registeredCount: number
   startsAt: string
@@ -75,10 +91,12 @@ export type EventListPayload = {
 
 export type CreateEventPayload = {
   bannerUrl?: string
+  bkashNumber?: string
   capacity: number
   clubId: string
   description: string
   endsAt: string
+  feeAmount: number
   registrationDeadline: string
   startsAt: string
   status: Extract<EventStatus, 'draft' | 'published'>
@@ -97,11 +115,23 @@ export type CancelEventRegistrationPayload = {
   reason?: string
 }
 
+export type RegisterEventPayload = {
+  eventId: string
+  paymentTransactionId?: string
+}
+
 export type EventRegistrationsPayload = {
   eventId: string
   page: number
   perPage: number
   status: EventRegistrationStatus
+}
+
+export type ReviewEventRegistrationPayload = {
+  action: 'approve' | 'decline'
+  eventId: string
+  registrationId: string
+  remarks?: string
 }
 
 export type EventListResponse = PaginatedData<EventItem>

@@ -12,7 +12,13 @@ const eventScopes: EventScope[] = ['all', 'managed', 'myClubs', 'registered']
 const eventSorts: EventSort[] = ['latest', 'upcoming']
 const eventStatuses: EventStatus[] = ['cancelled', 'completed', 'draft', 'published']
 const eventTimeframes: EventTimeframe[] = ['all', 'past', 'upcoming']
-const registrationStatuses: EventRegistrationStatus[] = ['cancelled', 'registered', 'waitlisted']
+const registrationStatuses: EventRegistrationStatus[] = [
+  'cancelled',
+  'declined',
+  'pending',
+  'registered',
+  'waitlisted'
+]
 
 export function parseEventScope(value: null | string): EventScope {
   return eventScopes.includes(value as EventScope) ? (value as EventScope) : 'all'
@@ -33,7 +39,7 @@ export function parseEventTimeframe(value: null | string): EventTimeframe {
 export function parseRegistrationStatus(value: string): EventRegistrationStatus {
   return registrationStatuses.includes(value as EventRegistrationStatus)
     ? (value as EventRegistrationStatus)
-    : 'registered'
+    : 'pending'
 }
 
 export function parsePage(value: null | string, fallback = 1) {
@@ -68,6 +74,18 @@ export function formatEventStatus(status: EventStatus) {
 
 export function formatRegistrationStatus(status: EventRegistrationStatus) {
   return EVENT_REGISTRATION_STATUS_LABELS[status]
+}
+
+export function formatEventFee(amount: number) {
+  if (amount <= 0) {
+    return 'Free'
+  }
+
+  return new Intl.NumberFormat('en-US', {
+    maximumFractionDigits: 0,
+    style: 'currency',
+    currency: 'BDT'
+  }).format(amount)
 }
 
 export function formatDateTime(value: string) {

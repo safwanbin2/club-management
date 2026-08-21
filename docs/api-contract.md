@@ -76,8 +76,7 @@ Planned route groups:
 - `/users`: own profile, public profile, account settings, admin user management
 - `/clubs`: club directory, details, membership, executive management
 - `/feed`: posts, announcements, comments, likes, pins
-- `/events`: event CRUD, registration, cancellation, waitlist
-- `/attendance`: QR generation, scan/check-in, reports, history
+- `/events`: event CRUD, free/paid registration, bKash transaction review, cancellation, waitlist
 - `/polls`: poll CRUD, voting, results, closing
 - `/chat`: club-scoped real-time messaging
 - `/notifications`: notification list, unread counts, mark read
@@ -92,6 +91,8 @@ The Slice 2 club workflow is implemented under `/clubs`:
 - `GET /clubs/:clubId`: club detail by slug or ObjectId with membership summary, executive committee, upcoming events, and current-user membership status.
 - `POST /clubs/:clubId/memberships/request`: create or reopen the authenticated user's membership request.
 - `POST /clubs/:clubId/memberships/leave`: leave an active membership or cancel a pending membership request.
+- `GET /clubs/:clubId/memberships`: active member roster, visible to active club members and club managers.
+- `PATCH /clubs/:clubId/memberships/:membershipId/role`: club-scoped executive/admin promotion or demotion for active members.
 - `GET /clubs/:clubId/memberships/requests`: club-scoped executive/admin pending request queue.
 - `PATCH /clubs/:clubId/memberships/requests/:membershipId`: approve or reject a pending request.
 
@@ -123,23 +124,12 @@ The Slice 4 events workflow is implemented under `/events`:
 - `GET /events/:eventId`: event detail by ObjectId.
 - `PATCH /events/:eventId`: club-scoped executive/admin event updates.
 - `DELETE /events/:eventId`: soft-delete/cancel an event.
-- `POST /events/:eventId/register`: register the authenticated user or place them at the end of the waitlist when capacity is full.
+- `POST /events/:eventId/register`: register the authenticated user, place them at the end of the waitlist when capacity is full, or create a pending paid registration when the event has a fee.
 - `POST /events/:eventId/cancel-registration`: cancel a registration or waitlist entry; cancelling a confirmed registration promotes the first waitlisted user.
 - `GET /events/:eventId/registrations`: club-scoped executive/admin registration queue by status.
+- `PATCH /events/:eventId/registrations/:registrationId/review`: club-scoped executive/admin approve or decline for pending paid registrations.
 
-Registration and waitlist promotion create notifications using `registration_confirmed` and `waitlist_promoted` notification types. Event management authorization is club-scoped in the service layer; university administrators can manage events for any active club.
-
-## Implemented Attendance Routes
-
-The Slice 5 attendance workflow is implemented under `/attendance`:
-
-- `GET /attendance/manageable-events`: event options the authenticated executive/admin can manage for attendance.
-- `POST /attendance/events/:eventId/token`: generate a signed 15-minute attendance token and check-in URL for a managed event.
-- `POST /attendance/check-in`: verify an attendance token and record the authenticated user's check-in for a confirmed event registration during the event window.
-- `GET /attendance/history`: paginated attendance history for the authenticated user.
-- `GET /attendance/events/:eventId/report`: club-scoped executive/admin attendance report with registration rows and checked-in summary.
-
-Attendance tokens are signed with the backend access-token secret and are not stored as database rows. Attendance records remain unique per event/user through the existing `attendance` index.
+Paid events expose `feeAmount`, `paymentMethod`, and `bkashNumber`. Paid registrations require `paymentTransactionId`, remain `pending`, and move to `registered`, `waitlisted`, or `declined` after manager review. Registration and waitlist promotion create notifications using `registration_confirmed` and `waitlist_promoted` notification types. Event management authorization is club-scoped in the service layer; university administrators can manage events for any active club.
 
 ## Implemented Poll Routes
 
@@ -161,14 +151,14 @@ The Slice 7 user activity workflow is implemented under `/notifications` and `/u
 - `GET /notifications/unread-count`: unread notification count for the authenticated user.
 - `PATCH /notifications/read-all`: mark all authenticated-user notifications as read.
 - `PATCH /notifications/:notificationId/read`: mark one authenticated-user notification as read.
-- `GET /users/me/profile`: authenticated user's profile, clubs, badges, attendance summary, and activity timeline.
+- `GET /users/me/profile`: authenticated user's profile, clubs, badges, and activity timeline.
 - `PATCH /users/me/profile`: update authenticated user's name, student ID, department, and avatar URL.
 - `GET /users/me/settings`: authenticated user's profile visibility and notification preferences.
 - `PATCH /users/me/settings`: update profile visibility and notification preferences.
 - `PATCH /users/me/password`: change password after validating the current password.
 - `GET /users/:userId/profile`: public profile view with profile-visibility enforcement.
 
-Profile reads award newly earned badges from current membership, attendance, and leadership activity. Newly awarded badges create `badge_earned` in-app notifications. Notification preferences are persisted on `users` for later delivery integrations.
+Profile reads award newly earned badges from current membership, event registration, and leadership activity. Newly awarded badges create `badge_earned` in-app notifications. Notification preferences are persisted on `users` for later delivery integrations.
 
 ## Implemented Resource Request Routes
 

@@ -37,16 +37,11 @@ export type ProfileActivity = {
   description: string
   id: string
   title: string
-  type: 'attendance' | 'badge' | 'membership' | 'notification'
+  type: 'badge' | 'membership' | 'notification'
 }
 
 export type UserProfileDetail = {
   activityTimeline: ProfileActivity[]
-  attendance: {
-    attended: number
-    percentage: number
-    registered: number
-  }
   badges: ProfileBadge[]
   clubs: ProfileClub[]
   executivePositions: ProfileClub[]

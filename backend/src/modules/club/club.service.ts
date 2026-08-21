@@ -17,6 +17,8 @@ import type {
   ClubDetailDto,
   ClubListItemDto,
   ClubListResult,
+  ClubMemberDto,
+  ClubMemberListResult,
   ClubMemberUserDto,
   ClubMembershipDto,
   ClubMembershipRequestDto,
@@ -24,8 +26,10 @@ import type {
 } from './club.types.js'
 import type {
   ClubListQuery,
+  ClubMembersQuery,
   ClubMembershipRequestsQuery,
-  ReviewMembershipInput
+  ReviewMembershipInput,
+  UpdateMembershipRoleInput
 } from './club.validation.js'
 
 type ClubLean = Club & {
@@ -414,6 +418,41 @@ export function assertMembershipCanLeave(membership: Pick<Membership, 'clubRole'
   }
 }
 
+export function getMembershipRoleUpdatePlan(
+  membership: Pick<Membership, 'clubRole' | 'executivePosition' | 'status'>,
+  input: UpdateMembershipRoleInput
+): Pick<Membership, 'clubRole' | 'executivePosition'> {
+  if (membership.status !== 'active') {
+    throw new ApplicationError(
+      'Only active club members can receive role changes.',
+      409,
+      'MEMBERSHIP_NOT_ACTIVE'
+    )
+  }
+
+  if (input.clubRole === 'member') {
+    return {
+      clubRole: 'member',
+      executivePosition: null
+    }
+  }
+
+  const executivePosition = input.executivePosition?.trim()
+
+  if (!executivePosition) {
+    throw new ApplicationError(
+      'Executive position is required for club leadership roles.',
+      422,
+      'EXECUTIVE_POSITION_REQUIRED'
+    )
+  }
+
+  return {
+    clubRole: input.clubRole,
+    executivePosition
+  }
+}
+
 export async function canActorManageClub(actor: UserDto, clubId: Types.ObjectId) {
   if (isUniversityAdmin(actor)) {
     return true
@@ -546,6 +585,101 @@ export async function getClubDetail(identifier: string, actor: UserDto): Promise
     upcomingEvents: upcomingEvents as EventLean[],
     usersById
   })
+}
+
+async function assertActorCanViewClubMembers(actor: UserDto, clubId: Types.ObjectId) {
+  if (await canActorManageClub(actor, clubId)) {
+    return
+  }
+
+  const membership = await MembershipModel.exists({
+    club: clubId,
+    status: 'active',
+    user: toObjectId(actor.id)
+  })
+
+  if (!membership) {
+    throw new ApplicationError('Only active club members can view this member list.', 403, 'FORBIDDEN')
+  }
+}
+
+function createClubMemberDto(
+  membership: MembershipLean,
+  usersById: Map<string, UserLean>
+): ClubMemberDto | null {
+  const user = usersById.get(membership.user.toString())
+
+  if (!user) {
+    return null
+  }
+
+  return {
+    ...toMembershipDto(membership),
+    user: toMemberUserDto(user)
+  }
+}
+
+export async function listClubMembers(
+  identifier: string,
+  query: ClubMembersQuery,
+  actor: UserDto
+): Promise<ClubMemberListResult> {
+  const club = await findVisibleClubByIdentifier(identifier, actor)
+  await assertActorCanViewClubMembers(actor, club._id)
+
+  const filter: FilterQuery<Membership> = {
+    club: club._id,
+    status: 'active'
+  }
+
+  if (query.role) {
+    filter.clubRole = query.role
+  }
+
+  if (query.search) {
+    const regex = new RegExp(escapeRegex(query.search), 'i')
+    const matchingUsers = (await UserModel.find({
+      deletedAt: null,
+      $or: [{ name: regex }, { email: regex }, { studentId: regex }, { department: regex }]
+    })
+      .select('_id')
+      .lean()) as UserLean[]
+
+    if (matchingUsers.length === 0) {
+      return {
+        ...defaultPagination,
+        currentPage: query.page,
+        perPage: query.perPage
+      } as ClubMemberListResult
+    }
+
+    filter.user = { $in: matchingUsers.map(user => user._id) }
+  }
+
+  const skip = (query.page - 1) * query.perPage
+  const [total, memberships] = await Promise.all([
+    MembershipModel.countDocuments(filter),
+    MembershipModel.find(filter)
+      .sort({ clubRole: 1, approvedAt: -1, _id: 1 })
+      .skip(skip)
+      .limit(query.perPage)
+      .lean()
+  ])
+  const membershipRows = memberships as MembershipLean[]
+  const users = (await UserModel.find({
+    _id: { $in: membershipRows.map(membership => membership.user) },
+    deletedAt: null
+  }).lean()) as UserLean[]
+  const usersById = new Map(users.map(user => [user._id.toString(), user]))
+
+  return getPagination(
+    membershipRows
+      .map(membership => createClubMemberDto(membership, usersById))
+      .filter((membership): membership is ClubMemberDto => Boolean(membership)),
+    total,
+    query.page,
+    query.perPage
+  )
 }
 
 export async function requestMembership(identifier: string, actor: UserDto) {
@@ -718,4 +852,41 @@ export async function reviewMembershipRequest(
   }
 
   return createMembershipRequestDto(updatedMembership, new Map([[user._id.toString(), user]]))
+}
+
+export async function updateMembershipRole(
+  identifier: string,
+  membershipId: string,
+  input: UpdateMembershipRoleInput,
+  actor: UserDto
+) {
+  const club = await findVisibleClubByIdentifier(identifier, actor)
+  await assertActorCanManageClub(actor, club._id)
+
+  if (!isObjectId(membershipId)) {
+    throw new ApplicationError('Membership not found.', 404, 'MEMBERSHIP_NOT_FOUND')
+  }
+
+  const membership = (await MembershipModel.findOne({
+    _id: toObjectId(membershipId),
+    club: club._id
+  }).lean()) as MembershipLean | null
+
+  if (!membership) {
+    throw new ApplicationError('Membership not found.', 404, 'MEMBERSHIP_NOT_FOUND')
+  }
+
+  const updates = getMembershipRoleUpdatePlan(membership, input)
+  const updatedMembership = (await MembershipModel.findByIdAndUpdate(
+    membership._id,
+    { $set: updates },
+    { new: true }
+  ).lean()) as MembershipLean
+  const user = (await UserModel.findById(updatedMembership.user).lean()) as UserLean | null
+
+  if (!user) {
+    throw new ApplicationError('Membership user not found.', 404, 'USER_NOT_FOUND')
+  }
+
+  return createClubMemberDto(updatedMembership, new Map([[user._id.toString(), user]]))
 }

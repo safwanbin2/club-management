@@ -9,6 +9,8 @@ export const EVENT_STATUS_LABELS: Record<EventStatus, string> = {
 
 export const EVENT_REGISTRATION_STATUS_LABELS: Record<EventRegistrationStatus, string> = {
   cancelled: 'Cancelled',
+  declined: 'Declined',
+  pending: 'Pending',
   registered: 'Registered',
   waitlisted: 'Waitlisted'
 }

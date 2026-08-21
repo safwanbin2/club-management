@@ -2,17 +2,17 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { request } from '@common/helpers/request'
 import type { ApiResponse } from '@common/types/api'
-import type { EventRegistration, RegisterEventPayload } from '../shared/types'
+import type { EventRegistrationListItem, ReviewEventRegistrationPayload } from '../shared/types'
 
-export default function useRegisterEvent() {
+export default function useReviewEventRegistration() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: ({ eventId, paymentTransactionId }: RegisterEventPayload) =>
-      request<ApiResponse<EventRegistration>>(
-        `events/${eventId}/register`,
-        { paymentTransactionId },
-        'POST'
+    mutationFn: ({ action, eventId, registrationId, remarks }: ReviewEventRegistrationPayload) =>
+      request<ApiResponse<EventRegistrationListItem>>(
+        `events/${eventId}/registrations/${registrationId}/review`,
+        { action, remarks },
+        'PATCH'
       ),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['events'] })

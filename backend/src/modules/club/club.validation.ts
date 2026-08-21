@@ -11,6 +11,7 @@ const clubCategories = [
 ] as const
 
 const clubStatuses = ['active', 'disabled', 'pending'] as const
+const clubRoles = ['advisor', 'executive', 'member'] as const
 const membershipStatuses = ['active', 'left', 'none', 'pending', 'rejected'] as const
 
 function optionalEnum<TValue extends readonly [string, ...string[]]>(values: TValue) {
@@ -41,8 +42,19 @@ export const clubMembershipRequestsQuerySchema = z.object({
   status: z.enum(['active', 'left', 'pending', 'rejected']).default('pending')
 })
 
+export const clubMembersQuerySchema = z.object({
+  page: z.coerce.number().int().positive().default(1),
+  perPage: z.coerce.number().int().positive().max(50).default(20),
+  role: optionalEnum(clubRoles),
+  search: z.string().trim().max(120).default('')
+})
+
 export const clubMembershipReviewParamsSchema = clubParamsSchema.extend({
   membershipId: z.string().trim().min(1, 'Membership request is required.')
+})
+
+export const clubMembershipRoleParamsSchema = clubParamsSchema.extend({
+  membershipId: z.string().trim().min(1, 'Membership is required.')
 })
 
 export const reviewMembershipSchema = z.object({
@@ -50,6 +62,13 @@ export const reviewMembershipSchema = z.object({
   remarks: z.string().trim().max(500).optional()
 })
 
+export const updateMembershipRoleSchema = z.object({
+  clubRole: z.enum(clubRoles),
+  executivePosition: z.string().trim().max(120).optional()
+})
+
 export type ClubListQuery = z.infer<typeof clubListQuerySchema>
+export type ClubMembersQuery = z.infer<typeof clubMembersQuerySchema>
 export type ClubMembershipRequestsQuery = z.infer<typeof clubMembershipRequestsQuerySchema>
 export type ReviewMembershipInput = z.infer<typeof reviewMembershipSchema>
+export type UpdateMembershipRoleInput = z.infer<typeof updateMembershipRoleSchema>

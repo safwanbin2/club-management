@@ -9,9 +9,12 @@ import * as eventController from './event.controller.js'
 import {
   cancelRegistrationSchema,
   createEventSchema,
+  eventRegistrationReviewParamsSchema,
   eventListQuerySchema,
   eventParamsSchema,
   eventRegistrationsQuerySchema,
+  registerEventSchema,
+  reviewEventRegistrationSchema,
   updateEventSchema
 } from './event.validation.js'
 
@@ -63,7 +66,7 @@ router.delete(
 router.post(
   '/:eventId/register',
   requireCapability(CAPABILITIES.eventsRegister),
-  validate({ params: eventParamsSchema }),
+  validate({ body: registerEventSchema, params: eventParamsSchema }),
   asyncHandler(eventController.register)
 )
 
@@ -79,6 +82,16 @@ router.get(
   requireCapability(CAPABILITIES.eventsManageClub),
   validate({ params: eventParamsSchema, query: eventRegistrationsQuerySchema }),
   asyncHandler(eventController.registrations)
+)
+
+router.patch(
+  '/:eventId/registrations/:registrationId/review',
+  requireCapability(CAPABILITIES.eventsManageClub),
+  validate({
+    body: reviewEventRegistrationSchema,
+    params: eventRegistrationReviewParamsSchema
+  }),
+  asyncHandler(eventController.reviewRegistration)
 )
 
 export default router

@@ -24,6 +24,7 @@ import { useAuthUser } from '@common/globalStates/use-auth-store'
 import getApiErrorMessage from '@common/helpers/get-api-error-message'
 import useDebouncedValue from '@common/hooks/use-debounced-value'
 import AppShell from '@features/app-shell'
+import UserProfileLink from '@features/user-profile-link'
 import useCreateResourceRequest from './data/use-create-resource-request'
 import useManageableResourceClubs from './data/use-manageable-resource-clubs'
 import useResourceRequestAnalytics from './data/use-resource-request-analytics'
@@ -363,7 +364,13 @@ export default function ResourcesPage() {
                             : null}
                         </span>
                         <span className="block text-xs text-text-muted">
-                          Requested by {request.requestedBy.name} on {formatDate(request.createdAt)}
+                          Requested by{' '}
+                          <UserProfileLink
+                            className="font-semibold text-text-muted hover:text-primary"
+                            name={request.requestedBy.name}
+                            userId={request.requestedBy.id}
+                          />{' '}
+                          on {formatDate(request.createdAt)}
                         </span>
                         {request.remarks ? (
                           <span className="block rounded-app bg-muted px-3 py-2 text-xs text-text-soft">
