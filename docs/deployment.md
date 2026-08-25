@@ -5,19 +5,46 @@ Vercel builds the full pnpm workspace so `frontend/dist` is published as the
 static app and `api/[...path].js` can load the compiled Express backend from
 `backend/dist`.
 
-## Vercel Settings
+## Root Deployment
 
-Use the repository root as the Vercel project root.
+Use these settings when frontend and backend are deployed together from the
+repository root.
 
-Required build settings:
+Vercel project settings:
 
 ```text
+Root Directory: .
+Framework Preset: Other
 Install Command: pnpm install --frozen-lockfile
 Build Command: pnpm build
 Output Directory: frontend/dist
 ```
 
-The root `vercel.json` keeps these settings in source control.
+The root `vercel.json` keeps these settings in source control and pins
+`framework` to `null` so Vercel does not auto-detect the backend workspace as an
+Express-only deployment.
+
+## Separate Backend Deployment
+
+Use these settings when the frontend already deploys from `frontend/` and the
+backend has its own Vercel project.
+
+Vercel project settings:
+
+```text
+Root Directory: backend
+Framework Preset: Other
+Install Command: pnpm install --frozen-lockfile
+Build Command: pnpm build
+Output Directory: leave empty
+```
+
+The backend `vercel.json` also sets `outputDirectory` to `null`. This prevents
+Vercel from reusing a frontend output directory such as `frontend/dist` while it
+is building the backend package.
+
+The backend API function lives at `backend/api/[...path].js`, so backend routes
+are served under `/api/*` on the backend deployment domain.
 
 ## Environment Variables
 

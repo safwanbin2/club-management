@@ -90,7 +90,8 @@ Vercel. Set production secrets in the Vercel project, not in the repository:
 - `FRONTEND_ORIGIN` / `FRONTEND_ORIGINS` when the frontend is hosted on a
   different origin from the backend
 
-See `docs/deployment.md` for the full Vercel setup and CORS notes.
+See `docs/deployment.md` for the full Vercel setup, including the separate
+backend project settings and CORS notes.
 
 ## Product Scope
 

@@ -3,17 +3,11 @@
   "framework": null,
   "buildCommand": "pnpm build",
   "installCommand": "pnpm install --frozen-lockfile",
-  "outputDirectory": "frontend/dist",
+  "outputDirectory": null,
   "functions": {
     "api/[...path].js": {
-      "includeFiles": "backend/dist/**",
+      "includeFiles": "dist/**",
       "maxDuration": 30
     }
-  },
-  "rewrites": [
-    {
-      "source": "/:path((?!api/).*)",
-      "destination": "/index.html"
-    }
-  ]
+  }
 }
