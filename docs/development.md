@@ -66,3 +66,9 @@ Run everything expected before handoff:
 ```bash
 pnpm check
 ```
+
+## Deployment
+
+Deployment notes live in `docs/deployment.md`. The production Vercel build runs
+from the repository root so both the frontend and backend are compiled before
+the API function is bundled.

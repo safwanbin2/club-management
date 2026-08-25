@@ -1,6 +1,8 @@
-const defaultApiUrl = 'http://localhost:5000/api'
+export function getDefaultApiUrl(isProduction = import.meta.env.PROD) {
+  return isProduction ? '/api' : 'http://localhost:5000/api'
+}
 
-export function normalizeApiUrl(value: string | undefined) {
+export function normalizeApiUrl(value: string | undefined, defaultApiUrl = getDefaultApiUrl()) {
   const trimmedValue = value?.trim()
   const apiUrl = (trimmedValue || defaultApiUrl).replace(/\/+$/, '')
 

@@ -1,8 +1,14 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "pnpm --filter frontend build",
-  "installCommand": "pnpm install --filter frontend...",
+  "buildCommand": "pnpm build",
+  "installCommand": "pnpm install --frozen-lockfile",
   "outputDirectory": "frontend/dist",
+  "functions": {
+    "api/[...path].js": {
+      "includeFiles": "backend/dist/**",
+      "maxDuration": 30
+    }
+  },
   "rewrites": [
     {
       "source": "/:path((?!api/).*)",

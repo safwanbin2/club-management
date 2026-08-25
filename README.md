@@ -79,6 +79,19 @@ pnpm check         # Run the full quality gate
 pnpm build         # Build frontend and backend
 ```
 
+## Deployment
+
+The root `vercel.json` deploys the Vite frontend and Express API together on
+Vercel. Set production secrets in the Vercel project, not in the repository:
+
+- `NODE_ENV=production`
+- `MONGODB_URI`
+- `ACCESS_TOKEN_SECRET`
+- `FRONTEND_ORIGIN` / `FRONTEND_ORIGINS` when the frontend is hosted on a
+  different origin from the backend
+
+See `docs/deployment.md` for the full Vercel setup and CORS notes.
+
 ## Product Scope
 
 The application includes role-aware workflows for:
