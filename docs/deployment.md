@@ -33,9 +33,9 @@ Vercel project settings:
 
 ```text
 Root Directory: backend
-Framework Preset: Other
+Framework Preset: Express
 Install Command: pnpm install --frozen-lockfile
-Build Command: pnpm build
+Build Command: leave empty
 Output Directory: leave empty
 ```
 
@@ -43,8 +43,9 @@ The backend `vercel.json` also sets `outputDirectory` to `null`. This prevents
 Vercel from reusing a frontend output directory such as `frontend/dist` while it
 is building the backend package.
 
-The backend API function lives at `backend/api/[...path].js`, so backend routes
-are served under `/api/*` on the backend deployment domain.
+Vercel's Express runtime detects `backend/src/server.ts` as the backend
+entrypoint. Backend routes are served under `/api/*` on the backend deployment
+domain because the Express app mounts its routes there.
 
 ## Environment Variables
 
