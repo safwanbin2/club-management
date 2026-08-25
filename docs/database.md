@@ -24,7 +24,6 @@ pnpm seed:demo
 - `comments`
 - `events`
 - `event_registrations`
-- `attendance`
 - `polls`
 - `poll_votes`
 - `chat_messages`

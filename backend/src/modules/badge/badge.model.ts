@@ -11,7 +11,6 @@ const badgeSchema = new mongoose.Schema<Badge>(
         'event_explorer',
         'executive_member',
         'first_club_joined',
-        'perfect_attendance',
         'volunteer'
       ],
       required: true,

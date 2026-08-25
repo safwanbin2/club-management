@@ -13,6 +13,7 @@ import {
 } from 'antd'
 import { MessageSquare, RefreshCw, Trash2 } from 'lucide-react'
 
+import UserProfileLink from '@features/user-profile-link'
 import { formatRelativeTime, getEntityInitials } from '../shared/helpers'
 import type { FeedComment, FeedPost } from '../shared/types'
 
@@ -139,7 +140,11 @@ export default function FeedCommentsDrawer({
                 }
                 title={
                   <span className="flex flex-wrap items-center gap-2">
-                    <span className="font-semibold text-text">{comment.author.name}</span>
+                    <UserProfileLink
+                      className="font-semibold text-text hover:text-primary"
+                      name={comment.author.name}
+                      userId={comment.author.id}
+                    />
                     <span className="text-xs font-normal text-text-muted">
                       {formatRelativeTime(comment.createdAt)}
                     </span>

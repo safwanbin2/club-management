@@ -3,9 +3,6 @@ import { USER_ROLES, type UserRole } from './roles.js'
 export const CAPABILITIES = {
   analyticsClubView: 'analytics:club:view',
   analyticsUniversityView: 'analytics:university:view',
-  attendanceCheckIn: 'attendance:check-in',
-  attendanceManage: 'attendance:manage',
-  attendanceViewOwn: 'attendance:view-own',
   badgesViewOwn: 'badges:view-own',
   chatAccessClub: 'chat:access-club',
   chatModerateClub: 'chat:moderate-club',
@@ -20,6 +17,7 @@ export const CAPABILITIES = {
   eventsManageClub: 'events:manage-club',
   eventsRegister: 'events:register',
   eventsView: 'events:view',
+  feedCreate: 'feed:create',
   feedCreateClub: 'feed:create-club',
   feedLike: 'feed:like',
   feedModerateClub: 'feed:moderate-club',
@@ -40,8 +38,6 @@ export const CAPABILITIES = {
 export type Capability = (typeof CAPABILITIES)[keyof typeof CAPABILITIES]
 
 const studentCapabilities = [
-  CAPABILITIES.attendanceCheckIn,
-  CAPABILITIES.attendanceViewOwn,
   CAPABILITIES.badgesViewOwn,
   CAPABILITIES.chatAccessClub,
   CAPABILITIES.clubsBrowse,
@@ -50,6 +46,7 @@ const studentCapabilities = [
   CAPABILITIES.commentsCreate,
   CAPABILITIES.eventsRegister,
   CAPABILITIES.eventsView,
+  CAPABILITIES.feedCreate,
   CAPABILITIES.feedLike,
   CAPABILITIES.feedView,
   CAPABILITIES.notificationsViewOwn,
@@ -62,7 +59,6 @@ const studentCapabilities = [
 const executiveCapabilities = [
   ...studentCapabilities,
   CAPABILITIES.analyticsClubView,
-  CAPABILITIES.attendanceManage,
   CAPABILITIES.chatModerateClub,
   CAPABILITIES.clubsManageOwn,
   CAPABILITIES.commentsModerateClub,

@@ -1,6 +1,6 @@
 # University Club Management System
 
-A modern, production-oriented MERN application for managing university clubs, members, events, announcements, attendance, polls, resources, and role-based dashboards.
+A modern, production-oriented MERN application for managing university clubs, members, events, announcements, polls, resources, and role-based dashboards.
 
 The project is designed for Students, Club Executives, and University Administration. It uses a modular full-stack structure, shared UI theming, and AI-ready project documentation so juniors and coding agents can build features as clean vertical slices.
 
@@ -62,7 +62,6 @@ Default local URLs:
 
 The backend CORS policy allows `FRONTEND_ORIGIN`, optional comma-separated
 `FRONTEND_ORIGINS`, and local loopback/private-network origins during development.
-`FRONTEND_ORIGIN` is also used to generate attendance check-in links.
 
 ## Available Scripts
 
@@ -88,7 +87,7 @@ The application includes role-aware workflows for:
 - student, executive, and admin dashboards
 - club browsing, club details, memberships, and executive management
 - news feed, announcements, posts, likes, comments, and moderation
-- events, registration, waitlists, QR attendance, and reports
+- events, free or paid registration, bKash transaction review, waitlists, and reports
 - polls, notifications, group chat, badges, resources, analytics, and search
 
 The full product brief lives in `docs/university-club-management-system.md`.

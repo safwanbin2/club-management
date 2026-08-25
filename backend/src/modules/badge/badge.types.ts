@@ -1,12 +1,7 @@
 import type { Types } from 'mongoose'
 
 export type BadgeType =
-  | 'community_leader'
-  | 'event_explorer'
-  | 'executive_member'
-  | 'first_club_joined'
-  | 'perfect_attendance'
-  | 'volunteer'
+  'community_leader' | 'event_explorer' | 'executive_member' | 'first_club_joined' | 'volunteer'
 
 export type Badge = {
   badgeType: BadgeType

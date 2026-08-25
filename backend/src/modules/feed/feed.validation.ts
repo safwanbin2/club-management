@@ -42,7 +42,10 @@ export const feedCommentParamsSchema = feedPostParamsSchema.extend({
 
 export const createFeedPostSchema = z.object({
   body: z.string().trim().min(10, 'Post body must be at least 10 characters.').max(4000),
-  clubId: z.string().trim().min(1, 'Club is required.'),
+  clubId: z.preprocess(
+    value => (value === '' || value === null ? undefined : value),
+    z.string().trim().min(1, 'Club is required.').optional()
+  ),
   highlighted: z.boolean().optional(),
   images: imageUrlsSchema,
   pinned: z.boolean().default(false),

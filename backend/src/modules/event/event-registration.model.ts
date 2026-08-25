@@ -19,6 +19,34 @@ const eventRegistrationSchema = new mongoose.Schema<EventRegistration>(
       required: true,
       type: mongoose.Schema.Types.ObjectId
     },
+    paymentMethod: {
+      default: null,
+      enum: ['bkash_send_money', null],
+      type: String
+    },
+    paymentReviewedAt: {
+      default: null,
+      type: Date
+    },
+    paymentReviewedBy: {
+      default: null,
+      ref: 'User',
+      type: mongoose.Schema.Types.ObjectId
+    },
+    paymentReviewRemarks: {
+      default: null,
+      trim: true,
+      type: String
+    },
+    paymentSubmittedAt: {
+      default: null,
+      type: Date
+    },
+    paymentTransactionId: {
+      default: null,
+      trim: true,
+      type: String
+    },
     promotedAt: {
       default: null,
       type: Date
@@ -30,7 +58,7 @@ const eventRegistrationSchema = new mongoose.Schema<EventRegistration>(
     },
     status: {
       default: 'registered',
-      enum: ['cancelled', 'registered', 'waitlisted'],
+      enum: ['cancelled', 'declined', 'pending', 'registered', 'waitlisted'],
       type: String
     },
     user: {
@@ -54,6 +82,7 @@ eventRegistrationSchema.index({ event: 1, status: 1, registeredAt: 1 })
 eventRegistrationSchema.index({ event: 1, user: 1 }, { unique: true })
 eventRegistrationSchema.index({ user: 1, status: 1 })
 eventRegistrationSchema.index({ event: 1, waitlistPosition: 1 })
+eventRegistrationSchema.index({ event: 1, paymentTransactionId: 1 })
 
 export const EventRegistrationModel = defineModel<EventRegistration>(
   'EventRegistration',

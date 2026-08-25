@@ -8,10 +8,15 @@ import { validate } from '../../http/middleware/validate.js'
 import * as clubController from './club.controller.js'
 import {
   clubListQuerySchema,
+  clubMembersQuerySchema,
+  clubMembershipRoleParamsSchema,
   clubMembershipRequestsQuerySchema,
   clubMembershipReviewParamsSchema,
   clubParamsSchema,
-  reviewMembershipSchema
+  createClubSchema,
+  reviewMembershipSchema,
+  updateClubSchema,
+  updateMembershipRoleSchema
 } from './club.validation.js'
 
 const router: ExpressRouter = Router()
@@ -25,11 +30,25 @@ router.get(
   asyncHandler(clubController.index)
 )
 
+router.post(
+  '/',
+  requireCapability(CAPABILITIES.clubsCreate),
+  validate({ body: createClubSchema }),
+  asyncHandler(clubController.store)
+)
+
 router.get(
   '/:clubId',
   requireCapability(CAPABILITIES.clubsBrowse),
   validate({ params: clubParamsSchema }),
   asyncHandler(clubController.show)
+)
+
+router.patch(
+  '/:clubId',
+  requireCapability(CAPABILITIES.clubsManageOwn),
+  validate({ body: updateClubSchema, params: clubParamsSchema }),
+  asyncHandler(clubController.update)
 )
 
 router.post(
@@ -47,6 +66,13 @@ router.post(
 )
 
 router.get(
+  '/:clubId/memberships',
+  requireCapability(CAPABILITIES.clubsBrowse),
+  validate({ params: clubParamsSchema, query: clubMembersQuerySchema }),
+  asyncHandler(clubController.members)
+)
+
+router.get(
   '/:clubId/memberships/requests',
   requireCapability(CAPABILITIES.membershipsViewClub),
   validate({ params: clubParamsSchema, query: clubMembershipRequestsQuerySchema }),
@@ -61,6 +87,16 @@ router.patch(
     params: clubMembershipReviewParamsSchema
   }),
   asyncHandler(clubController.reviewMembership)
+)
+
+router.patch(
+  '/:clubId/memberships/:membershipId/role',
+  requireCapability(CAPABILITIES.membershipsApproveClub),
+  validate({
+    body: updateMembershipRoleSchema,
+    params: clubMembershipRoleParamsSchema
+  }),
+  asyncHandler(clubController.updateMembershipRole)
 )
 
 export default router

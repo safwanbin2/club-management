@@ -12,4 +12,4 @@ Use one module folder per domain area. Each implemented module should keep route
 └── <module>.validation.ts
 ```
 
-Initial domain folders match the product brief: `auth`, `user`, `club`, `feed`, `event`, `attendance`, `poll`, `chat`, `notification`, `resource-request`, and `search`.
+Initial domain folders match the product brief: `auth`, `user`, `club`, `feed`, `event`, `poll`, `chat`, `notification`, `resource-request`, and `search`.

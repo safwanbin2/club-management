@@ -34,7 +34,6 @@ Students can:
 - Receive notifications
 - Vote in club polls
 - Participate in club group chats (only for clubs they belong to)
-- View attendance history
 - View badges and achievements
 - View certificates (optional)
 
@@ -57,8 +56,8 @@ Executives inherit all Student permissions and additionally can:
 - Edit/Delete events
 - Set event capacity
 - Manage registrations
-- Generate QR code for attendance
-- View attendance reports
+- Create paid events with bKash send-money details
+- Review paid registration transaction IDs
 - Create polls
 - Close polls
 - View poll results
@@ -125,7 +124,6 @@ Student Dashboard
 - Joined clubs
 - Upcoming events
 - Notifications
-- Attendance summary
 - Recent activity
 - Badges
 
@@ -135,7 +133,6 @@ Club Executive Dashboard
 - Pending requests
 - Upcoming events
 - Poll statistics
-- Attendance charts
 - Engagement metrics
 
 University Dashboard
@@ -225,6 +222,8 @@ Event contains:
 - Venue
 - Capacity
 - Registration deadline
+- Optional event fee
+- bKash send-money number for paid events
 - Organizer
 - Status
 
@@ -232,6 +231,15 @@ Students can:
 
 - Register
 - Cancel registration
+- Submit a bKash transaction ID for paid event registration
+
+All event registrations start as pending requests. A club executive for the event's club or a university administrator approves or declines each request with remarks, and approval places the member into registered or waitlisted status based on capacity.
+
+Paid events:
+
+- Event creator lists a bKash send-money number.
+- Members send money externally and paste the transaction ID during registration.
+- Payment-enabled registration requests keep the submitted bKash transaction ID for executive or administrator validation.
 
 When capacity is reached:
 
@@ -242,22 +250,6 @@ When someone cancels:
 Automatically move the first waitlisted student into the participant list and notify them.
 
 Completed events should automatically appear as a feed post.
-
----
-
-# Attendance
-
-Every event should support attendance.
-
-Executives generate a QR code.
-
-Students scan the QR during the event.
-
-Attendance is stored.
-
-Executives can view attendance reports.
-
-Students can view attendance history.
 
 ---
 
@@ -340,8 +332,6 @@ Each profile displays:
 - Student information
 - Joined clubs
 - Executive positions
-- Events attended
-- Attendance percentage
 - Badges
 - Achievements
 - Activity timeline
@@ -361,7 +351,6 @@ Examples:
 - Event Explorer
 - Volunteer
 - Executive Member
-- 100% Attendance
 - Community Leader
 
 Badges should appear on the public profile.
@@ -374,7 +363,6 @@ Club Analytics
 
 - Membership growth
 - Event popularity
-- Attendance
 - Poll participation
 - Feed engagement
 
@@ -385,7 +373,7 @@ University Analytics
 - Monthly registrations
 - Club rankings
 - Event participation
-- Attendance trends
+- Registration trends
 
 Use attractive dashboard charts.
 

@@ -10,6 +10,11 @@ const eventSchema = new mongoose.Schema<Event>(
       trim: true,
       type: String
     },
+    bkashNumber: {
+      default: null,
+      trim: true,
+      type: String
+    },
     capacity: {
       min: 1,
       required: true,
@@ -37,6 +42,16 @@ const eventSchema = new mongoose.Schema<Event>(
     endsAt: {
       required: true,
       type: Date
+    },
+    feeAmount: {
+      default: 0,
+      min: 0,
+      type: Number
+    },
+    paymentMethod: {
+      default: 'none',
+      enum: ['bkash_send_money', 'none'],
+      type: String
     },
     registrationDeadline: {
       required: true,

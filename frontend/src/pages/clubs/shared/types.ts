@@ -42,6 +42,10 @@ export type ClubMembershipRequest = ClubMembership & {
   user: ClubMemberUser
 }
 
+export type ClubMember = ClubMembership & {
+  user: ClubMemberUser
+}
+
 export type ClubExecutive = ClubMembership & {
   user: ClubMemberUser
 }
@@ -105,10 +109,46 @@ export type ClubListPayload = {
   status?: ClubStatus
 }
 
+export type ClubWritePayload = {
+  category: ClubCategory
+  contactEmail?: string
+  contactPhone?: string
+  coverImageUrl?: string
+  description: string
+  facultyAdvisor: {
+    department?: string
+    email?: string
+    name: string
+  }
+  gallery: string[]
+  logoUrl?: string
+  name: string
+  socialLinks: {
+    facebook?: string
+    instagram?: string
+    linkedin?: string
+    website?: string
+  }
+  status?: ClubStatus
+}
+
+export type CreateClubPayload = ClubWritePayload
+
+export type UpdateClubPayload = Partial<ClubWritePayload> & {
+  clubId: string
+}
+
 export type MembershipRequestsPayload = {
   page: number
   perPage: number
   status: ClubMembershipStatus
+}
+
+export type ClubMembersPayload = {
+  page: number
+  perPage: number
+  role?: ClubRole
+  search: string
 }
 
 export type ReviewMembershipPayload = {
@@ -118,5 +158,13 @@ export type ReviewMembershipPayload = {
   remarks?: string
 }
 
+export type UpdateMembershipRolePayload = {
+  clubId: string
+  clubRole: ClubRole
+  executivePosition?: string
+  membershipId: string
+}
+
 export type ClubListResponse = PaginatedData<ClubListItem>
+export type ClubMembersResponse = PaginatedData<ClubMember>
 export type ClubMembershipRequestsResponse = PaginatedData<ClubMembershipRequest>

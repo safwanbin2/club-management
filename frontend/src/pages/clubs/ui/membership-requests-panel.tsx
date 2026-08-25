@@ -2,6 +2,7 @@ import { Alert, Button, Empty, Popconfirm, Table, Tag } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 import { Check, RefreshCw, X } from 'lucide-react'
 
+import UserProfileLink from '@features/user-profile-link'
 import type { ClubMembershipRequest } from '../shared/types'
 import { formatDateTime } from '../shared/helpers'
 
@@ -30,7 +31,11 @@ export default function MembershipRequestsPanel({
       key: 'student',
       render: (_, request) => (
         <div>
-          <p className="m-0 font-semibold text-text">{request.user.name}</p>
+          <UserProfileLink
+            className="font-semibold text-text hover:text-primary"
+            name={request.user.name}
+            userId={request.user.id}
+          />
           <p className="m-0 text-xs text-text-soft">{request.user.email}</p>
         </div>
       ),

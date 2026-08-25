@@ -77,6 +77,10 @@ export type ClubMembershipRequestDto = ClubMembershipDto & {
   user: ClubMemberUserDto
 }
 
+export type ClubMemberDto = ClubMembershipDto & {
+  user: ClubMemberUserDto
+}
+
 export type ClubEventPreviewDto = {
   endsAt: string
   id: string
@@ -126,4 +130,5 @@ export type ClubDetailDto = ClubListItemDto & {
 }
 
 export type ClubListResult = PaginatedResult<ClubListItemDto>
+export type ClubMemberListResult = PaginatedResult<ClubMemberDto>
 export type ClubMembershipRequestListResult = PaginatedResult<ClubMembershipRequestDto>
