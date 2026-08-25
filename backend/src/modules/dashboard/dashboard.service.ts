@@ -1,7 +1,6 @@
 import { Types } from 'mongoose'
 
 import { USER_ROLES } from '../../constants/roles.js'
-import { AttendanceModel } from '../attendance/attendance.model.js'
 import { BadgeModel } from '../badge/badge.model.js'
 import { ClubModel } from '../club/club.model.js'
 import { EventModel } from '../event/event.model.js'
@@ -20,14 +19,6 @@ function toObjectId(id: string) {
 
 function formatNumber(value: number) {
   return new Intl.NumberFormat('en-US').format(value)
-}
-
-function formatPercent(numerator: number, denominator: number) {
-  if (denominator <= 0) {
-    return '0%'
-  }
-
-  return `${Math.round((numerator / denominator) * 100)}%`
 }
 
 function createPanel(
@@ -63,7 +54,7 @@ export function getDashboardSummarySkeleton(user: UserDto): DashboardSummary {
       hero: {
         eyebrow: 'Club Executive Workspace',
         subtitle:
-          'Manage club membership, announcements, events, polls, attendance, and engagement from one place.',
+          'Manage club membership, announcements, events, polls, resources, and engagement from one place.',
         title: `Welcome back, ${user.name}`
       },
       metrics: [
@@ -89,11 +80,11 @@ export function getDashboardSummarySkeleton(user: UserDto): DashboardSummary {
           value: '0'
         },
         {
-          change: 'No check-ins yet',
-          id: 'attendance',
-          label: 'Attendance Rate',
+          change: 'No registrations yet',
+          id: 'registrations',
+          label: 'Event Registrations',
           tone: 'success',
-          value: '0%'
+          value: '0'
         }
       ],
       panels: [
@@ -189,7 +180,7 @@ export function getDashboardSummarySkeleton(user: UserDto): DashboardSummary {
     hero: {
       eyebrow: 'Student Workspace',
       subtitle:
-        'Track club membership, upcoming events, attendance, notifications, badges, and campus activity.',
+        'Track club membership, upcoming events, notifications, badges, and campus activity.',
       title: `Welcome back, ${user.name}`
     },
     metrics: [
@@ -215,11 +206,11 @@ export function getDashboardSummarySkeleton(user: UserDto): DashboardSummary {
         value: '0'
       },
       {
-        change: 'No check-ins yet',
-        id: 'attendance',
-        label: 'Attendance',
+        change: 'No badges yet',
+        id: 'badges',
+        label: 'Badges',
         tone: 'success',
-        value: '0%'
+        value: '0'
       }
     ],
     panels: [
@@ -227,7 +218,7 @@ export function getDashboardSummarySkeleton(user: UserDto): DashboardSummary {
         'clubs',
         'My Clubs',
         'No joined clubs yet',
-        'Join your first club to see committee updates, events, and attendance here.',
+        'Join your first club to see committee updates and events here.',
         []
       ),
       createPanel(
@@ -251,18 +242,15 @@ async function getStudentDashboardSummary(user: UserDto): Promise<DashboardSumma
     joinedClubCount,
     registrationCount,
     unreadCount,
-    attendanceCount,
     badgeCount,
     memberships,
     registrations,
     notifications,
-    badges,
-    attendanceRows
+    badges
   ] = await Promise.all([
     MembershipModel.countDocuments({ status: 'active', user: userId }),
     EventRegistrationModel.countDocuments({ status: { $ne: 'cancelled' }, user: userId }),
     NotificationModel.countDocuments({ readAt: null, recipient: userId }),
-    AttendanceModel.countDocuments({ user: userId }),
     BadgeModel.countDocuments({ user: userId }),
     MembershipModel.find({ status: 'active', user: userId })
       .sort({ approvedAt: -1 })
@@ -273,8 +261,7 @@ async function getStudentDashboardSummary(user: UserDto): Promise<DashboardSumma
       .limit(4)
       .lean(),
     NotificationModel.find({ recipient: userId }).sort({ createdAt: -1 }).limit(4).lean(),
-    BadgeModel.find({ user: userId }).sort({ earnedAt: -1 }).limit(4).lean(),
-    AttendanceModel.find({ user: userId }).sort({ checkedInAt: -1 }).limit(4).lean()
+    BadgeModel.find({ user: userId }).sort({ earnedAt: -1 }).limit(4).lean()
   ])
 
   const clubs = await ClubModel.find({
@@ -283,10 +270,7 @@ async function getStudentDashboardSummary(user: UserDto): Promise<DashboardSumma
   const clubMap = new Map(clubs.map(club => [club._id.toString(), club]))
   const events = await EventModel.find({
     _id: {
-      $in: [
-        ...registrations.map(registration => registration.event),
-        ...attendanceRows.map(attendance => attendance.event)
-      ]
+      $in: registrations.map(registration => registration.event)
     }
   }).lean()
   const eventMap = new Map(events.map(event => [event._id.toString(), event]))
@@ -317,14 +301,11 @@ async function getStudentDashboardSummary(user: UserDto): Promise<DashboardSumma
       value: formatNumber(unreadCount)
     },
     {
-      change:
-        attendanceCount > 0
-          ? `${formatNumber(attendanceCount)} check-in${attendanceCount === 1 ? '' : 's'}`
-          : 'No check-ins yet',
-      id: 'attendance',
-      label: 'Attendance',
+      change: badgeCount > 0 ? 'Achievement activity' : 'No badges yet',
+      id: 'badges',
+      label: 'Badges',
       tone: 'success',
-      value: formatPercent(attendanceCount, registrationCount)
+      value: formatNumber(badgeCount)
     }
   ]
 
@@ -333,7 +314,7 @@ async function getStudentDashboardSummary(user: UserDto): Promise<DashboardSumma
       'clubs',
       'My Clubs',
       'No joined clubs yet',
-      'Join your first club to see committee updates, events, and attendance here.',
+      'Join your first club to see committee updates and events here.',
       memberships.map(membership => {
         const club = clubMap.get(membership.club.toString())
         return {
@@ -381,30 +362,17 @@ async function getStudentDashboardSummary(user: UserDto): Promise<DashboardSumma
     ),
     createPanel(
       'badges',
-      'Badges And Attendance',
-      'No badges or check-ins yet',
-      'Earn badges and check in to events to build your activity record.',
-      [
-        ...badges.map(badge => ({
-          description: badge.description,
-          id: badge._id.toString(),
-          meta: badge.earnedAt.toDateString(),
-          status: badge.badgeType,
-          title: badge.title,
-          tone: 'primary' as const
-        })),
-        ...attendanceRows.map(attendance => {
-          const event = eventMap.get(attendance.event.toString())
-          return {
-            description: event?.venue ?? 'Event check-in',
-            id: attendance._id.toString(),
-            meta: attendance.checkedInAt.toDateString(),
-            status: attendance.method,
-            title: event ? `Checked in: ${event.title}` : 'Attendance recorded',
-            tone: 'success' as const
-          }
-        })
-      ].slice(0, 4)
+      'Badges',
+      'No badges yet',
+      'Earn badges through memberships, event registrations, and leadership activity.',
+      badges.map(badge => ({
+        description: badge.description,
+        id: badge._id.toString(),
+        meta: badge.earnedAt.toDateString(),
+        status: badge.badgeType,
+        title: badge.title,
+        tone: 'primary' as const
+      }))
     )
   ]
 
@@ -435,7 +403,6 @@ async function getExecutiveDashboardSummary(user: UserDto): Promise<DashboardSum
     pendingResources,
     openPolls,
     eventRegistrationCount,
-    attendanceCount,
     pendingMemberships,
     managedClubs,
     resourceRequests,
@@ -448,7 +415,6 @@ async function getExecutiveDashboardSummary(user: UserDto): Promise<DashboardSum
       event: { $in: managedEvents.map(event => event._id) },
       status: 'registered'
     }),
-    AttendanceModel.countDocuments({ event: { $in: managedEvents.map(event => event._id) } }),
     MembershipModel.find({ club: { $in: managedClubIds }, status: 'pending' })
       .sort({ requestedAt: -1 })
       .limit(4)
@@ -491,11 +457,11 @@ async function getExecutiveDashboardSummary(user: UserDto): Promise<DashboardSum
       value: formatNumber(managedEvents.length)
     },
     {
-      change: attendanceCount > 0 ? 'Attendance captured' : 'No check-ins yet',
-      id: 'attendance',
-      label: 'Attendance Rate',
+      change: eventRegistrationCount > 0 ? 'Confirmed attendees' : 'No registrations yet',
+      id: 'registrations',
+      label: 'Event Registrations',
       tone: 'success',
-      value: formatPercent(attendanceCount, eventRegistrationCount)
+      value: formatNumber(eventRegistrationCount)
     }
   ]
 

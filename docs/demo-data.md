@@ -1,6 +1,6 @@
 # Demo Data Plan
 
-Demo data should make the product feel alive and should exercise the tricky workflows: roles, membership approvals, waitlists, attendance, polls, notifications, analytics, and resource approvals.
+Demo data should make the product feel alive and should exercise the tricky workflows: roles, membership approvals, waitlists, paid event review, polls, notifications, analytics, and resource approvals.
 
 ## Personas
 
@@ -16,7 +16,7 @@ Demo data should make the product feel alive and should exercise the tricky work
 - Debate Society: public speaking, active tournament event.
 - Photography Club: arts, gallery posts and achievement feed items.
 - Cultural Club: performance, room booking request.
-- Volunteer Forum: community service, badges and attendance activity.
+- Volunteer Forum: community service, badges, and resource activity.
 
 ## Workflow Scenarios
 
@@ -25,7 +25,7 @@ Demo data should make the product feel alive and should exercise the tricky work
 - An event reaches capacity and places students on the waitlist.
 - A cancellation promotes the first waitlisted student and creates a notification.
 - A completed event produces a feed post.
-- A QR attendance check-in records attendance history.
+- Paid event registrations can remain pending until an executive validates the bKash transaction ID.
 - A poll closes and exposes final results.
 - Aisha has an unread membership notification and seeded first-club badge for profile and notification demos.
 - A room booking request is pending admin review and a funding request is approved by administration.
@@ -43,7 +43,7 @@ It:
 
 1. Runs pending database migrations first.
 2. Upserts users with known demo credentials.
-3. Upserts clubs, memberships, events, posts, post likes, comments, polls, resource requests, notifications, badges, chat, and attendance.
+3. Upserts clubs, memberships, events, event registrations, posts, post likes, comments, polls, resource requests, notifications, badges, and chat.
 4. Prints demo login credentials.
 
 The script is idempotent and does not clear arbitrary data. Do not run demo seeding against production data.

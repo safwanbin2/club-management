@@ -2,7 +2,6 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { GuestRoute, ProtectedRoute } from '@utilities/route-guards'
 import AssistantPage from '@pages/assistant'
-import AttendancePage from '@pages/attendance'
 import { ForgotPasswordPage, LoginPage, RegisterPage, ResetPasswordPage } from '@pages/auth'
 import ChatPage from '@pages/chat'
 import { ClubDetailPage, ClubsPage } from '@pages/clubs'
@@ -37,7 +36,6 @@ export default function AppRoutes() {
         <Route path="/clubs/:clubId" element={<ClubDetailPage />} />
         <Route path="/feed" element={<FeedPage />} />
         <Route path="/events" element={<EventsPage />} />
-        <Route path="/attendance" element={<AttendancePage />} />
         <Route path="/chat" element={<ChatPage />} />
         <Route path="/polls" element={<PollsPage />} />
         <Route path="/notifications" element={<NotificationsPage />} />

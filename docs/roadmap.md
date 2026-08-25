@@ -27,11 +27,10 @@ This roadmap is optimized for AI-assisted delivery: each phase creates a working
 - Feed homepage with filters and pinned/highlighted content.
 - Executive moderation actions.
 
-## Phase 4: Events, Waitlists, Attendance
+## Phase 4: Events, Waitlists, And Paid Registration Review
 
-- Event CRUD, registration, cancellation, waitlist promotion.
-- Attendance QR token and check-in flow.
-- Attendance reports and history.
+- Event CRUD, free/paid registration, cancellation, waitlist promotion.
+- bKash transaction submission and executive validation for paid events.
 
 ## Phase 5: Polls, Notifications, Profiles, Settings
 

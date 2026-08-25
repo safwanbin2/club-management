@@ -1,7 +1,13 @@
-import { Alert, Button, Form, Input } from 'antd'
-import { ArrowRight, Building2, IdCard, Lock, Mail, User } from 'lucide-react'
+import { Alert, Button, Form, Input, Select } from 'antd'
+import { ArrowRight, IdCard, Lock, Mail, User } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 
+import {
+  EAST_DELTA_EMAIL_DOMAIN_ERROR,
+  EAST_DELTA_EMAIL_SUFFIX,
+  EAST_DELTA_PROGRAM_OPTIONS,
+  isEastDeltaEmail
+} from '@common/constants/east-delta-university'
 import useRegister from '../data/use-register'
 import { getApiErrorMessage } from '../shared/helpers'
 import type { RegisterPayload } from '../shared/types'
@@ -50,13 +56,23 @@ export default function RegisterForm() {
         name="email"
         rules={[
           { message: 'Email is required.', required: true },
-          { message: 'Enter a valid email.', type: 'email' }
+          { message: 'Enter a valid email.', type: 'email' },
+          {
+            validator(_, value: string | undefined) {
+              if (!value || isEastDeltaEmail(value)) {
+                return Promise.resolve()
+              }
+
+              return Promise.reject(new Error(EAST_DELTA_EMAIL_DOMAIN_ERROR))
+            }
+          }
         ]}
+        validateFirst
       >
         <Input
           autoComplete="email"
           prefix={<Mail size={18} aria-hidden="true" />}
-          placeholder="name@university.edu"
+          placeholder={`name${EAST_DELTA_EMAIL_SUFFIX}`}
         />
       </Form.Item>
 
@@ -65,10 +81,13 @@ export default function RegisterForm() {
           <Input prefix={<IdCard size={18} aria-hidden="true" />} placeholder="2026-1234" />
         </Form.Item>
 
-        <Form.Item label="Department" name="department">
-          <Input
-            prefix={<Building2 size={18} aria-hidden="true" />}
-            placeholder="Computer Science"
+        <Form.Item label="Department / Program" name="department">
+          <Select
+            allowClear
+            showSearch
+            optionFilterProp="label"
+            options={EAST_DELTA_PROGRAM_OPTIONS}
+            placeholder="Select your program"
           />
         </Form.Item>
       </div>

@@ -3,7 +3,6 @@ import {
   BarChart3,
   Bot,
   CalendarDays,
-  ClipboardCheck,
   ClipboardList,
   LayoutDashboard,
   MessageSquare,
@@ -59,13 +58,6 @@ const sharedItems: AppNavItem[] = [
     key: 'events',
     label: 'Events',
     path: '/events'
-  },
-  {
-    enabled: true,
-    icon: ClipboardCheck,
-    key: 'attendance',
-    label: 'Attendance',
-    path: '/attendance'
   },
   {
     enabled: true,

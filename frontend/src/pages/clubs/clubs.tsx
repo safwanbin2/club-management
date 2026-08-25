@@ -1,12 +1,14 @@
 import { Alert, App as AntApp, Button, Empty, Pagination } from 'antd'
-import { RefreshCw, Users } from 'lucide-react'
+import { Plus, RefreshCw, Users } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
+import { USER_ROLES } from '@common/constants/roles'
 import { useAuthUser } from '@common/globalStates/use-auth-store'
 import getApiErrorMessage from '@common/helpers/get-api-error-message'
 import useDebouncedValue from '@common/hooks/use-debounced-value'
 import AppShell from '@features/app-shell'
+import useCreateClub from './data/use-create-club'
 import useClubs from './data/use-clubs'
 import useLeaveClub from './data/use-leave-club'
 import useRequestMembership from './data/use-request-membership'
@@ -18,19 +20,23 @@ import {
   parsePerPage,
   parseSort
 } from './shared/helpers'
-import type { ClubListPayload } from './shared/types'
+import type { ClubListPayload, ClubWritePayload } from './shared/types'
 import ClubCard from './ui/club-card'
 import ClubDirectoryToolbar from './ui/club-directory-toolbar'
+import ClubFormModal from './ui/club-form-modal'
 import ClubsSkeleton from './ui/clubs-skeleton'
 
 type ParamUpdates = Record<string, null | number | string | undefined>
 
 export default function ClubsPage() {
   const [searchParams, setSearchParams] = useSearchParams()
+  const navigate = useNavigate()
   const user = useAuthUser()
   const { message } = AntApp.useApp()
+  const createClub = useCreateClub()
   const requestMembership = useRequestMembership()
   const leaveClub = useLeaveClub()
+  const [isCreateOpen, setCreateOpen] = useState(false)
   const urlSearchTerm = searchParams.get('search') ?? ''
   const [searchTerm, setSearchTerm] = useState(urlSearchTerm)
   const debouncedSearchTerm = useDebouncedValue(searchTerm, 350)
@@ -89,6 +95,7 @@ export default function ClubsPage() {
     refetchClubs,
     totalClubs
   } = useClubs(payload)
+  const userCanCreateClub = user?.role === USER_ROLES.universityAdmin
 
   const handleRequest = (clubId: string) => {
     requestMembership.mutate(clubId, {
@@ -112,6 +119,19 @@ export default function ClubsPage() {
     })
   }
 
+  const handleCreateClub = (values: ClubWritePayload) => {
+    createClub.mutate(values, {
+      onError: error => {
+        message.error(getApiErrorMessage(error, 'Club could not be created.'))
+      },
+      onSuccess: response => {
+        message.success('Club created.')
+        setCreateOpen(false)
+        void navigate(`/clubs/${response.data.slug}`)
+      }
+    })
+  }
+
   return (
     <AppShell>
       <main className="space-y-6 px-5 py-6 lg:px-8">
@@ -126,11 +146,18 @@ export default function ClubsPage() {
               directory.
             </p>
           </div>
-          <div className="rounded-app border border-border bg-surface px-4 py-3 shadow-panel">
-            <span className="inline-flex items-center gap-2 text-sm font-semibold text-text-soft">
-              <Users size={17} aria-hidden="true" />
-              {totalClubs} matching club(s)
-            </span>
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="rounded-app border border-border bg-surface px-4 py-3 shadow-panel">
+              <span className="inline-flex items-center gap-2 text-sm font-semibold text-text-soft">
+                <Users size={17} aria-hidden="true" />
+                {totalClubs} matching club(s)
+              </span>
+            </div>
+            {userCanCreateClub ? (
+              <Button icon={<Plus size={17} />} onClick={() => setCreateOpen(true)} type="primary">
+                Create Club
+              </Button>
+            ) : null}
           </div>
         </section>
 
@@ -221,6 +248,15 @@ export default function ClubsPage() {
             Refreshing clubs...
           </p>
         ) : null}
+
+        <ClubFormModal
+          allowStatus
+          isOpen={isCreateOpen}
+          isSubmitting={createClub.isPending}
+          mode="create"
+          onClose={() => setCreateOpen(false)}
+          onSubmit={handleCreateClub}
+        />
       </main>
     </AppShell>
   )

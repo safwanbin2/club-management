@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest'
 
-import { buildPostModerationUpdate, getVisibleCommentCountDelta } from './feed.service.js'
+import {
+  buildFeedPostCreationPlan,
+  buildPostModerationUpdate,
+  getVisibleCommentCountDelta
+} from './feed.service.js'
 
 describe('feed.service moderation helpers', () => {
   it('calculates comment count deltas when visibility changes', () => {
@@ -38,5 +42,61 @@ describe('feed.service moderation helpers', () => {
       highlighted: true,
       moderationStatus: 'visible'
     })
+  })
+})
+
+describe('feed.service post creation rules', () => {
+  it('allows authenticated users to publish regular public posts without a club', () => {
+    expect(
+      buildFeedPostCreationPlan({
+        actorCanManageClub: false,
+        actorIsActiveClubMember: false,
+        clubId: null,
+        highlighted: undefined,
+        pinned: false,
+        type: 'post',
+        visibility: 'public'
+      })
+    ).toEqual({
+      clubId: null,
+      highlighted: false,
+      pinned: false,
+      type: 'post',
+      visibility: 'public'
+    })
+  })
+
+  it('allows active club members to publish regular posts in their club', () => {
+    expect(
+      buildFeedPostCreationPlan({
+        actorCanManageClub: false,
+        actorIsActiveClubMember: true,
+        clubId: 'club-1',
+        highlighted: true,
+        pinned: true,
+        type: 'post',
+        visibility: 'members'
+      })
+    ).toEqual({
+      clubId: 'club-1',
+      highlighted: false,
+      pinned: false,
+      type: 'post',
+      visibility: 'members'
+    })
+  })
+
+  it('keeps announcements scoped to club managers', () => {
+    expect(() =>
+      buildFeedPostCreationPlan({
+        actorCanManageClub: false,
+        actorIsActiveClubMember: true,
+        clubId: 'club-1',
+        highlighted: undefined,
+        pinned: false,
+        type: 'announcement',
+        visibility: 'public'
+      })
+    ).toThrow('Only club managers can publish announcement posts.')
   })
 })

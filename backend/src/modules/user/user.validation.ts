@@ -1,11 +1,25 @@
 import { z } from 'zod'
 
+import {
+  EAST_DELTA_PROGRAM_ERROR,
+  isEastDeltaProgram
+} from '../../constants/east-delta-university.js'
+
 const notificationPreferencesSchema = z.object({
   emailDigest: z.boolean(),
   eventReminders: z.boolean(),
   inApp: z.boolean(),
   membershipUpdates: z.boolean()
 })
+
+const optionalEastDeltaProgramSchema = z
+  .string()
+  .trim()
+  .optional()
+  .transform(value => (value === '' ? undefined : value))
+  .refine(value => value === undefined || isEastDeltaProgram(value), {
+    message: EAST_DELTA_PROGRAM_ERROR
+  })
 
 export const userProfileParamsSchema = z.object({
   userId: z.string().trim().min(1, 'User is required.')
@@ -19,7 +33,7 @@ export const updateOwnProfileSchema = z.object({
     .optional()
     .or(z.literal(''))
     .transform(value => (value === '' ? undefined : value)),
-  department: z.string().trim().max(120).optional(),
+  department: optionalEastDeltaProgramSchema,
   name: z.string().trim().min(2, 'Name must be at least 2 characters.').max(120),
   studentId: z.string().trim().max(80).optional()
 })
