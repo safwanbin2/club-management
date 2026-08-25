@@ -1,6 +1,6 @@
 # Feature Status
 
-Last verified: July 17, 2026.
+Last verified: August 21, 2026.
 
 Use this file as the handoff ledger for future agents. It tracks what is complete, what is only partially built, and what should be built next. The source of truth for product behavior remains `docs/university-club-management-system.md`; the build order comes from `docs/feature-slices.md`.
 
@@ -501,6 +501,36 @@ Verification:
 - `pnpm test` passed.
 - `pnpm build` passed with Vite's existing large chunk warning.
 - `pnpm format:check` passed.
+
+### Campus Assistant
+
+Status: `Complete`
+
+Implemented:
+
+- Backend assistant route:
+  - `POST /api/assistant/chat`
+- Gemini Interactions API integration through backend-only environment configuration.
+- Allowlisted read-only campus tools for:
+  - dashboard summary
+  - global campus search
+  - resource request analytics
+  - upcoming visible events
+- Server-side tool execution with role-aware service boundaries and no direct model database access.
+- Assistant prompt validation with a 2,000-character cap.
+- Frontend `/assistant` page with chat transcript, suggested prompts, loading/error/empty states, recent tool trace, and role-aware navigation entry.
+
+Known follow-up:
+
+- Chat transcripts are kept in browser state for the current page session; persist them to MongoDB later if conversation history should survive refreshes.
+- The initial tool layer is read-only. Any future write tools should require explicit confirmation and audit logging.
+- Streaming responses can be added later if the assistant needs token-by-token output.
+
+Verification:
+
+- Assistant backend focused tests passed.
+- Assistant frontend helper test passed.
+- Backend and frontend type checks passed during implementation.
 
 ## Update Protocol
 

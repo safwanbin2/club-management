@@ -83,6 +83,7 @@ Planned route groups:
 - `/notifications`: notification list, unread counts, mark read
 - `/resource-requests`: room bookings and funding requests
 - `/search`: global search across clubs, events, students, and posts
+- `/assistant`: Gemini-powered campus chat assistant with allowlisted read-only tools
 
 ## Implemented Clubs And Membership Routes
 
@@ -207,6 +208,25 @@ Query parameters:
 - `limit`: maximum items per group, capped at 10.
 
 Search honors existing visibility boundaries. Member-only events and feed posts are returned only when the authenticated user belongs to the related club; university administrators can search across active platform content. Private profiles are excluded except for the profile owner and university administrators.
+
+## Implemented Assistant Routes
+
+The campus assistant workflow is implemented under `/assistant`:
+
+- `POST /assistant/chat`: authenticated Gemini-powered assistant prompt endpoint.
+
+Request body:
+
+- `message`: prompt text, trimmed and capped at 2,000 characters.
+- `previousInteractionId`: optional Gemini interaction ID for continuing the current browser-session chat.
+
+Response data:
+
+- `message`: final assistant response text.
+- `interactionId`: Gemini interaction ID to send on the next prompt.
+- `toolsUsed`: list of allowlisted campus tools used during the turn.
+
+The backend declares Gemini function tools and executes them server-side. Tools are read-only and wrap existing role-aware services for dashboard summaries, global search, resource request analytics, and upcoming events. Gemini never receives the API key or direct database access. The backend reads `GEMINI_API_KEY`, `GEMINI_MODEL`, `GEMINI_PROJECT_NAME`, and `GEMINI_PROJECT_NUMBER` from environment variables.
 
 ## Validation
 
