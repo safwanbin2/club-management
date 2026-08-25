@@ -6,11 +6,7 @@ export type EventVisibility = 'members' | 'public'
 export type EventPaymentMethod = 'bkash_send_money' | 'none'
 export type EventRegistrationPaymentMethod = 'bkash_send_money' | null
 export type EventRegistrationStatus =
-  | 'cancelled'
-  | 'declined'
-  | 'pending'
-  | 'registered'
-  | 'waitlisted'
+  'cancelled' | 'declined' | 'pending' | 'registered' | 'waitlisted'
 export type EventScope = 'all' | 'managed' | 'myClubs' | 'registered'
 export type EventSort = 'latest' | 'upcoming'
 export type EventTimeframe = 'all' | 'past' | 'upcoming'

@@ -1,5 +1,5 @@
 import { Button, Tag } from 'antd'
-import { ArrowLeft, Mail, Users } from 'lucide-react'
+import { ArrowLeft, Edit3, Mail, Users } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 import type { ClubDetail } from '../shared/types'
@@ -11,6 +11,7 @@ type ClubDetailHeroProps = {
   club: ClubDetail
   isLeavePending?: boolean
   isRequestPending?: boolean
+  onEdit?: () => void
   onLeave: (clubId: string) => void
   onRequest: (clubId: string) => void
 }
@@ -19,6 +20,7 @@ export default function ClubDetailHero({
   club,
   isLeavePending,
   isRequestPending,
+  onEdit,
   onLeave,
   onRequest
 }: ClubDetailHeroProps) {
@@ -64,6 +66,11 @@ export default function ClubDetailHero({
             </div>
 
             <div className="flex flex-wrap items-center gap-3">
+              {club.canManage && onEdit ? (
+                <Button icon={<Edit3 size={16} />} onClick={onEdit}>
+                  Edit Details
+                </Button>
+              ) : null}
               <ClubMembershipAction
                 club={club}
                 isLeavePending={isLeavePending}

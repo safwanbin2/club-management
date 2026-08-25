@@ -24,6 +24,7 @@ This document captures the first-pass domain language for the University Club Ma
 User:
 
 - identity, email, password hash, role, avatar, student information, profile visibility, notification preferences, account settings, status
+- registration email must use the `@eastdelta.edu.bd` domain; student department/program is selected from the configured East Delta University program list
 
 Club:
 
@@ -78,10 +79,13 @@ ResourceRequest:
 - Only club members can access a club chat.
 - Only club members can vote in that club's polls.
 - A student can vote only once per poll.
-- Event registrations move to waitlist after capacity is reached.
-- Paid event registrations start as pending until a club executive or university admin approves or declines the submitted bKash transaction ID.
+- Event registrations start as pending requests until a club executive or university admin approves or declines them.
+- Event managers do not create attendee registration requests for events they manage; their relationship to those events is represented through management permissions and profile managed-event summaries.
+- Approved event registrations move to waitlist after capacity is reached.
+- Paid event registration requests include a submitted bKash transaction ID for review.
 - Cancelling a registration promotes the first waitlisted student.
 - Completed events should create a feed item.
 - Executive permissions are scoped to clubs they manage.
+- A profile's managed events are derived from active `executive` or `advisor` memberships in the event's club.
 - University admin permissions are platform-wide.
 - Soft delete is preferred for user-facing records that may need moderation or recovery.

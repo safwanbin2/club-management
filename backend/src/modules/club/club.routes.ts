@@ -13,7 +13,9 @@ import {
   clubMembershipRequestsQuerySchema,
   clubMembershipReviewParamsSchema,
   clubParamsSchema,
+  createClubSchema,
   reviewMembershipSchema,
+  updateClubSchema,
   updateMembershipRoleSchema
 } from './club.validation.js'
 
@@ -28,11 +30,25 @@ router.get(
   asyncHandler(clubController.index)
 )
 
+router.post(
+  '/',
+  requireCapability(CAPABILITIES.clubsCreate),
+  validate({ body: createClubSchema }),
+  asyncHandler(clubController.store)
+)
+
 router.get(
   '/:clubId',
   requireCapability(CAPABILITIES.clubsBrowse),
   validate({ params: clubParamsSchema }),
   asyncHandler(clubController.show)
+)
+
+router.patch(
+  '/:clubId',
+  requireCapability(CAPABILITIES.clubsManageOwn),
+  validate({ body: updateClubSchema, params: clubParamsSchema }),
+  asyncHandler(clubController.update)
 )
 
 router.post(

@@ -219,12 +219,7 @@ export default function EventFormModal({
               name="feeAmount"
               rules={[{ message: 'Event fee is required.', required: true }]}
             >
-              <InputNumber
-                addonBefore="BDT"
-                className="w-full"
-                min={0}
-                placeholder="0"
-              />
+              <InputNumber addonBefore="BDT" className="w-full" min={0} placeholder="0" />
             </Form.Item>
 
             <Form.Item

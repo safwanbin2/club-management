@@ -140,7 +140,9 @@ function toRegistrationDto(registration: EventRegistrationLean): EventRegistrati
     id: registration._id.toString(),
     paymentMethod: registration.paymentMethod ?? null,
     paymentReviewedAt: formatDate(registration.paymentReviewedAt),
-    paymentReviewedBy: registration.paymentReviewedBy ? registration.paymentReviewedBy.toString() : null,
+    paymentReviewedBy: registration.paymentReviewedBy
+      ? registration.paymentReviewedBy.toString()
+      : null,
     paymentReviewRemarks: registration.paymentReviewRemarks ?? null,
     paymentSubmittedAt: formatDate(registration.paymentSubmittedAt),
     paymentTransactionId: registration.paymentTransactionId ?? null,
@@ -180,14 +182,12 @@ export function getInitialRegistrationPlacement(input: {
   registeredCount: number
   waitlistedCount: number
 }): InitialRegistrationPlacement {
-  if (input.feeAmount > 0) {
-    return {
-      status: 'pending',
-      waitlistPosition: null
-    }
-  }
+  void input
 
-  return getRegistrationPlacement(input.registeredCount, input.capacity, input.waitlistedCount)
+  return {
+    status: 'pending',
+    waitlistPosition: null
+  }
 }
 
 export function getReviewedRegistrationPlacement(
@@ -200,6 +200,18 @@ export function getReviewedRegistrationPlacement(
 
 export function shouldPromoteFromWaitlist(cancelledStatus: EventRegistrationStatus) {
   return cancelledStatus === 'registered'
+}
+
+export function assertCanRequestEventRegistration(canManageEvent: boolean) {
+  if (!canManageEvent) {
+    return
+  }
+
+  throw new ApplicationError(
+    'Event managers do not need to register for their managed events.',
+    409,
+    'EVENT_MANAGER_REGISTRATION_NOT_REQUIRED'
+  )
 }
 
 async function getActiveMembershipClubIds(actor: UserDto) {
@@ -710,13 +722,11 @@ export async function deleteEvent(eventId: string, actor: UserDto) {
   return dto
 }
 
-export async function registerForEvent(
-  eventId: string,
-  input: RegisterEventInput,
-  actor: UserDto
-) {
+export async function registerForEvent(eventId: string, input: RegisterEventInput, actor: UserDto) {
   const event = await findEventById(eventId, actor)
   const now = new Date()
+
+  assertCanRequestEventRegistration(await canActorManageClub(actor, event.club))
 
   if (event.status !== 'published') {
     throw new ApplicationError(
@@ -753,15 +763,11 @@ export async function registerForEvent(
     return toRegistrationDto(existingRegistration)
   }
 
-  const [registeredCount, waitlistedCount] = await Promise.all([
-    EventRegistrationModel.countDocuments({ event: event._id, status: 'registered' }),
-    EventRegistrationModel.countDocuments({ event: event._id, status: 'waitlisted' })
-  ])
   const placement = getInitialRegistrationPlacement({
     capacity: event.capacity,
     feeAmount,
-    registeredCount,
-    waitlistedCount
+    registeredCount: 0,
+    waitlistedCount: 0
   })
   const registration = (await EventRegistrationModel.findOneAndUpdate(
     { event: event._id, user: userId },
@@ -785,10 +791,6 @@ export async function registerForEvent(
     },
     { new: true, setDefaultsOnInsert: true, upsert: true }
   ).lean()) as EventRegistrationLean
-
-  if (placement.status !== 'pending') {
-    await createRegistrationNotification(userId, event, placement.status)
-  }
 
   return toRegistrationDto(registration)
 }
@@ -926,7 +928,7 @@ export async function reviewEventRegistration(
 
   if (registration.status !== 'pending') {
     throw new ApplicationError(
-      'Only pending paid registrations can be reviewed.',
+      'Only pending registrations can be reviewed.',
       409,
       'REGISTRATION_NOT_PENDING'
     )

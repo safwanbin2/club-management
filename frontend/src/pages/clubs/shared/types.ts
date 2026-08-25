@@ -109,6 +109,35 @@ export type ClubListPayload = {
   status?: ClubStatus
 }
 
+export type ClubWritePayload = {
+  category: ClubCategory
+  contactEmail?: string
+  contactPhone?: string
+  coverImageUrl?: string
+  description: string
+  facultyAdvisor: {
+    department?: string
+    email?: string
+    name: string
+  }
+  gallery: string[]
+  logoUrl?: string
+  name: string
+  socialLinks: {
+    facebook?: string
+    instagram?: string
+    linkedin?: string
+    website?: string
+  }
+  status?: ClubStatus
+}
+
+export type CreateClubPayload = ClubWritePayload
+
+export type UpdateClubPayload = Partial<ClubWritePayload> & {
+  clubId: string
+}
+
 export type MembershipRequestsPayload = {
   page: number
   perPage: number

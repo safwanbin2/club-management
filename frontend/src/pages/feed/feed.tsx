@@ -1,4 +1,4 @@
-import { Alert, App as AntApp, Button, Empty, Pagination, Tooltip } from 'antd'
+import { Alert, App as AntApp, Button, Empty, Pagination } from 'antd'
 import { Megaphone, Plus, RefreshCw } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
@@ -11,6 +11,7 @@ import AppShell from '@features/app-shell'
 import useCreateFeedPost from './data/use-create-feed-post'
 import useCreatePostComment from './data/use-create-post-comment'
 import useFeedManageableClubs from './data/use-feed-manageable-clubs'
+import useFeedPostableClubs from './data/use-feed-postable-clubs'
 import useFeedPosts from './data/use-feed-posts'
 import useFeedTrendingClubs from './data/use-feed-trending-clubs'
 import useModerateFeedComment from './data/use-moderate-feed-comment'
@@ -34,6 +35,10 @@ import TrendingClubsPanel from './ui/trending-clubs-panel'
 type ParamUpdates = Record<string, null | number | string | undefined>
 
 function canCreateFeedPost(role: null | string | undefined) {
+  return Boolean(role)
+}
+
+function canPublishManagedFeedPost(role: null | string | undefined) {
   return role === USER_ROLES.clubExecutive || role === USER_ROLES.universityAdmin
 }
 
@@ -47,6 +52,7 @@ export default function FeedPage() {
   const [searchTerm, setSearchTerm] = useState(urlSearchTerm)
   const debouncedSearchTerm = useDebouncedValue(searchTerm, 350)
   const userCanCreate = canCreateFeedPost(user?.role)
+  const userCanPublishManagedContent = canPublishManagedFeedPost(user?.role)
 
   const updateSearchParams = useCallback(
     (updates: ParamUpdates) => {
@@ -99,7 +105,10 @@ export default function FeedPage() {
     totalFeedPosts
   } = useFeedPosts(payload)
   const { isTrendingClubsPending, trendingClubs } = useFeedTrendingClubs()
-  const { isManageableClubsPending, manageableClubs } = useFeedManageableClubs(userCanCreate)
+  const { isManageableClubsPending, manageableClubs } = useFeedManageableClubs(
+    userCanPublishManagedContent
+  )
+  const { isPostableClubsPending, postableClubs } = useFeedPostableClubs(userCanCreate)
   const createFeedPost = useCreateFeedPost()
   const togglePostLike = useTogglePostLike()
   const createPostComment = useCreatePostComment()
@@ -202,22 +211,9 @@ export default function FeedPage() {
           </div>
 
           {userCanCreate ? (
-            <Tooltip
-              title={
-                manageableClubs.length === 0 && !isManageableClubsPending
-                  ? 'You need an active managed club to publish.'
-                  : undefined
-              }
-            >
-              <Button
-                disabled={manageableClubs.length === 0 && !isManageableClubsPending}
-                icon={<Plus size={17} />}
-                onClick={() => setCreateOpen(true)}
-                type="primary"
-              >
-                Create Post
-              </Button>
-            </Tooltip>
+            <Button icon={<Plus size={17} />} onClick={() => setCreateOpen(true)} type="primary">
+              Create Post
+            </Button>
           ) : null}
         </section>
 
@@ -326,9 +322,12 @@ export default function FeedPage() {
         </div>
 
         <FeedCreatePostModal
-          clubs={manageableClubs}
+          clubs={postableClubs}
+          manageableClubs={manageableClubs}
           isOpen={isCreateOpen}
-          isPending={isManageableClubsPending}
+          isPending={
+            isPostableClubsPending || (userCanPublishManagedContent && isManageableClubsPending)
+          }
           isSubmitting={createFeedPost.isPending}
           onClose={() => setCreateOpen(false)}
           onSubmit={handleCreatePost}

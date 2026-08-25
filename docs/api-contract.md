@@ -60,6 +60,10 @@ Frontend data hooks should adapt backend responses once, then return domain name
 
 Initial auth should use secure password hashing, short-lived access tokens, refresh/session persistence, and role-aware guards.
 
+Registration accepts only East Delta University email addresses ending in `@eastdelta.edu.bd`.
+Student department/profile program values must come from the configured East Delta University
+program list rather than free-text input.
+
 Roles:
 
 - `student`
@@ -88,7 +92,9 @@ Planned route groups:
 The Slice 2 club workflow is implemented under `/clubs`:
 
 - `GET /clubs`: paginated club directory with search, category/status filters, membership filters, and sorting.
+- `POST /clubs`: university admin club creation with faculty advisor, contact, branding, social, and status fields.
 - `GET /clubs/:clubId`: club detail by slug or ObjectId with membership summary, executive committee, upcoming events, and current-user membership status.
+- `PATCH /clubs/:clubId`: club-scoped executive/admin detail updates; university administrators can also change club status.
 - `POST /clubs/:clubId/memberships/request`: create or reopen the authenticated user's membership request.
 - `POST /clubs/:clubId/memberships/leave`: leave an active membership or cancel a pending membership request.
 - `GET /clubs/:clubId/memberships`: active member roster, visible to active club members and club managers.
@@ -104,15 +110,16 @@ The Slice 3 central news feed workflow is implemented under `/feed`:
 
 - `GET /feed`: paginated feed posts with search, type filters, latest/popular sorting, public/member visibility rules, current-user like state, and moderation flags.
 - `GET /feed/trending-clubs`: active clubs ranked by visible feed activity and member counts.
-- `GET /feed/manageable-clubs`: clubs the authenticated executive/admin can publish for.
-- `POST /feed/posts`: executive/admin creation for club posts, announcements, and achievements.
+- `GET /feed/manageable-clubs`: clubs the authenticated executive/admin can publish manager-only content for.
+- `GET /feed/postable-clubs`: active clubs the authenticated user can post in, or all active clubs for university administrators.
+- `POST /feed/posts`: authenticated regular campus posts without a club, active-member regular club posts, and executive/admin manager-only club announcements or achievements.
 - `POST /feed/posts/:postId/like`: toggle the authenticated user's like on a visible post.
 - `GET /feed/posts/:postId/comments`: paginated visible comments; club managers can also see non-deleted moderated comments.
 - `POST /feed/posts/:postId/comments`: create a visible comment and update post comment counts.
 - `PATCH /feed/posts/:postId/moderation`: club-scoped executive/admin pin, highlight, hide, flag, or delete moderation actions.
 - `PATCH /feed/posts/:postId/comments/:commentId/moderation`: club-scoped executive/admin comment moderation.
 
-Likes are persisted in `post_likes` with a unique post/user index. Club-scoped executive authorization is enforced in the feed service layer for create and moderation actions; university administrators can manage posts for any active club.
+Likes are persisted in `post_likes` with a unique post/user index. Club-scoped membership is enforced for regular club posts; executive authorization is enforced for manager-only club post types and moderation actions. University administrators can manage posts for any active club.
 
 ## Implemented Events And Waitlist Routes
 
@@ -124,12 +131,12 @@ The Slice 4 events workflow is implemented under `/events`:
 - `GET /events/:eventId`: event detail by ObjectId.
 - `PATCH /events/:eventId`: club-scoped executive/admin event updates.
 - `DELETE /events/:eventId`: soft-delete/cancel an event.
-- `POST /events/:eventId/register`: register the authenticated user, place them at the end of the waitlist when capacity is full, or create a pending paid registration when the event has a fee.
+- `POST /events/:eventId/register`: create a pending registration request for the authenticated non-manager user; paid events require a bKash transaction ID.
 - `POST /events/:eventId/cancel-registration`: cancel a registration or waitlist entry; cancelling a confirmed registration promotes the first waitlisted user.
 - `GET /events/:eventId/registrations`: club-scoped executive/admin registration queue by status.
-- `PATCH /events/:eventId/registrations/:registrationId/review`: club-scoped executive/admin approve or decline for pending paid registrations.
+- `PATCH /events/:eventId/registrations/:registrationId/review`: club-scoped executive/admin approve or decline for pending registration requests.
 
-Paid events expose `feeAmount`, `paymentMethod`, and `bkashNumber`. Paid registrations require `paymentTransactionId`, remain `pending`, and move to `registered`, `waitlisted`, or `declined` after manager review. Registration and waitlist promotion create notifications using `registration_confirmed` and `waitlist_promoted` notification types. Event management authorization is club-scoped in the service layer; university administrators can manage events for any active club.
+Paid events expose `feeAmount`, `paymentMethod`, and `bkashNumber`. All registrations remain `pending` and move to `registered`, `waitlisted`, or `declined` after manager review; paid registrations additionally require `paymentTransactionId`. Registration approval and waitlist promotion create notifications using `registration_confirmed` and `waitlist_promoted` notification types. Event management authorization is club-scoped in the service layer; university administrators can manage events for any active club.
 
 ## Implemented Poll Routes
 
@@ -151,14 +158,14 @@ The Slice 7 user activity workflow is implemented under `/notifications` and `/u
 - `GET /notifications/unread-count`: unread notification count for the authenticated user.
 - `PATCH /notifications/read-all`: mark all authenticated-user notifications as read.
 - `PATCH /notifications/:notificationId/read`: mark one authenticated-user notification as read.
-- `GET /users/me/profile`: authenticated user's profile, clubs, badges, and activity timeline.
-- `PATCH /users/me/profile`: update authenticated user's name, student ID, department, and avatar URL.
+- `GET /users/me/profile`: authenticated user's profile, clubs, event participation summary, managed-event summary, badges, and activity timeline.
+- `PATCH /users/me/profile`: update authenticated user's name, student ID, department/program from the configured EDU list, and avatar URL.
 - `GET /users/me/settings`: authenticated user's profile visibility and notification preferences.
 - `PATCH /users/me/settings`: update profile visibility and notification preferences.
 - `PATCH /users/me/password`: change password after validating the current password.
-- `GET /users/:userId/profile`: public profile view with profile-visibility enforcement.
+- `GET /users/:userId/profile`: public profile view with profile-visibility enforcement plus visible event participation and managed-event summaries.
 
-Profile reads award newly earned badges from current membership, event registration, and leadership activity. Newly awarded badges create `badge_earned` in-app notifications. Notification preferences are persisted on `users` for later delivery integrations.
+Profile reads award newly earned badges from current membership, event registration, and leadership activity. Profile event participation counts approved `registered` and `waitlisted` event registrations; managed events are derived automatically from active `executive` or `advisor` memberships in the event's club. Newly awarded badges create `badge_earned` in-app notifications. Notification preferences are persisted on `users` for later delivery integrations.
 
 ## Implemented Resource Request Routes
 

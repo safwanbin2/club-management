@@ -1,8 +1,10 @@
 import { Alert, App as AntApp, Button, Empty, Tag } from 'antd'
 import { CalendarDays, Mail, MapPin, RefreshCw, ShieldCheck, Users } from 'lucide-react'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
 
+import { USER_ROLES } from '@common/constants/roles'
+import { useAuthUser } from '@common/globalStates/use-auth-store'
 import getApiErrorMessage from '@common/helpers/get-api-error-message'
 import AppShell from '@features/app-shell'
 import UserProfileLink from '@features/user-profile-link'
@@ -12,6 +14,7 @@ import useLeaveClub from './data/use-leave-club'
 import useMembershipRequests from './data/use-membership-requests'
 import useRequestMembership from './data/use-request-membership'
 import useReviewMembershipRequest from './data/use-review-membership-request'
+import useUpdateClub from './data/use-update-club'
 import useUpdateMembershipRole from './data/use-update-membership-role'
 import {
   createMembershipRequestsPayload,
@@ -19,19 +22,23 @@ import {
   formatDateTime,
   formatMemberCount
 } from './shared/helpers'
-import type { ClubMember, ClubMembershipRequest } from './shared/types'
+import type { ClubMember, ClubMembershipRequest, ClubWritePayload } from './shared/types'
 import ClubDetailHero from './ui/club-detail-hero'
 import ClubDetailSkeleton from './ui/club-detail-skeleton'
+import ClubFormModal from './ui/club-form-modal'
 import ClubMembersPanel from './ui/club-members-panel'
 import MembershipRequestsPanel from './ui/membership-requests-panel'
 
 export default function ClubDetailPage() {
   const { clubId } = useParams()
+  const user = useAuthUser()
   const { message } = AntApp.useApp()
   const requestMembership = useRequestMembership()
   const leaveClub = useLeaveClub()
   const reviewMembership = useReviewMembershipRequest()
+  const updateClub = useUpdateClub()
   const updateMembershipRole = useUpdateMembershipRole()
+  const [isEditOpen, setEditOpen] = useState(false)
   const requestPayload = useMemo(() => createMembershipRequestsPayload(), [])
   const membersPayload = useMemo(() => ({ page: 1, perPage: 50, search: '' }), [])
   const { clubDetail, isClubDetailError, isClubDetailPending, refetchClubDetail } =
@@ -125,6 +132,28 @@ export default function ClubDetailPage() {
     )
   }
 
+  const handleUpdateClub = (values: ClubWritePayload) => {
+    if (!clubDetail) {
+      return
+    }
+
+    updateClub.mutate(
+      {
+        ...values,
+        clubId: clubDetail.slug
+      },
+      {
+        onError: error => {
+          message.error(getApiErrorMessage(error, 'Club details could not be updated.'))
+        },
+        onSuccess: () => {
+          message.success('Club details updated.')
+          setEditOpen(false)
+        }
+      }
+    )
+  }
+
   return (
     <AppShell>
       <main className="space-y-6 px-5 py-6 lg:px-8">
@@ -152,6 +181,7 @@ export default function ClubDetailPage() {
                 requestMembership.isPending && requestMembership.variables === clubDetail.slug
               }
               onLeave={handleLeave}
+              onEdit={() => setEditOpen(true)}
               onRequest={handleRequest}
             />
 
@@ -338,6 +368,16 @@ export default function ClubDetailPage() {
                 </section>
               </aside>
             </section>
+
+            <ClubFormModal
+              allowStatus={user?.role === USER_ROLES.universityAdmin}
+              club={clubDetail}
+              isOpen={isEditOpen}
+              isSubmitting={updateClub.isPending}
+              mode="edit"
+              onClose={() => setEditOpen(false)}
+              onSubmit={handleUpdateClub}
+            />
           </>
         ) : null}
       </main>

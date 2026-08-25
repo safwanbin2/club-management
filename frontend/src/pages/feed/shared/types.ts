@@ -71,7 +71,7 @@ export type FeedListPayload = {
 
 export type CreateFeedPostPayload = {
   body: string
-  clubId: string
+  clubId?: string
   highlighted?: boolean
   images: string[]
   pinned: boolean

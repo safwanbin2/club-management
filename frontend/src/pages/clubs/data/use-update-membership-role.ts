@@ -8,7 +8,12 @@ export default function useUpdateMembershipRole() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: ({ clubId, clubRole, executivePosition, membershipId }: UpdateMembershipRolePayload) =>
+    mutationFn: ({
+      clubId,
+      clubRole,
+      executivePosition,
+      membershipId
+    }: UpdateMembershipRolePayload) =>
       request<ApiResponse<ClubMember>>(
         `clubs/${clubId}/memberships/${membershipId}/role`,
         { clubRole, executivePosition },

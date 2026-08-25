@@ -5,6 +5,7 @@ import {
   Edit3,
   Lock,
   MapPin,
+  ShieldCheck,
   Trash2,
   Users,
   WalletCards,
@@ -19,7 +20,8 @@ import {
   formatTimeRange,
   getEntityInitials,
   getEventDateBadge,
-  isEventRegistrationOpen
+  isEventRegistrationOpen,
+  shouldShowEventRegistrationAction
 } from '../shared/helpers'
 import type { EventItem } from '../shared/types'
 
@@ -41,7 +43,9 @@ function getStatusColor(status: EventItem['status']) {
   return 'red'
 }
 
-function getRegistrationStatusColor(status: NonNullable<EventItem['currentUserRegistration']>['status']) {
+function getRegistrationStatusColor(
+  status: NonNullable<EventItem['currentUserRegistration']>['status']
+) {
   if (status === 'registered') return 'green'
   if (status === 'waitlisted') return 'gold'
   if (status === 'pending') return 'blue'
@@ -60,14 +64,18 @@ export default function EventCard({
   onViewRegistrations
 }: EventCardProps) {
   const dateBadge = getEventDateBadge(event.startsAt)
+  const canUseRegistrationActions = shouldShowEventRegistrationAction(event)
   const activeRegistration =
-    event.currentUserRegistration?.status === 'registered' ||
-    event.currentUserRegistration?.status === 'waitlisted' ||
-    event.currentUserRegistration?.status === 'pending'
+    canUseRegistrationActions &&
+    (event.currentUserRegistration?.status === 'registered' ||
+      event.currentUserRegistration?.status === 'waitlisted' ||
+      event.currentUserRegistration?.status === 'pending')
       ? event.currentUserRegistration
       : null
   const declinedRegistration =
-    event.currentUserRegistration?.status === 'declined' ? event.currentUserRegistration : null
+    canUseRegistrationActions && event.currentUserRegistration?.status === 'declined'
+      ? event.currentUserRegistration
+      : null
   const registrationOpen =
     event.status === 'published' &&
     isEventRegistrationOpen(event.startsAt, event.registrationDeadline)
@@ -79,10 +87,10 @@ export default function EventCard({
         : activeRegistration?.status === 'pending'
           ? 'Cancel Request'
           : declinedRegistration
-            ? 'Resubmit Payment'
-            : event.availableSpots > 0
-              ? 'Register'
-              : 'Join Waitlist'
+            ? event.feeAmount > 0
+              ? 'Resubmit Payment'
+              : 'Resubmit Request'
+            : 'Request Registration'
 
   return (
     <article className="grid gap-4 rounded-app border border-border bg-surface p-5 shadow-panel md:grid-cols-[92px_minmax(0,1fr)]">
@@ -124,7 +132,7 @@ export default function EventCard({
           {event.canManage ? (
             <div className="flex flex-wrap gap-2">
               <Button icon={<Users size={16} />} onClick={() => onViewRegistrations(event)}>
-                Attendees
+                Registrations
               </Button>
               <Button icon={<Edit3 size={16} />} onClick={() => onEdit(event)}>
                 Edit
@@ -176,31 +184,37 @@ export default function EventCard({
             ) : null}
           </div>
 
-          {activeRegistration ? (
-            <Popconfirm
-              okText="Confirm"
-              onConfirm={() => onCancelRegistration(event)}
-              title={
-                activeRegistration.status === 'registered'
-                  ? 'Cancel this event registration?'
-                  : activeRegistration.status === 'waitlisted'
-                    ? 'Leave this event waitlist?'
-                    : 'Cancel this pending payment request?'
-              }
-            >
-              <Button icon={<XCircle size={16} />} loading={isRegistering}>
-                {primaryActionLabel}
+          {canUseRegistrationActions ? (
+            activeRegistration ? (
+              <Popconfirm
+                okText="Confirm"
+                onConfirm={() => onCancelRegistration(event)}
+                title={
+                  activeRegistration.status === 'registered'
+                    ? 'Cancel this event registration?'
+                    : activeRegistration.status === 'waitlisted'
+                      ? 'Leave this event waitlist?'
+                      : 'Cancel this pending registration request?'
+                }
+              >
+                <Button icon={<XCircle size={16} />} loading={isRegistering}>
+                  {primaryActionLabel}
+                </Button>
+              </Popconfirm>
+            ) : (
+              <Button
+                disabled={!registrationOpen}
+                loading={isRegistering}
+                onClick={() => onRegister(event)}
+                type="primary"
+              >
+                {registrationOpen ? primaryActionLabel : 'Closed'}
               </Button>
-            </Popconfirm>
+            )
           ) : (
-            <Button
-              disabled={!registrationOpen}
-              loading={isRegistering}
-              onClick={() => onRegister(event)}
-              type="primary"
-            >
-              {registrationOpen ? primaryActionLabel : 'Closed'}
-            </Button>
+            <Tag color="blue" icon={<ShieldCheck size={13} />}>
+              Manager
+            </Tag>
           )}
         </div>
       </div>

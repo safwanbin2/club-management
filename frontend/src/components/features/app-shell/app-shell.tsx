@@ -6,8 +6,10 @@ import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 
 import { ROLE_LABELS } from '@common/constants/roles'
 import { useAuthUser } from '@common/globalStates/use-auth-store'
+import UserProfileLink from '@features/user-profile-link'
 import useNotificationUnreadCount from './data/use-notification-unread-count'
 import useLogout from './data/use-logout'
+import { shouldShowNavbarRoleLabel } from './shared/helpers'
 import { ROLE_NAV_ITEMS } from './shared/navigation'
 
 function getInitials(name: string) {
@@ -115,6 +117,7 @@ export default function AppShell({ children }: PropsWithChildren) {
   const bottomNavItems = roleNavItems.filter(item =>
     ['clubs', 'dashboard', 'events', 'feed'].includes(item.key)
   )
+  const showRoleLabel = shouldShowNavbarRoleLabel(user?.role)
 
   useEffect(() => {
     if (location.pathname === '/search') {
@@ -179,10 +182,18 @@ export default function AppShell({ children }: PropsWithChildren) {
       <aside className="sticky top-0 hidden h-screen border-r border-border bg-primary-soft/55 p-5 lg:flex lg:flex-col">
         <Brand />
         <div className="mt-8 rounded-app border border-border bg-surface p-4">
-          <p className="m-0 text-xs font-semibold uppercase tracking-[0.08em] text-text-soft">
-            {user ? ROLE_LABELS[user.role] : 'Workspace'}
-          </p>
-          <p className="m-0 mt-1 text-sm font-semibold text-text">{user?.name}</p>
+          {showRoleLabel ? (
+            <p className="m-0 text-xs font-semibold uppercase tracking-[0.08em] text-text-soft">
+              {ROLE_LABELS[user.role]}
+            </p>
+          ) : null}
+          {user ? (
+            <UserProfileLink
+              className="mt-1 block text-sm font-semibold text-text hover:text-primary"
+              name={user.name}
+              userId={user.id}
+            />
+          ) : null}
         </div>
         <div className="mt-6 flex-1 overflow-y-auto pr-1">
           <NavItems />
@@ -220,9 +231,11 @@ export default function AppShell({ children }: PropsWithChildren) {
             value={globalSearchTerm}
           />
           <div className="ml-auto flex shrink-0 items-center gap-2 sm:gap-3">
-            <span className="hidden rounded-full bg-blue-100 px-4 py-2 text-sm font-semibold text-blue-700 xl:inline-flex">
-              {user ? ROLE_LABELS[user.role] : 'Role'}
-            </span>
+            {showRoleLabel ? (
+              <span className="hidden rounded-full bg-blue-100 px-4 py-2 text-sm font-semibold text-blue-700 xl:inline-flex">
+                {ROLE_LABELS[user.role]}
+              </span>
+            ) : null}
             <Button
               icon={
                 <Badge count={unreadCount} offset={[5, -4]} size="small">
@@ -257,10 +270,18 @@ export default function AppShell({ children }: PropsWithChildren) {
       >
         <div className="space-y-5">
           <div className="rounded-app border border-border bg-primary-soft/55 p-4">
-            <p className="m-0 text-xs font-semibold uppercase tracking-[0.08em] text-text-soft">
-              {user ? ROLE_LABELS[user.role] : 'Workspace'}
-            </p>
-            <p className="m-0 mt-1 text-sm font-semibold text-text">{user?.name}</p>
+            {showRoleLabel ? (
+              <p className="m-0 text-xs font-semibold uppercase tracking-[0.08em] text-text-soft">
+                {ROLE_LABELS[user.role]}
+              </p>
+            ) : null}
+            {user ? (
+              <UserProfileLink
+                className="mt-1 block text-sm font-semibold text-text hover:text-primary"
+                name={user.name}
+                userId={user.id}
+              />
+            ) : null}
           </div>
 
           <NavItems onNavigate={() => setMobileNavOpen(false)} />

@@ -5,7 +5,9 @@ import type {
   ClubListQuery,
   ClubMembersQuery,
   ClubMembershipRequestsQuery,
+  CreateClubInput,
   ReviewMembershipInput,
+  UpdateClubInput,
   UpdateMembershipRoleInput
 } from './club.validation.js'
 import * as clubService from './club.service.js'
@@ -33,8 +35,29 @@ export async function index(req: Request, res: Response) {
   )
 }
 
+export async function store(req: Request, res: Response) {
+  return success(
+    res,
+    await clubService.createClub(getValidatedBody<CreateClubInput>(req), req.auth!.user),
+    'Club created',
+    201
+  )
+}
+
 export async function show(req: Request, res: Response) {
   return success(res, await clubService.getClubDetail(getClubId(req), req.auth!.user))
+}
+
+export async function update(req: Request, res: Response) {
+  return success(
+    res,
+    await clubService.updateClub(
+      getClubId(req),
+      getValidatedBody<UpdateClubInput>(req),
+      req.auth!.user
+    ),
+    'Club updated'
+  )
 }
 
 export async function requestMembership(req: Request, res: Response) {

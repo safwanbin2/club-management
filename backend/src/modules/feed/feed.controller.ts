@@ -42,6 +42,10 @@ export async function manageableClubs(req: Request, res: Response) {
   return success(res, await feedService.listManageableClubs(req.auth!.user))
 }
 
+export async function postableClubs(req: Request, res: Response) {
+  return success(res, await feedService.listPostableClubs(req.auth!.user))
+}
+
 export async function store(req: Request, res: Response) {
   return success(
     res,

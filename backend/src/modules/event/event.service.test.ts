@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
+import { ApplicationError } from '../../utils/application-error.js'
 import {
+  assertCanRequestEventRegistration,
   getInitialRegistrationPlacement,
   getRegistrationPlacement,
   getReviewedRegistrationPlacement,
@@ -22,11 +24,11 @@ describe('event.service waitlist rules', () => {
     })
   })
 
-  it('keeps paid registrations pending until executive review', () => {
+  it('keeps all registrations pending until executive review', () => {
     expect(
       getInitialRegistrationPlacement({
         capacity: 5,
-        feeAmount: 250,
+        feeAmount: 0,
         registeredCount: 1,
         waitlistedCount: 0
       })
@@ -49,5 +51,12 @@ describe('event.service waitlist rules', () => {
     expect(shouldPromoteFromWaitlist('pending')).toBe(false)
     expect(shouldPromoteFromWaitlist('declined')).toBe(false)
     expect(shouldPromoteFromWaitlist('cancelled')).toBe(false)
+  })
+})
+
+describe('event.service registration requester rules', () => {
+  it('blocks event managers from requesting registration for managed events', () => {
+    expect(() => assertCanRequestEventRegistration(true)).toThrow(ApplicationError)
+    expect(() => assertCanRequestEventRegistration(false)).not.toThrow()
   })
 })

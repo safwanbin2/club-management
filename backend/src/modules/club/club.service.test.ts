@@ -3,6 +3,8 @@ import { describe, expect, it } from 'vitest'
 import { ApplicationError } from '../../utils/application-error.js'
 import {
   assertMembershipCanLeave,
+  buildClubWritePayload,
+  createClubSlug,
   getMembershipRequestPlan,
   getMembershipRoleUpdatePlan
 } from './club.service.js'
@@ -90,5 +92,50 @@ describe('club.service membership rules', () => {
         { clubRole: 'executive', executivePosition: 'Secretary' }
       )
     ).toThrow(ApplicationError)
+  })
+})
+
+describe('club.service club write rules', () => {
+  it('creates stable slugs from club names', () => {
+    expect(createClubSlug(' Robotics & AI Club!! ')).toBe('robotics-ai-club')
+  })
+
+  it('normalizes optional club write fields', () => {
+    expect(
+      buildClubWritePayload({
+        category: 'technology',
+        contactEmail: '',
+        contactPhone: ' +880 1700 000000 ',
+        coverImageUrl: '',
+        description: 'Builds campus software and hardware projects.',
+        facultyAdvisor: {
+          department: '',
+          email: '',
+          name: ' Dr. Ada Rahman '
+        },
+        gallery: ['https://example.com/club.jpg'],
+        logoUrl: '',
+        name: ' Robotics Club ',
+        socialLinks: {
+          facebook: '',
+          instagram: 'https://instagram.com/robotics'
+        }
+      })
+    ).toEqual({
+      category: 'technology',
+      contactEmail: null,
+      contactPhone: '+880 1700 000000',
+      coverImageUrl: null,
+      description: 'Builds campus software and hardware projects.',
+      facultyAdvisor: {
+        name: 'Dr. Ada Rahman'
+      },
+      gallery: ['https://example.com/club.jpg'],
+      logoUrl: null,
+      name: 'Robotics Club',
+      socialLinks: {
+        instagram: 'https://instagram.com/robotics'
+      }
+    })
   })
 })

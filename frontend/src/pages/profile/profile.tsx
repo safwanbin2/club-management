@@ -1,14 +1,114 @@
-import { Alert, App as AntApp, Avatar, Button, Empty, Form, Input, List, Tag } from 'antd'
-import { Award, Building2, RefreshCw, Save, UserRound } from 'lucide-react'
+import { Alert, App as AntApp, Avatar, Button, Empty, Form, Input, List, Select, Tag } from 'antd'
+import {
+  Award,
+  Building2,
+  CalendarDays,
+  Clock,
+  MapPin,
+  RefreshCw,
+  Save,
+  ShieldCheck,
+  UserRound
+} from 'lucide-react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 
 import { ROLE_LABELS } from '@common/constants/roles'
+import {
+  EAST_DELTA_PROGRAM_OPTIONS,
+  isEastDeltaProgram
+} from '@common/constants/east-delta-university'
 import getApiErrorMessage from '@common/helpers/get-api-error-message'
 import AppShell from '@features/app-shell'
+import {
+  formatEventStatus,
+  formatRegistrationStatus,
+  formatTimeRange
+} from '@pages/events/shared/helpers'
 import useProfile from './data/use-profile'
 import useUpdateProfile from './data/use-update-profile'
 import { formatDateTime, getInitials } from './shared/helpers'
-import type { UpdateOwnProfilePayload } from './shared/types'
+import type {
+  ProfileJoinedEvent,
+  ProfileManagedEvent,
+  UpdateOwnProfilePayload
+} from './shared/types'
+
+type ProfileEvent = ProfileJoinedEvent | ProfileManagedEvent
+
+function getEventStatusColor(status: ProfileEvent['status']) {
+  if (status === 'published') return 'green'
+  if (status === 'draft') return 'blue'
+  if (status === 'completed') return 'purple'
+  return 'red'
+}
+
+function getRegistrationStatusColor(status: ProfileJoinedEvent['registrationStatus']) {
+  return status === 'registered' ? 'green' : 'gold'
+}
+
+function isJoinedEvent(event: ProfileEvent): event is ProfileJoinedEvent {
+  return 'registrationStatus' in event
+}
+
+function ProfileEventList({ emptyText, events }: { emptyText: string; events: ProfileEvent[] }) {
+  if (events.length === 0) {
+    return <Empty description={emptyText} image={Empty.PRESENTED_IMAGE_SIMPLE} />
+  }
+
+  return (
+    <List
+      dataSource={events}
+      renderItem={event => (
+        <List.Item className="!items-start">
+          <List.Item.Meta
+            avatar={
+              <span className="grid h-10 w-10 place-items-center rounded-app bg-primary/10 text-primary">
+                <CalendarDays aria-hidden="true" size={18} />
+              </span>
+            }
+            description={
+              <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-text-soft">
+                <Link className="font-semibold text-primary" to={`/clubs/${event.club.slug}`}>
+                  {event.club.name}
+                </Link>
+                <span className="inline-flex items-center gap-1">
+                  <CalendarDays aria-hidden="true" size={14} />
+                  {formatDateTime(event.startsAt)}
+                </span>
+                <span className="inline-flex items-center gap-1">
+                  <Clock aria-hidden="true" size={14} />
+                  {formatTimeRange(event.startsAt, event.endsAt)}
+                </span>
+                <span className="inline-flex items-center gap-1">
+                  <MapPin aria-hidden="true" size={14} />
+                  {event.venue}
+                </span>
+              </div>
+            }
+            title={
+              <div className="flex flex-wrap items-center gap-2">
+                <Link
+                  className="font-bold text-text hover:text-primary"
+                  to={`/events?event=${event.id}`}
+                >
+                  {event.title}
+                </Link>
+                <Tag color={getEventStatusColor(event.status)}>
+                  {formatEventStatus(event.status)}
+                </Tag>
+                {isJoinedEvent(event) ? (
+                  <Tag color={getRegistrationStatusColor(event.registrationStatus)}>
+                    {formatRegistrationStatus(event.registrationStatus)}
+                  </Tag>
+                ) : null}
+              </div>
+            }
+          />
+        </List.Item>
+      )}
+    />
+  )
+}
 
 export default function ProfilePage() {
   const { userId } = useParams()
@@ -17,6 +117,8 @@ export default function ProfilePage() {
   const { isProfileError, isProfilePending, profile, refetchProfile } = useProfile(userId)
   const updateProfile = useUpdateProfile()
   const [form] = Form.useForm<UpdateOwnProfilePayload>()
+  const shouldShowManagement =
+    Boolean(profile?.executivePositions.length) || Boolean(profile?.eventSummary.managedCount)
 
   const handleFinish = (values: UpdateOwnProfilePayload) => {
     updateProfile.mutate(values, {
@@ -59,15 +161,33 @@ export default function ProfilePage() {
                   {[profile.user.department, profile.user.studentId].filter(Boolean).join(' • ')}
                 </p>
               </div>
-              <div className="flex flex-wrap gap-2">
-                <Button icon={<RefreshCw size={16} />} onClick={() => refetchProfile()}>
-                  Refresh
-                </Button>
-                {profile.isOwnProfile ? (
-                  <Button onClick={() => navigate('/settings')} type="primary">
-                    Account Settings
+              <div className="space-y-3">
+                <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm">
+                  <div>
+                    <span className="block text-2xl font-bold text-text">
+                      {profile.eventSummary.joinedCount}
+                    </span>
+                    <span className="text-text-soft">Events joined</span>
+                  </div>
+                  {shouldShowManagement ? (
+                    <div>
+                      <span className="block text-2xl font-bold text-text">
+                        {profile.eventSummary.managedCount}
+                      </span>
+                      <span className="text-text-soft">Events managed</span>
+                    </div>
+                  ) : null}
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <Button icon={<RefreshCw size={16} />} onClick={() => refetchProfile()}>
+                    Refresh
                   </Button>
-                ) : null}
+                  {profile.isOwnProfile ? (
+                    <Button onClick={() => navigate('/settings')} type="primary">
+                      Account Settings
+                    </Button>
+                  ) : null}
+                </div>
               </div>
             </section>
 
@@ -83,7 +203,9 @@ export default function ProfilePage() {
                       form={form}
                       initialValues={{
                         avatarUrl: profile.user.avatarUrl ?? undefined,
-                        department: profile.user.department ?? undefined,
+                        department: isEastDeltaProgram(profile.user.department)
+                          ? profile.user.department
+                          : undefined,
                         name: profile.user.name,
                         studentId: profile.user.studentId ?? undefined
                       }}
@@ -98,8 +220,14 @@ export default function ProfilePage() {
                         <Form.Item label="Student ID" name="studentId">
                           <Input />
                         </Form.Item>
-                        <Form.Item label="Department" name="department">
-                          <Input />
+                        <Form.Item label="Department / Program" name="department">
+                          <Select
+                            allowClear
+                            showSearch
+                            optionFilterProp="label"
+                            options={EAST_DELTA_PROGRAM_OPTIONS}
+                            placeholder="Select a program"
+                          />
                         </Form.Item>
                         <Form.Item label="Avatar URL" name="avatarUrl">
                           <Input placeholder="https://..." />
@@ -114,6 +242,53 @@ export default function ProfilePage() {
                         Save Profile
                       </Button>
                     </Form>
+                  </section>
+                ) : null}
+
+                <section className="rounded-app border border-border bg-surface p-5 shadow-panel">
+                  <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+                    <h2 className="m-0 inline-flex items-center gap-2 text-xl font-bold text-text">
+                      <CalendarDays aria-hidden="true" size={20} />
+                      Event Participation
+                    </h2>
+                    <Tag color="green">{profile.eventSummary.joinedCount} joined</Tag>
+                  </div>
+                  <ProfileEventList
+                    emptyText="No joined events yet"
+                    events={profile.eventSummary.joinedEvents}
+                  />
+                  {profile.eventSummary.joinedCount > profile.eventSummary.joinedEvents.length ? (
+                    <Link
+                      className="mt-3 inline-flex font-semibold text-primary"
+                      to="/events?scope=registered"
+                    >
+                      View all joined events
+                    </Link>
+                  ) : null}
+                </section>
+
+                {shouldShowManagement ? (
+                  <section className="rounded-app border border-border bg-surface p-5 shadow-panel">
+                    <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+                      <h2 className="m-0 inline-flex items-center gap-2 text-xl font-bold text-text">
+                        <ShieldCheck aria-hidden="true" size={20} />
+                        Management
+                      </h2>
+                      <Tag color="blue">{profile.eventSummary.managedCount} managed</Tag>
+                    </div>
+                    <ProfileEventList
+                      emptyText="No managed events yet"
+                      events={profile.eventSummary.managedEvents}
+                    />
+                    {profile.eventSummary.managedCount >
+                    profile.eventSummary.managedEvents.length ? (
+                      <Link
+                        className="mt-3 inline-flex font-semibold text-primary"
+                        to="/events?scope=managed"
+                      >
+                        View all managed events
+                      </Link>
+                    ) : null}
                   </section>
                 ) : null}
 

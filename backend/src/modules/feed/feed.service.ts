@@ -16,7 +16,7 @@ import { CommentModel } from './comment.model.js'
 import type { Comment } from './comment.types.js'
 import { PostLikeModel } from './post-like.model.js'
 import { PostModel } from './post.model.js'
-import type { ModerationStatus, Post } from './post.types.js'
+import type { ModerationStatus, Post, PostType, PostVisibility } from './post.types.js'
 import type {
   CreateFeedCommentInput,
   CreateFeedPostInput,
@@ -55,6 +55,14 @@ type PostLean = Post & {
 
 type UserLean = User & {
   _id: Types.ObjectId
+}
+
+type FeedPostCreationPlan = {
+  clubId: null | string
+  highlighted: boolean
+  pinned: boolean
+  type: Extract<PostType, 'achievement' | 'announcement' | 'post'>
+  visibility: PostVisibility
 }
 
 const defaultPagination = {
@@ -192,6 +200,20 @@ async function findActiveClub(identifier: string) {
   }
 
   return club
+}
+
+async function actorHasActiveClubMembership(actor: UserDto, clubId: Types.ObjectId) {
+  if (isUniversityAdmin(actor)) {
+    return true
+  }
+
+  const membership = await MembershipModel.exists({
+    club: clubId,
+    status: 'active',
+    user: toObjectId(actor.id)
+  })
+
+  return Boolean(membership)
 }
 
 async function buildFeedVisibilityClause(actor: UserDto): Promise<FilterQuery<Post> | null> {
@@ -425,6 +447,72 @@ export function buildPostModerationUpdate(
   return update
 }
 
+export function buildFeedPostCreationPlan(input: {
+  actorCanManageClub: boolean
+  actorIsActiveClubMember: boolean
+  clubId: null | string
+  highlighted: boolean | undefined
+  pinned: boolean
+  type: Extract<PostType, 'achievement' | 'announcement' | 'post'>
+  visibility: PostVisibility
+}): FeedPostCreationPlan {
+  if (!input.clubId) {
+    if (input.type !== 'post') {
+      throw new ApplicationError(
+        'Club is required for announcement and achievement posts.',
+        422,
+        'CLUB_REQUIRED'
+      )
+    }
+
+    if (input.visibility !== 'public') {
+      throw new ApplicationError(
+        'Club-free posts must be public.',
+        422,
+        'CLUB_FREE_POST_PUBLIC_REQUIRED'
+      )
+    }
+
+    if (input.pinned || input.highlighted) {
+      throw new ApplicationError(
+        'Only club managers can pin or highlight feed posts.',
+        403,
+        'FORBIDDEN'
+      )
+    }
+
+    return {
+      clubId: null,
+      highlighted: false,
+      pinned: false,
+      type: 'post',
+      visibility: 'public'
+    }
+  }
+
+  if (!input.actorCanManageClub && !input.actorIsActiveClubMember) {
+    throw new ApplicationError('Only active club members can post in this club.', 403, 'FORBIDDEN')
+  }
+
+  if (input.type !== 'post' && !input.actorCanManageClub) {
+    throw new ApplicationError(
+      `Only club managers can publish ${input.type} posts.`,
+      403,
+      'FORBIDDEN'
+    )
+  }
+
+  return {
+    clubId: input.clubId,
+    highlighted: input.actorCanManageClub
+      ? (input.highlighted ?? input.type === 'announcement')
+      : false,
+    pinned: input.actorCanManageClub ? input.pinned : false,
+    type: input.type,
+    visibility: input.visibility
+  }
+}
+
 export async function listFeedPosts(
   query: FeedListQuery,
   actor: UserDto
@@ -563,25 +651,71 @@ export async function listManageableClubs(actor: UserDto): Promise<FeedManageabl
   return clubs.map(toClubDto)
 }
 
+export async function listPostableClubs(actor: UserDto): Promise<FeedManageableClubDto[]> {
+  if (isUniversityAdmin(actor)) {
+    const clubs = (await ClubModel.find({
+      deletedAt: null,
+      status: 'active'
+    })
+      .sort({ name: 1 })
+      .lean()) as ClubLean[]
+
+    return clubs.map(toClubDto)
+  }
+
+  const memberships = (await MembershipModel.find({
+    status: 'active',
+    user: toObjectId(actor.id)
+  }).lean()) as MembershipLean[]
+
+  if (memberships.length === 0) {
+    return []
+  }
+
+  const clubs = (await ClubModel.find({
+    _id: { $in: memberships.map(membership => membership.club) },
+    deletedAt: null,
+    status: 'active'
+  })
+    .sort({ name: 1 })
+    .lean()) as ClubLean[]
+
+  return clubs.map(toClubDto)
+}
+
 export async function createFeedPost(input: CreateFeedPostInput, actor: UserDto) {
-  const club = await findActiveClub(input.clubId)
-  await assertActorCanManageClub(actor, club._id)
+  const club = input.clubId ? await findActiveClub(input.clubId) : null
+  const [actorCanManageClub, actorIsActiveClubMember] = club
+    ? await Promise.all([
+        canActorManageClub(actor, club._id),
+        actorHasActiveClubMembership(actor, club._id)
+      ])
+    : [false, false]
+  const plan = buildFeedPostCreationPlan({
+    actorCanManageClub,
+    actorIsActiveClubMember,
+    clubId: club ? club._id.toString() : null,
+    highlighted: input.highlighted,
+    pinned: input.pinned,
+    type: input.type,
+    visibility: input.visibility
+  })
 
   const post = await PostModel.create({
     author: toObjectId(actor.id),
     body: input.body,
-    club: club._id,
+    club: club?._id ?? null,
     commentCount: 0,
-    highlighted: input.highlighted ?? input.type === 'announcement',
+    highlighted: plan.highlighted,
     images: input.images,
     likeCount: 0,
     moderationStatus: 'visible',
-    pinned: input.pinned,
+    pinned: plan.pinned,
     relatedEvent: null,
     relatedPoll: null,
     title: input.title ?? null,
-    type: input.type,
-    visibility: input.visibility
+    type: plan.type,
+    visibility: plan.visibility
   })
 
   const [dto] = await createPostDtos([post.toObject() as PostLean], actor)

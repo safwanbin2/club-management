@@ -1,4 +1,5 @@
 import type {
+  EventItem,
   EventListPayload,
   EventRegistrationStatus,
   EventScope,
@@ -139,4 +140,8 @@ export function getEntityInitials(name: string) {
 export function isEventRegistrationOpen(startsAt: string, registrationDeadline: string) {
   const now = Date.now()
   return new Date(startsAt).getTime() > now && new Date(registrationDeadline).getTime() >= now
+}
+
+export function shouldShowEventRegistrationAction(event: Pick<EventItem, 'canManage'>) {
+  return !event.canManage
 }

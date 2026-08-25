@@ -45,8 +45,9 @@ Acceptance:
 - Event CRUD exists for executives.
 - Students can register or cancel.
 - Executives can create paid events with a fee and bKash send-money number.
-- Paid registrations collect a transaction ID and stay pending until executive/admin review.
-- Executives/admins can approve or decline paid registration requests with a reason.
+- All registrations stay pending until executive/admin review.
+- Paid registrations collect a transaction ID for bKash validation.
+- Executives/admins can approve or decline registration requests with a reason.
 - Capacity produces a waitlist.
 - Cancelling promotes the first waitlisted student.
 - Notifications are created for registration and waitlist promotion.

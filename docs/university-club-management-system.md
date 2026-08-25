@@ -233,11 +233,13 @@ Students can:
 - Cancel registration
 - Submit a bKash transaction ID for paid event registration
 
+All event registrations start as pending requests. A club executive for the event's club or a university administrator approves or declines each request with remarks, and approval places the member into registered or waitlisted status based on capacity.
+
 Paid events:
 
 - Event creator lists a bKash send-money number.
 - Members send money externally and paste the transaction ID during registration.
-- Paid registrations stay pending until an executive or university administrator approves or declines them with a reason.
+- Payment-enabled registration requests keep the submitted bKash transaction ID for executive or administrator validation.
 
 When capacity is reached:
 

@@ -28,7 +28,9 @@ import type {
   ClubListQuery,
   ClubMembersQuery,
   ClubMembershipRequestsQuery,
+  CreateClubInput,
   ReviewMembershipInput,
+  UpdateClubInput,
   UpdateMembershipRoleInput
 } from './club.validation.js'
 
@@ -57,6 +59,8 @@ type MembershipRequestPlan =
       kind: 'already-pending'
     }
 
+type ClubWriteInput = Omit<CreateClubInput, 'status'> | Omit<UpdateClubInput, 'status'>
+
 const defaultPagination = {
   currentPage: 1,
   currentTotal: 0,
@@ -80,6 +84,38 @@ function isUniversityAdmin(actor: UserDto) {
 
 function escapeRegex(value: string) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
+function normalizeNullableText(value: string | undefined) {
+  const trimmed = value?.trim() ?? ''
+  return trimmed.length > 0 ? trimmed : null
+}
+
+function normalizeOptionalText(value: string | undefined) {
+  const trimmed = value?.trim() ?? ''
+  return trimmed.length > 0 ? trimmed : undefined
+}
+
+function normalizeStringList(values: (string | undefined)[] | undefined) {
+  return values?.map(value => value?.trim() ?? '').filter(Boolean) ?? []
+}
+
+function normalizeSocialLinks(input: ClubWriteInput['socialLinks']) {
+  const socialLinks: Club['socialLinks'] = {}
+
+  if (!input) {
+    return socialLinks
+  }
+
+  for (const key of ['facebook', 'instagram', 'linkedin', 'website'] as const) {
+    const value = normalizeOptionalText(input[key])
+
+    if (value) {
+      socialLinks[key] = value
+    }
+  }
+
+  return socialLinks
 }
 
 function getPagination<TItem>(
@@ -141,6 +177,89 @@ function toEventPreviewDto(event: EventLean) {
     title: event.title,
     venue: event.venue
   }
+}
+
+export function createClubSlug(value: string) {
+  const slug = value
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+
+  return slug || 'club'
+}
+
+export function buildClubWritePayload(input: ClubWriteInput): Partial<Club> {
+  const payload: Partial<Club> = {}
+
+  if (input.name !== undefined) {
+    payload.name = input.name.trim()
+  }
+
+  if (input.description !== undefined) {
+    payload.description = input.description.trim()
+  }
+
+  if (input.category !== undefined) {
+    payload.category = input.category
+  }
+
+  if (input.facultyAdvisor !== undefined) {
+    payload.facultyAdvisor = {
+      name: input.facultyAdvisor.name.trim()
+    }
+
+    const department = normalizeOptionalText(input.facultyAdvisor.department)
+    const email = normalizeOptionalText(input.facultyAdvisor.email)
+
+    if (department) {
+      payload.facultyAdvisor.department = department
+    }
+
+    if (email) {
+      payload.facultyAdvisor.email = email
+    }
+  }
+
+  if (input.contactEmail !== undefined) {
+    payload.contactEmail = normalizeNullableText(input.contactEmail)
+  }
+
+  if (input.contactPhone !== undefined) {
+    payload.contactPhone = normalizeNullableText(input.contactPhone)
+  }
+
+  if (input.logoUrl !== undefined) {
+    payload.logoUrl = normalizeNullableText(input.logoUrl)
+  }
+
+  if (input.coverImageUrl !== undefined) {
+    payload.coverImageUrl = normalizeNullableText(input.coverImageUrl)
+  }
+
+  if (input.gallery !== undefined) {
+    payload.gallery = normalizeStringList(input.gallery)
+  }
+
+  if (input.socialLinks !== undefined) {
+    payload.socialLinks = normalizeSocialLinks(input.socialLinks)
+  }
+
+  return payload
+}
+
+async function createUniqueClubSlug(name: string) {
+  const baseSlug = createClubSlug(name)
+  let slug = baseSlug
+  let suffix = 2
+
+  while (await ClubModel.exists({ slug })) {
+    slug = `${baseSlug}-${suffix}`
+    suffix += 1
+  }
+
+  return slug
 }
 
 function createClubDto(input: {
@@ -480,6 +599,58 @@ async function assertActorCanManageClub(actor: UserDto, clubId: Types.ObjectId) 
   throw new ApplicationError('You cannot manage membership for this club.', 403, 'FORBIDDEN')
 }
 
+export async function createClub(input: CreateClubInput, actor: UserDto) {
+  if (!roleHasCapability(actor.role, CAPABILITIES.clubsCreate)) {
+    throw new ApplicationError('You cannot create clubs.', 403, 'FORBIDDEN')
+  }
+
+  const payload = buildClubWritePayload(input)
+  const createdClub = await ClubModel.create({
+    ...payload,
+    createdBy: toObjectId(actor.id),
+    deletedAt: null,
+    disabledAt: input.status === 'disabled' ? new Date() : null,
+    slug: await createUniqueClubSlug(input.name),
+    status: input.status
+  })
+
+  return getClubDetail(createdClub._id.toString(), actor)
+}
+
+export async function updateClub(identifier: string, input: UpdateClubInput, actor: UserDto) {
+  const club = await findVisibleClubByIdentifier(identifier, actor)
+  await assertActorCanManageClub(actor, club._id)
+
+  if (input.status !== undefined && !isUniversityAdmin(actor)) {
+    throw new ApplicationError(
+      'Only university administrators can change club status.',
+      403,
+      'FORBIDDEN'
+    )
+  }
+
+  const payload = buildClubWritePayload(input)
+
+  if (input.status !== undefined) {
+    payload.status = input.status
+    payload.disabledAt = input.status === 'disabled' ? new Date() : null
+  }
+
+  const updatedClub = (await ClubModel.findByIdAndUpdate(
+    club._id,
+    {
+      $set: payload
+    },
+    { new: true }
+  ).lean()) as ClubLean | null
+
+  if (!updatedClub) {
+    throw new ApplicationError('Club not found.', 404, 'CLUB_NOT_FOUND')
+  }
+
+  return getClubDetail(updatedClub._id.toString(), actor)
+}
+
 export async function listClubs(query: ClubListQuery, actor: UserDto): Promise<ClubListResult> {
   const filter = await applyMembershipStatusFilter(
     buildClubFilter(query, actor),
@@ -599,7 +770,11 @@ async function assertActorCanViewClubMembers(actor: UserDto, clubId: Types.Objec
   })
 
   if (!membership) {
-    throw new ApplicationError('Only active club members can view this member list.', 403, 'FORBIDDEN')
+    throw new ApplicationError(
+      'Only active club members can view this member list.',
+      403,
+      'FORBIDDEN'
+    )
   }
 }
 

@@ -187,12 +187,8 @@ export default function EventsPage() {
         onError: error => {
           message.error(getApiErrorMessage(error, 'Event registration could not be updated.'))
         },
-        onSuccess: registration => {
-          message.success(
-            registration.data.status === 'waitlisted'
-              ? 'Added to event waitlist.'
-              : 'Event registration confirmed.'
-          )
+        onSuccess: () => {
+          message.success('Registration request submitted for executive review.')
         }
       }
     )
@@ -208,14 +204,8 @@ export default function EventsPage() {
         onError: error => {
           message.error(getApiErrorMessage(error, 'Event registration could not be updated.'))
         },
-        onSuccess: registration => {
-          message.success(
-            registration.data.status === 'pending'
-              ? 'Payment submitted for executive review.'
-              : registration.data.status === 'waitlisted'
-                ? 'Added to event waitlist.'
-                : 'Event registration confirmed.'
-          )
+        onSuccess: () => {
+          message.success('Payment submitted with registration request for executive review.')
           setPaymentEvent(null)
         }
       }

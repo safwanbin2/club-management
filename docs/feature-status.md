@@ -1,6 +1,7 @@
 # Feature Status
 
 Last verified: July 17, 2026.
+Last updated: August 25, 2026.
 
 Use this file as the handoff ledger for future agents. It tracks what is complete, what is only partially built, and what should be built next. The source of truth for product behavior remains `docs/university-club-management-system.md`; the build order comes from `docs/feature-slices.md`.
 
@@ -107,6 +108,7 @@ Implemented:
   - register
   - forgot password
   - reset password
+- Registration now requires an `@eastdelta.edu.bd` email address and collects department/program from the configured East Delta University program list instead of free text.
 - Protected and guest route guards.
 - Auth bootstrap on app load.
 - Role-aware app shell.
@@ -130,8 +132,10 @@ Status: `Complete`
 Implemented:
 
 - Backend club routes:
-  - `GET /api/clubs`
-  - `GET /api/clubs/:clubId`
+- `GET /api/clubs`
+- `POST /api/clubs`
+- `GET /api/clubs/:clubId`
+- `PATCH /api/clubs/:clubId`
   - `POST /api/clubs/:clubId/memberships/request`
   - `POST /api/clubs/:clubId/memberships/leave`
   - `GET /api/clubs/:clubId/memberships`
@@ -141,6 +145,8 @@ Implemented:
 - Club list search, category/status filters, membership filters, pagination, and sorting.
 - Club detail with membership summary, current-user membership status, executive committee, and upcoming event previews.
 - Student membership request and leave/cancel flows.
+- University admin club creation from the club directory.
+- Club-scoped executive/admin club detail editing, with status changes restricted to university administrators.
 - Executive/admin pending request review with approve/reject actions.
 - Active-member roster visible to active members and managers.
 - Executive/admin member role promotion and demotion for active memberships.
@@ -152,7 +158,7 @@ Implemented:
 
 Known follow-up:
 
-- Admin create/disable club management remains a later administration expansion, not part of the Slice 2 student/executive membership acceptance.
+- A dedicated bulk admin club management table can be added later if status audits, owner transfer, or mass actions need more space than the directory/detail flows.
 - Demo seed clubs currently rely on generated category visuals when no club cover/logo URL exists.
 
 Verification:
@@ -171,9 +177,10 @@ Implemented:
 
 - Backend feed routes:
   - `GET /api/feed`
-  - `GET /api/feed/trending-clubs`
-  - `GET /api/feed/manageable-clubs`
-  - `POST /api/feed/posts`
+- `GET /api/feed/trending-clubs`
+- `GET /api/feed/manageable-clubs`
+- `GET /api/feed/postable-clubs`
+- `POST /api/feed/posts`
   - `POST /api/feed/posts/:postId/like`
   - `GET /api/feed/posts/:postId/comments`
   - `POST /api/feed/posts/:postId/comments`
@@ -181,7 +188,9 @@ Implemented:
   - `PATCH /api/feed/posts/:postId/comments/:commentId/moderation`
 - `post_likes` persistence with one-like-per-user uniqueness.
 - Feed list search, type filters, pagination, latest/popular sorting, public/member visibility rules, like state, and per-post management flags.
-- Club-scoped executive/admin creation for posts, announcements, and achievements.
+- Authenticated campus feed posts without a club.
+- Active-member regular posts in joined clubs.
+- Club-scoped executive/admin creation for announcements and achievements.
 - Like and comment workflows with post counter updates.
 - Club-scoped pin, highlight, hide, delete, and comment moderation behavior.
 - Frontend `/feed` page using the News Feed Stitch references with filters, loading, empty, error, pagination, create-post modal, comments drawer, toast feedback, and a real trending-clubs rail.
@@ -215,16 +224,16 @@ Implemented:
   - `GET /api/events/:eventId`
   - `PATCH /api/events/:eventId`
   - `DELETE /api/events/:eventId`
-  - `POST /api/events/:eventId/register`
+- `POST /api/events/:eventId/register`
   - `POST /api/events/:eventId/cancel-registration`
   - `GET /api/events/:eventId/registrations`
   - `PATCH /api/events/:eventId/registrations/:registrationId/review`
 - Event list search, scope filters, status filters, timeframe filters, pagination, latest/upcoming sorting, public/member visibility rules, registration counts, current-user registration status, and management flags.
 - Club-scoped executive/admin event creation, editing, and soft deletion.
 - Paid event creation with fee amount and bKash send-money number.
-- Student registration and cancellation.
+- Student registration request and cancellation.
 - Paid registration transaction ID submission with pending status.
-- Executive/admin approval or decline for pending paid registrations.
+- Executive/admin approval or decline for all pending registration requests.
 - Capacity-based waitlist placement.
 - First-waitlisted promotion when a confirmed attendee cancels.
 - Registration and waitlist-promotion notifications.
@@ -312,8 +321,9 @@ Implemented:
 - Notification inbox filters, unread count, single mark-read, and mark-all-read behavior.
 - Badge earning rules for first club joined, event registration, executive membership, volunteer membership, and community leadership.
 - Badge-earned notifications for newly awarded profile achievements.
-- Own profile page with private profile editing, clubs, badges, and activity timeline.
-- Public profile page with profile-visibility enforcement and limited user details.
+- Own profile page with private profile editing, joined-event count/list, managed-event count/list for executives/advisors, clubs, badges, and activity timeline.
+- Private profile editing now uses the same configured East Delta University department/program select as registration.
+- Public profile page with profile-visibility enforcement, visible event summaries, and limited user details.
 - Account settings page for profile visibility, notification preferences, and password changes.
 - Header notification badge, notification page route, profile menu, and settings navigation.
 

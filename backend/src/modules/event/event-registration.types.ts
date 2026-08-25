@@ -1,11 +1,7 @@
 import type { Types } from 'mongoose'
 
 export type EventRegistrationStatus =
-  | 'cancelled'
-  | 'declined'
-  | 'pending'
-  | 'registered'
-  | 'waitlisted'
+  'cancelled' | 'declined' | 'pending' | 'registered' | 'waitlisted'
 
 export type EventRegistrationPaymentMethod = 'bkash_send_money' | null
 

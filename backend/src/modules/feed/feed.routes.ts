@@ -40,9 +40,15 @@ router.get(
   asyncHandler(feedController.manageableClubs)
 )
 
+router.get(
+  '/postable-clubs',
+  requireCapability(CAPABILITIES.feedCreate),
+  asyncHandler(feedController.postableClubs)
+)
+
 router.post(
   '/posts',
-  requireCapability(CAPABILITIES.feedCreateClub),
+  requireCapability(CAPABILITIES.feedCreate),
   validate({ body: createFeedPostSchema }),
   asyncHandler(feedController.store)
 )

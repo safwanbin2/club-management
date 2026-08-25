@@ -13,7 +13,11 @@ type ClubMembersPanelProps = {
   isRoleUpdatePending: boolean
   members: ClubMember[]
   onRefresh: () => void
-  onUpdateRole: (member: ClubMember, clubRole: 'executive' | 'member', executivePosition?: string) => void
+  onUpdateRole: (
+    member: ClubMember,
+    clubRole: 'executive' | 'member',
+    executivePosition?: string
+  ) => void
   totalMembers: number
 }
 
@@ -106,7 +110,10 @@ export default function ClubMembersPanel({
             >
               <List.Item.Meta
                 avatar={
-                  <Avatar className="bg-primary text-white" src={member.user.avatarUrl ?? undefined}>
+                  <Avatar
+                    className="bg-primary text-white"
+                    src={member.user.avatarUrl ?? undefined}
+                  >
                     {getClubInitials(member.user.name)}
                   </Avatar>
                 }
