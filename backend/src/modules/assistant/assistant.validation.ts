@@ -11,4 +11,9 @@ export const assistantChatSchema = z.object({
     .transform(value => value || undefined)
 })
 
+export const assistantRunParamsSchema = z.object({
+  runId: z.string().trim().min(12, 'Assistant run id is required.').max(120)
+})
+
 export type AssistantChatRequest = z.infer<typeof assistantChatSchema>
+export type AssistantRunParams = z.infer<typeof assistantRunParamsSchema>

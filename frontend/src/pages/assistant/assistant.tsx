@@ -1,9 +1,10 @@
 import { App as AntApp, Button, Empty, Form, Input, Skeleton, Tag } from 'antd'
 import { Bot, Gauge, History, Search, Send, Sparkles } from 'lucide-react'
-import { useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import getApiErrorMessage from '@common/helpers/get-api-error-message'
 import AppShell from '@features/app-shell'
+import useAssistantRun from './data/use-assistant-run'
 import useSendAssistantMessage from './data/use-send-assistant-message'
 import {
   createPendingAssistantExchangeMessages,
@@ -15,6 +16,12 @@ import type { AssistantMessage, AssistantToolTrace } from './shared/types'
 
 type AssistantFormValues = {
   message: string
+}
+
+type ActiveAssistantRun = {
+  assistantMessageId: string
+  previousInteractionId?: string
+  runId: string
 }
 
 const suggestedPrompts = [
@@ -117,9 +124,13 @@ export default function AssistantPage() {
   const [form] = Form.useForm<AssistantFormValues>()
   const transcriptRef = useRef<HTMLDivElement>(null)
   const pendingAssistantMessageIdRef = useRef<null | string>(null)
+  const [activeRun, setActiveRun] = useState<ActiveAssistantRun | null>(null)
   const [messages, setMessages] = useState<AssistantMessage[]>([])
   const [previousInteractionId, setPreviousInteractionId] = useState<string>()
   const sendAssistantMessage = useSendAssistantMessage()
+  const { assistantRun, assistantRunError, isAssistantRunError } = useAssistantRun(
+    activeRun?.runId ?? null
+  )
 
   const recentTools = useMemo(
     () =>
@@ -130,16 +141,70 @@ export default function AssistantPage() {
     [messages]
   )
   const isWaitingForAssistant =
-    sendAssistantMessage.isPending || messages.some(message => message.status === 'pending')
+    sendAssistantMessage.isPending ||
+    Boolean(activeRun) ||
+    messages.some(message => message.status === 'pending')
 
-  const scrollTranscript = () => {
+  const scrollTranscript = useCallback(() => {
     window.requestAnimationFrame(() => {
       transcriptRef.current?.scrollTo({
         behavior: 'smooth',
         top: transcriptRef.current.scrollHeight
       })
     })
-  }
+  }, [])
+
+  useEffect(() => {
+    if (!activeRun || !assistantRun || assistantRun.status === 'pending') {
+      return
+    }
+
+    if (assistantRun.status === 'completed' && assistantRun.result) {
+      setMessages(currentMessages =>
+        replaceAssistantPendingMessage(
+          currentMessages,
+          activeRun.assistantMessageId,
+          assistantRun.result!
+        )
+      )
+      setPreviousInteractionId(assistantRun.result.interactionId ?? activeRun.previousInteractionId)
+    } else {
+      const errorMessage = assistantRun.error?.message ?? 'Assistant could not respond.'
+
+      setMessages(currentMessages =>
+        replaceAssistantPendingMessageWithError(
+          currentMessages,
+          activeRun.assistantMessageId,
+          errorMessage
+        )
+      )
+      toast.error(errorMessage)
+    }
+
+    pendingAssistantMessageIdRef.current = null
+    setActiveRun(null)
+    scrollTranscript()
+  }, [activeRun, assistantRun, scrollTranscript, toast])
+
+  useEffect(() => {
+    if (!activeRun || !isAssistantRunError) {
+      return
+    }
+
+    const errorMessage = getApiErrorMessage(assistantRunError, 'Assistant status could not load.')
+
+    setMessages(currentMessages =>
+      replaceAssistantPendingMessageWithError(
+        currentMessages,
+        activeRun.assistantMessageId,
+        errorMessage
+      )
+    )
+    pendingAssistantMessageIdRef.current = null
+    setActiveRun(null)
+    toast.error(errorMessage)
+    scrollTranscript()
+  }, [activeRun, assistantRunError, isAssistantRunError, scrollTranscript, toast])
 
   const submitPrompt = (prompt: string) => {
     const message = prompt.trim()
@@ -177,12 +242,38 @@ export default function AssistantPage() {
           toast.error(errorMessage)
           scrollTranscript()
         },
-        onSuccess: response => {
-          setMessages(currentMessages =>
-            replaceAssistantPendingMessage(currentMessages, assistantMessageId, response)
-          )
-          setPreviousInteractionId(response.interactionId ?? interactionIdForRequest)
-          pendingAssistantMessageIdRef.current = null
+        onSuccess: run => {
+          if (run.status === 'completed' && run.result) {
+            setMessages(currentMessages =>
+              replaceAssistantPendingMessage(currentMessages, assistantMessageId, run.result!)
+            )
+            setPreviousInteractionId(run.result.interactionId ?? interactionIdForRequest)
+            pendingAssistantMessageIdRef.current = null
+            scrollTranscript()
+            return
+          }
+
+          if (run.status === 'failed') {
+            const errorMessage = run.error?.message ?? 'Assistant could not respond.'
+
+            setMessages(currentMessages =>
+              replaceAssistantPendingMessageWithError(
+                currentMessages,
+                assistantMessageId,
+                errorMessage
+              )
+            )
+            pendingAssistantMessageIdRef.current = null
+            toast.error(errorMessage)
+            scrollTranscript()
+            return
+          }
+
+          setActiveRun({
+            assistantMessageId,
+            previousInteractionId: interactionIdForRequest,
+            runId: run.runId
+          })
           scrollTranscript()
         }
       }
@@ -274,6 +365,18 @@ export default function AssistantPage() {
                   <Input.TextArea
                     autoSize={{ maxRows: 5, minRows: 2 }}
                     maxLength={2000}
+                    onKeyDown={event => {
+                      if (
+                        event.key !== 'Enter' ||
+                        event.shiftKey ||
+                        event.nativeEvent.isComposing
+                      ) {
+                        return
+                      }
+
+                      event.preventDefault()
+                      submitPrompt(form.getFieldValue('message') ?? '')
+                    }}
                     placeholder="Ask about events, clubs, analytics, resources..."
                   />
                 </Form.Item>

@@ -70,6 +70,8 @@ export type AssistantChatInput = {
   previousInteractionId?: string
 }
 
+export type AssistantRunStatus = 'completed' | 'failed' | 'pending'
+
 export type AssistantToolTrace = {
   label: string
   name: string
@@ -80,4 +82,16 @@ export type AssistantChatResult = {
   interactionId: string | null
   message: string
   toolsUsed: AssistantToolTrace[]
+}
+
+export type AssistantRunSnapshot = {
+  createdAt: string
+  error: null | {
+    code: string
+    message: string
+  }
+  result: AssistantChatResult | null
+  runId: string
+  status: AssistantRunStatus
+  updatedAt: string
 }

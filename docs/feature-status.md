@@ -1,6 +1,6 @@
 # Feature Status
 
-Last updated: August 25, 2026.
+Last updated: August 26, 2026.
 
 Use this file as the handoff ledger for future agents. It tracks what is complete, what is only partially built, and what should be built next. The source of truth for product behavior remains `docs/university-club-management-system.md`; the build order comes from `docs/feature-slices.md`.
 
@@ -502,7 +502,10 @@ Implemented:
 
 - Backend assistant route:
   - `POST /api/assistant/chat`
-- Gemini Interactions API integration through backend-only environment configuration.
+  - `GET /api/assistant/chat/:runId`
+- Async assistant run lifecycle: prompt submission returns immediately with a run id, and the frontend polls for completion instead of holding the original request open.
+- Fast local handling for trivial greetings so simple chat openers do not call Gemini.
+- Gemini `generateContent` integration through backend-only environment configuration, with a server-side request timeout.
 - Allowlisted read-only campus tools for:
   - dashboard summary
   - global campus search
@@ -517,11 +520,12 @@ Known follow-up:
 - Chat transcripts are kept in browser state for the current page session; persist them to MongoDB later if conversation history should survive refreshes.
 - The initial tool layer is read-only. Any future write tools should require explicit confirmation and audit logging.
 - Streaming responses can be added later if the assistant needs token-by-token output.
+- Assistant run state is in-memory and short-lived; use Redis or MongoDB-backed jobs before deploying across multiple backend instances.
 
 Verification:
 
-- Assistant backend focused tests passed.
-- Assistant frontend helper test passed.
+- A local `hi` assistant request completed from the initial POST in 52ms.
+- A local dashboard summary assistant run returned `202` in 52ms and completed through polling in about 3.5s with one tool call.
 - Backend and frontend type checks passed during implementation.
 
 ## Update Protocol

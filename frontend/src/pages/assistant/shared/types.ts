@@ -15,6 +15,20 @@ export type AssistantChatPayload = {
   previousInteractionId?: string
 }
 
+export type AssistantRunStatus = 'completed' | 'failed' | 'pending'
+
+export type AssistantRunResponse = {
+  createdAt: string
+  error: null | {
+    code: string
+    message: string
+  }
+  result: AssistantChatResponse | null
+  runId: string
+  status: AssistantRunStatus
+  updatedAt: string
+}
+
 export type AssistantMessageStatus = 'complete' | 'error' | 'pending'
 
 export type AssistantMessage = {

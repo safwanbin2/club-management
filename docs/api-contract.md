@@ -210,20 +210,23 @@ Search honors existing visibility boundaries. Member-only events and feed posts 
 
 The campus assistant workflow is implemented under `/assistant`:
 
-- `POST /assistant/chat`: authenticated Gemini-powered assistant prompt endpoint.
+- `POST /assistant/chat`: authenticated assistant prompt endpoint that starts an assistant run.
+- `GET /assistant/chat/:runId`: authenticated status endpoint for polling an assistant run until it completes or fails.
 
 Request body:
 
 - `message`: prompt text, trimmed and capped at 2,000 characters.
-- `previousInteractionId`: optional Gemini interaction ID for continuing the current browser-session chat.
+- `previousInteractionId`: optional model conversation ID from the last completed assistant response.
 
-Response data:
+Run response data:
 
-- `message`: final assistant response text.
-- `interactionId`: Gemini interaction ID to send on the next prompt.
-- `toolsUsed`: list of allowlisted campus tools used during the turn.
+- `runId`: short-lived server-side assistant run identifier.
+- `status`: `pending`, `completed`, or `failed`.
+- `result`: final assistant response when complete, containing `message`, `interactionId`, and `toolsUsed`.
+- `error`: assistant error details when failed.
+- `createdAt` and `updatedAt`: run timestamps.
 
-The backend declares Gemini function tools and executes them server-side. Tools are read-only and wrap existing role-aware services for dashboard summaries, global search, resource request analytics, and upcoming events. Gemini never receives the API key or direct database access. The backend reads `GEMINI_API_KEY`, `GEMINI_MODEL`, `GEMINI_PROJECT_NAME`, and `GEMINI_PROJECT_NUMBER` from environment variables.
+The initial `POST` returns immediately with either a completed quick response or a `202` pending run. The frontend polls `GET /assistant/chat/:runId`, so slow model responses do not keep the browser's submit request open. Trivial greetings are answered locally without calling Gemini. The backend uses Gemini `generateContent` with function tools and executes tools server-side. Tools are read-only and wrap existing role-aware services for dashboard summaries, global search, resource request analytics, and upcoming events. Gemini never receives the API key or direct database access. The backend reads `GEMINI_API_KEY`, `GEMINI_MODEL`, `GEMINI_PROJECT_NAME`, `GEMINI_PROJECT_NUMBER`, and `GEMINI_REQUEST_TIMEOUT_MS` from environment variables.
 
 ## Validation
 
