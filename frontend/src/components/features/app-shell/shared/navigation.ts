@@ -1,6 +1,7 @@
 import {
   Bell,
   BarChart3,
+  Bot,
   CalendarDays,
   ClipboardList,
   LayoutDashboard,
@@ -29,6 +30,13 @@ const sharedItems: AppNavItem[] = [
     key: 'dashboard',
     label: 'Dashboard',
     path: '/dashboard'
+  },
+  {
+    enabled: true,
+    icon: Bot,
+    key: 'assistant',
+    label: 'Assistant',
+    path: '/assistant'
   },
   {
     enabled: true,

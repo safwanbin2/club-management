@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { GuestRoute, ProtectedRoute } from '@utilities/route-guards'
+import AssistantPage from '@pages/assistant'
 import { ForgotPasswordPage, LoginPage, RegisterPage, ResetPasswordPage } from '@pages/auth'
 import ChatPage from '@pages/chat'
 import { ClubDetailPage, ClubsPage } from '@pages/clubs'
@@ -27,6 +28,7 @@ export default function AppRoutes() {
       <Route element={<ProtectedRoute />}>
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
         <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/assistant" element={<AssistantPage />} />
         <Route path="/student/dashboard" element={<Navigate to="/dashboard" replace />} />
         <Route path="/executive/dashboard" element={<Navigate to="/dashboard" replace />} />
         <Route path="/admin/dashboard" element={<Navigate to="/dashboard" replace />} />

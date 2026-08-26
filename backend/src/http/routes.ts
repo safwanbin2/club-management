@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import type { Router as ExpressRouter } from 'express'
 
+import assistantRoutes from '../modules/assistant/assistant.routes.js'
 import authRoutes from '../modules/auth/auth.routes.js'
 import chatRoutes from '../modules/chat/chat.routes.js'
 import clubRoutes from '../modules/club/club.routes.js'
@@ -23,6 +24,7 @@ router.get('/health', (_req, res) => {
 })
 
 router.use('/auth', authRoutes)
+router.use('/assistant', assistantRoutes)
 router.use('/chat', chatRoutes)
 router.use('/clubs', clubRoutes)
 router.use('/dashboard', dashboardRoutes)

@@ -1,6 +1,7 @@
 import { USER_ROLES, type UserRole } from './roles.js'
 
 export const CAPABILITIES = {
+  assistantChat: 'assistant:chat',
   analyticsClubView: 'analytics:club:view',
   analyticsUniversityView: 'analytics:university:view',
   badgesViewOwn: 'badges:view-own',
@@ -38,6 +39,7 @@ export const CAPABILITIES = {
 export type Capability = (typeof CAPABILITIES)[keyof typeof CAPABILITIES]
 
 const studentCapabilities = [
+  CAPABILITIES.assistantChat,
   CAPABILITIES.badgesViewOwn,
   CAPABILITIES.chatAccessClub,
   CAPABILITIES.clubsBrowse,
