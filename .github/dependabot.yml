@@ -1,0 +1,21 @@
+version: 2
+
+updates:
+  - package-ecosystem: 'npm'
+    directories:
+      - '/'
+      - '/frontend'
+      - '/backend'
+    schedule:
+      interval: 'daily'
+      time: '09:00'
+      timezone: 'Asia/Dhaka'
+    open-pull-requests-limit: 0
+    commit-message:
+      prefix: 'security'
+      include: 'scope'
+    groups:
+      npm-security:
+        applies-to: 'security-updates'
+        patterns:
+          - '*'
