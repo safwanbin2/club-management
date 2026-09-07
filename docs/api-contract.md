@@ -60,6 +60,8 @@ Frontend data hooks should adapt backend responses once, then return domain name
 
 Initial auth should use secure password hashing, short-lived access tokens, refresh/session persistence, and role-aware guards.
 
+The refresh cookie is a stable per-session token and is not rotated on `POST /auth/refresh`. Rotation invalidated the previous token before the browser was guaranteed to store the new cookie, which logged users out on aborted reloads and in parallel tabs. Each successful refresh slides the session expiry forward; logout and password reset revoke sessions.
+
 Registration accepts only East Delta University email addresses ending in `@eastdelta.edu.bd`.
 Student department/profile program values must come from the configured East Delta University
 program list rather than free-text input.

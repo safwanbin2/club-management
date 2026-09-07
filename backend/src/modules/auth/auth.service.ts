@@ -109,7 +109,7 @@ export async function refresh(refreshToken: string, context: AuthContext): Promi
     expiresAt: { $gt: now },
     refreshTokenHash: hashToken(refreshToken),
     revokedAt: null
-  }).select('+refreshTokenHash')
+  })
 
   if (!session) {
     throw new ApplicationError(
@@ -135,16 +135,18 @@ export async function refresh(refreshToken: string, context: AuthContext): Promi
     )
   }
 
-  const nextRefreshToken = createOpaqueToken()
-  const nextRefreshTokenExpiresAt = getRefreshExpiry()
+  // The refresh token is intentionally not rotated. Rotation invalidated the old token before
+  // the browser was guaranteed to store the new cookie (aborted reloads, parallel tabs), which
+  // logged users out. The session stays revocable through logout and password reset, and its
+  // expiry slides forward on each successful refresh.
+  const refreshTokenExpiresAt = getRefreshExpiry()
 
-  session.refreshTokenHash = hashToken(nextRefreshToken)
-  session.expiresAt = nextRefreshTokenExpiresAt
+  session.expiresAt = refreshTokenExpiresAt
   session.userAgent = context.userAgent ?? session.userAgent
   session.ipAddress = context.ipAddress ?? session.ipAddress
   await session.save()
 
-  return buildAuthResult(user, nextRefreshToken, nextRefreshTokenExpiresAt)
+  return buildAuthResult(user, refreshToken, refreshTokenExpiresAt)
 }
 
 export async function logout(refreshToken?: string) {
