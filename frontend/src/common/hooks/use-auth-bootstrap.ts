@@ -11,27 +11,34 @@ import { refreshAuthSession } from '@common/helpers/request'
 export function useAuthBootstrap() {
   const status = useAuthStatus()
   const { markGuest } = useAuthActions()
-  const shouldRefreshSession = status === 'unknown' && hasAuthSessionMarker()
-  const query = useQuery({
+  const isAuthUnknown = status === 'unknown'
+  const shouldRefreshSession = isAuthUnknown && hasAuthSessionMarker()
+
+  // Handle the refresh outcome inside the query itself. Reacting to `query.isError` in an
+  // effect would re-run on every guard mount that shares the cached query, wiping a session
+  // that was set later by login/register.
+  useQuery({
     enabled: shouldRefreshSession,
-    queryFn: refreshAuthSession,
+    gcTime: 0,
+    queryFn: async () => {
+      try {
+        return await refreshAuthSession()
+      } catch (error) {
+        markGuest()
+        throw error
+      }
+    },
     queryKey: ['auth', 'bootstrap'],
     retry: false
   })
 
   useEffect(() => {
-    if (status === 'unknown' && !shouldRefreshSession) {
+    if (isAuthUnknown && !shouldRefreshSession) {
       markGuest()
     }
-  }, [markGuest, shouldRefreshSession, status])
-
-  useEffect(() => {
-    if (query.isError) {
-      markGuest()
-    }
-  }, [markGuest, query.isError])
+  }, [isAuthUnknown, markGuest, shouldRefreshSession])
 
   return {
-    isAuthBootstrapping: shouldRefreshSession && query.isPending
+    isAuthBootstrapping: isAuthUnknown
   }
 }
