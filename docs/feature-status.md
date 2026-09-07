@@ -116,7 +116,8 @@ Implemented:
 Known follow-up:
 
 - Password reset currently has the application-level flow, but production email delivery is not integrated.
-- Auth can be hardened later with stricter session rotation, device management, and audit history.
+- Refresh tokens are deliberately not rotated: rotation caused 401s on rapid reloads and in parallel tabs. If rotation is reintroduced, it needs a reuse grace window for the previous token.
+- Auth can be hardened later with device management and audit history.
 
 Verification:
 
